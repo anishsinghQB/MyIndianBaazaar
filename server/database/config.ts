@@ -70,30 +70,32 @@ export const initializeDatabase = async () => {
 
     // Create products table with string-based ID
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS products (
-        id VARCHAR(255) PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        description TEXT,
-        images TEXT[],
-        mrp DECIMAL(10,2) NOT NULL,
-        our_price DECIMAL(10,2) NOT NULL,
-        discount INTEGER,
-        rating DECIMAL(3,2) DEFAULT 0,
-        after_exchange_price DECIMAL(10,2),
-        offers TEXT[],
-        coupons TEXT[],
-        company VARCHAR(255),
-        color VARCHAR(100),
-        size VARCHAR(100),
-        weight VARCHAR(100),
-        height VARCHAR(100),
-        category VARCHAR(100),
-        in_stock BOOLEAN DEFAULT true,
-        stock_quantity INTEGER DEFAULT 0,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+  CREATE TABLE IF NOT EXISTS products (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    images TEXT[],
+    mrp DECIMAL(10,2) NOT NULL,
+    our_price DECIMAL(10,2) NOT NULL,
+    discount INTEGER,
+    rating DECIMAL(3,2) DEFAULT 0,
+    after_exchange_price DECIMAL(10,2),
+    offers TEXT[],
+    coupons TEXT[],
+    company VARCHAR(255),
+    color VARCHAR(100),
+    size VARCHAR(100),
+    weight VARCHAR(100),
+    height VARCHAR(100),
+    category VARCHAR(100),
+    in_stock BOOLEAN DEFAULT true,
+    stock_quantity INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  );
+`);
 
     // Create orders table
     await pool.query(`

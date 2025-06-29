@@ -166,18 +166,17 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
 
     const calculatedDiscount =
       discount || Math.round(((mrp - ourPrice) / mrp) * 100);
-    const afterExchangePrice = ourPrice * 0.95; // 5% discount for exchange
-    const productId = generateProductId();
+
+    const afterExchangePrice = parseFloat((ourPrice * 0.95).toFixed(2)); // 5% exchange offer
 
     const result = await pool.query(
       `INSERT INTO products (
-        id, name, description, images, mrp, our_price, discount, after_exchange_price,
+        name, description, images, mrp, our_price, discount, after_exchange_price,
         offers, coupons, company, color, size, weight, height, category,
         in_stock, stock_quantity
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
       RETURNING *`,
       [
-        productId,
         name,
         description,
         images,
@@ -195,7 +194,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
         category,
         inStock,
         stockQuantity,
-      ],
+      ]
     );
 
     const row = result.rows[0];
@@ -223,7 +222,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       faqs: [],
     };
 
-    // Create notification for all users about new product
+    // ✅ Your UUID-based ID is used here
     await createProductNotification(product.name, product.id);
 
     res.status(201).json({
