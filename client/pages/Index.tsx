@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Filter, Grid, List } from "lucide-react";
-import Header from "@/components/Header";
+import Layout from "@/components/Layout";
 import HeroSlider from "@/components/HeroSlider";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -63,11 +63,10 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-
-      {/* Hero Slider */}
-      <HeroSlider />
+    <Layout>
+      <div className="bg-gray-50">
+        {/* Hero Slider */}
+        <HeroSlider />
 
       {/* Categories */}
       <section className="py-8 bg-white border-b">
@@ -166,50 +165,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-lg font-bold mb-4">IndianBaazaar</h3>
-              <p className="text-gray-400">
-                Your trusted marketplace for quality products at the best
-                prices.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Categories</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Clothes</li>
-                <li>Electronics</li>
-                <li>Beauty</li>
-                <li>Books</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Help Center</li>
-                <li>Contact Us</li>
-                <li>Returns</li>
-                <li>Shipping Info</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Connect</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Newsletter</li>
-                <li>Social Media</li>
-                <li>Blog</li>
-                <li>Reviews</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 IndianBaazaar. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+      </div>
+    </Layout>
   );
-}
