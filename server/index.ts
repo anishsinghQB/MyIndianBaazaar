@@ -60,7 +60,7 @@ async function migrateProductIds() {
 
     await sequelize.query(`
       ALTER TABLE products
-      ALTER COLUMN id TYPE uuid USING id::uuid;
+       ALTER COLUMN id SET DEFAULT uuid_generate_v4();
     `);
     await sequelize.query(`
       ALTER TABLE order_items

@@ -53,6 +53,8 @@ export const connectToPgSqlDB = async () => {
 export const initializeDatabase = async () => {
   try {
     // Create users table
+    await pool.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
+
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,

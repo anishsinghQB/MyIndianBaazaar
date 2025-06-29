@@ -4,12 +4,6 @@ import { AuthRequest, requireAdmin } from "../utils/auth";
 import { z } from "zod";
 import { createProductNotification } from "./notifications";
 
-// Function to generate unique product ID
-const generateProductId = () => {
-  const timestamp = Date.now().toString(36);
-  const randomPart = Math.random().toString(36).substring(2, 15);
-  return `${timestamp}${randomPart}`.toUpperCase();
-};
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
