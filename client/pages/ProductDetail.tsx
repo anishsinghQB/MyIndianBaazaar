@@ -31,13 +31,19 @@ export default function ProductDetail() {
     // Get related products from same category
     if (foundProduct) {
       const related = sampleProducts
-        .filter(p => p.id !== foundProduct.id && p.category === foundProduct.category)
+        .filter(
+          (p) =>
+            p.id !== foundProduct.id && p.category === foundProduct.category,
+        )
         .slice(0, 4);
 
       // If not enough from same category, add from other categories
       if (related.length < 4) {
         const additional = sampleProducts
-          .filter(p => p.id !== foundProduct.id && !related.some(r => r.id === p.id))
+          .filter(
+            (p) =>
+              p.id !== foundProduct.id && !related.some((r) => r.id === p.id),
+          )
           .slice(0, 4 - related.length);
         setRelatedProducts([...related, ...additional]);
       } else {
@@ -338,8 +344,8 @@ export default function ProductDetail() {
                 </div>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
@@ -352,7 +358,9 @@ export default function ProductDetail() {
                 <ProductCard
                   key={relatedProduct.id}
                   product={relatedProduct}
-                  onCartUpdate={() => window.dispatchEvent(new Event("storage"))}
+                  onCartUpdate={() =>
+                    window.dispatchEvent(new Event("storage"))
+                  }
                 />
               ))}
             </div>
