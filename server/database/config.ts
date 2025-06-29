@@ -144,6 +144,7 @@ export const initializeDatabase = async () => {
         message TEXT NOT NULL,
         type VARCHAR(100) NOT NULL,
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        metadata JSONB,
         is_read BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
