@@ -1,61 +1,236 @@
-import { DemoResponse } from "@shared/api";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { Filter, Grid, List } from "lucide-react";
+import Header from "@/components/Header";
+import ProductCard from "@/components/ProductCard";
+import { Button } from "@/components/ui/button";
+import { sampleProducts } from "@/lib/sampleData";
+import { Product } from "@shared/types";
+
+const categories = [
+  { id: "all", name: "All Products" },
+  { id: "clothes", name: "Clothes" },
+  { id: "beauty", name: "Beauty" },
+  { id: "mice", name: "Mice" },
+  { id: "electronics", name: "Electronics" },
+  { id: "books", name: "Books" },
+  { id: "groceries", name: "Groceries" },
+];
 
 export default function Index() {
-  const [messageFromServer, setMessageFromServer] = useState("");
-  // Fetch users on component mount
-  useEffect(() => {
-    fetchHello();
-  }, []);
+  const [products, setProducts] = useState<Product[]>(sampleProducts);
+  const [filteredProducts, setFilteredProducts] =
+    useState<Product[]>(sampleProducts);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [sortBy, setSortBy] = useState("featured");
 
-  const fetchHello = async () => {
-    try {
-      const response = await fetch("/api/demo");
-      const data = (await response.json()) as DemoResponse;
-      setMessageFromServer(data.message);
-    } catch (error) {
-      console.error("Error fetching hello:", error);
+  useEffect(() => {
+    let filtered = products;
+
+    // Filter by category
+    if (selectedCategory !== "all") {
+      filtered = products.filter(
+        (product) => product.category === selectedCategory,
+      );
     }
+
+    // Sort products
+    switch (sortBy) {
+      case "price-low":
+        filtered = [...filtered].sort((a, b) => a.ourPrice - b.ourPrice);
+        break;
+      case "price-high":
+        filtered = [...filtered].sort((a, b) => b.ourPrice - a.ourPrice);
+        break;
+      case "rating":
+        filtered = [...filtered].sort((a, b) => b.rating - a.rating);
+        break;
+      case "discount":
+        filtered = [...filtered].sort((a, b) => b.discount - a.discount);
+        break;
+      default:
+        // Keep original order for featured
+        break;
+    }
+
+    setFilteredProducts(filtered);
+  }, [products, selectedCategory, sortBy]);
+
+  const handleCartUpdate = () => {
+    // Force re-render to update cart count in header
+    window.dispatchEvent(new Event("storage"));
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
-      <div className="text-center">
-        {/* TODO: replace everything here with the actual app! */}
-        <h1 className="text-2xl font-semibold text-slate-800 flex items-center justify-center gap-3">
-          <svg
-            className="animate-spin h-8 w-8 text-slate-400"
-            viewBox="0 0 50 50"
-          >
-            <circle
-              className="opacity-30"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-            />
-            <circle
-              className="text-slate-600"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-              strokeDasharray="100"
-              strokeDashoffset="75"
-            />
-          </svg>
-          Generating your app...
-        </h1>
-        <p className="mt-4 text-slate-600 max-w-md">
-          Watch the chat on the left for updates that might need your attention
-          to finish generating
-        </p>
-        <p className="mt-4 text-slate-600 max-w-md">{messageFromServer}</p>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-primary to-blue-600 text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            Welcome to IndianBaazaar
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 opacity-90">
+            Your one-stop destination for everything you need
+          </p>
+          <div className="max-w-2xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-4 text-sm md:text-base">
+              <span className="bg-white/20 px-4 py-2 rounded-full">
+                ✨ Premium Quality
+              </span>
+              <span className="bg-white/20 px-4 py-2 rounded-full">
+                🚚 Free Shipping
+              </span>
+              <span className="bg-white/20 px-4 py-2 rounded-full">
+                💯 Best Prices
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="py-8 bg-white border-b">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap gap-2 md:gap-4 justify-center">
+            {categories.map((category) => (
+              <Button
+                key={category.id}
+                variant={
+                  selectedCategory === category.id ? "default" : "outline"
+                }
+                onClick={() => setSelectedCategory(category.id)}
+                className="text-sm"
+              >
+                {category.name}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Filters and Controls */}
+      <section className="py-6 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex items-center gap-4">
+              <span className="text-gray-600 font-medium">
+                {filteredProducts.length} Products
+              </span>
+            </div>
+
+            <div className="flex items-center gap-4">
+              {/* Sort Dropdown */}
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="featured">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="discount">Best Discount</option>
+              </select>
+
+              {/* View Mode Toggle */}
+              <div className="flex border border-gray-300 rounded-lg">
+                <Button
+                  variant={viewMode === "grid" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  className="rounded-r-none"
+                >
+                  <Grid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === "list" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("list")}
+                  className="rounded-l-none"
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Products Grid */}
+      <section className="py-8">
+        <div className="container mx-auto px-4">
+          {filteredProducts.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-gray-500 text-lg">
+                No products found in this category.
+              </p>
+            </div>
+          ) : (
+            <div
+              className={
+                viewMode === "grid"
+                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                  : "space-y-4"
+              }
+            >
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onCartUpdate={handleCartUpdate}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-lg font-bold mb-4">IndianBaazaar</h3>
+              <p className="text-gray-400">
+                Your trusted marketplace for quality products at the best
+                prices.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Categories</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li>Clothes</li>
+                <li>Electronics</li>
+                <li>Beauty</li>
+                <li>Books</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Support</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li>Help Center</li>
+                <li>Contact Us</li>
+                <li>Returns</li>
+                <li>Shipping Info</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Connect</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li>Newsletter</li>
+                <li>Social Media</li>
+                <li>Blog</li>
+                <li>Reviews</li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 IndianBaazaar. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
