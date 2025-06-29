@@ -20,6 +20,7 @@ import {
   updateProduct,
   deleteProduct,
   getSearchSuggestions,
+  getProductsByCategory,
 } from "./routes/products";
 
 // Notification routes
@@ -84,8 +85,9 @@ export function createServer() {
 
   // Product routes
   app.get("/api/products", getAllProducts);
-  app.get("/api/products/:id", getProductById);
   app.get("/api/products/search/suggestions", getSearchSuggestions);
+  app.get("/api/products/category/:category", getProductsByCategory);
+  app.get("/api/products/:id", getProductById);
   app.post("/api/products", authenticateToken, requireAdmin, createProduct);
   app.put("/api/products/:id", authenticateToken, requireAdmin, updateProduct);
   app.delete(

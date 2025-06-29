@@ -335,6 +335,55 @@ export const deleteProduct: RequestHandler = async (req: AuthRequest, res) => {
   }
 };
 
+export const getProductsByCategory: RequestHandler = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const { inStock } = req.query;
+
+    let query = "SELECT * FROM products WHERE category = $1";
+    const params: any[] = [category];
+
+    if (inStock === "true") {
+      query += " AND in_stock = true";
+    }
+
+    query += " ORDER BY created_at DESC";
+
+    const result = await pool.query(query, params);
+
+    res.json({
+      products: result.rows.map((row) => ({
+        id: row.id.toString(),
+        name: row.name,
+        description: row.description,
+        images: row.images || [],
+        mrp: parseFloat(row.mrp),
+        ourPrice: parseFloat(row.our_price),
+        discount: row.discount || 0,
+        rating: parseFloat(row.rating) || 0,
+        afterExchangePrice: row.after_exchange_price
+          ? parseFloat(row.after_exchange_price)
+          : undefined,
+        offers: row.offers || [],
+        coupons: row.coupons || [],
+        company: row.company,
+        color: row.color,
+        size: row.size,
+        weight: row.weight,
+        height: row.height,
+        category: row.category,
+        inStock: row.in_stock,
+        stockQuantity: row.stock_quantity,
+        reviews: [],
+        faqs: [],
+      })),
+    });
+  } catch (error) {
+    console.error("Get products by category error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export const getSearchSuggestions: RequestHandler = async (req, res) => {
   try {
     const { q } = req.query;

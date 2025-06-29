@@ -90,6 +90,17 @@ export const api = {
   },
 
   async getProductsByCategory(category: string): Promise<Product[]> {
-    return this.getProducts({ category });
+    try {
+      const response = await fetch(`${API_BASE}/products/category/${category}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch products by category");
+      }
+
+      const data: ProductsResponse = await response.json();
+      return data.products;
+    } catch (error) {
+      console.error("Error fetching products by category:", error);
+      return [];
+    }
   },
 };
