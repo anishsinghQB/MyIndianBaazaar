@@ -4,7 +4,7 @@ import Layout from "@/components/Layout";
 import HeroSlider from "@/components/HeroSlider";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { sampleProducts } from "@/lib/sampleData";
+import { api } from "@/lib/api";
 import { Product } from "@shared/types";
 
 const categories = [
@@ -18,13 +18,34 @@ const categories = [
 ];
 
 export default function Index() {
-  const [products, setProducts] = useState<Product[]>(sampleProducts);
-  const [filteredProducts, setFilteredProducts] =
-    useState<Product[]>(sampleProducts);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState("featured");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Fetch products on component mount
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const fetchedProducts = await api.getProducts();
+        setProducts(fetchedProducts);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError("Failed to load products. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Filter and sort products when dependencies change
   useEffect(() => {
     let filtered = products;
 
@@ -139,7 +160,21 @@ export default function Index() {
         {/* Products Grid */}
         <section className="py-8">
           <div className="container mx-auto px-4">
-            {filteredProducts.length === 0 ? (
+            {loading ? (
+              <div className="text-center py-16">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                <p className="text-gray-500 text-lg mt-4">
+                  Loading products...
+                </p>
+              </div>
+            ) : error ? (
+              <div className="text-center py-16">
+                <p className="text-red-500 text-lg mb-4">{error}</p>
+                <Button onClick={() => window.location.reload()}>
+                  Try Again
+                </Button>
+              </div>
+            ) : filteredProducts.length === 0 ? (
               <div className="text-center py-16">
                 <p className="text-gray-500 text-lg">
                   No products found in this category.

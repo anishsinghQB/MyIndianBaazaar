@@ -20,6 +20,7 @@ import {
   updateProduct,
   deleteProduct,
   getSearchSuggestions,
+  getProductsByCategory,
 } from "./routes/products";
 
 // Notification routes
@@ -56,26 +57,18 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Initialize database only if required
-  const dbRequired =
-    process.env.DB_REQUIRED !== "false" ||
-    process.env.NODE_ENV !== "development";
+  // Initialize database
+  initializeDatabase().catch(console.error);
+  connectToPgSqlDB().catch(console.error);
 
-  if (dbRequired) {
-    initializeDatabase().catch(console.error);
-    connectToPgSqlDB().catch(console.error);
-
-    sequelize
-      .sync({ alter: true })
-      .then(() => {
-        console.log("Tables synced");
-      })
-      .catch((err) => {
-        console.error("Unable to sync tables:", err);
-      });
-  } else {
-    console.log("Database operations skipped (development mode)");
-  }
+  sequelize
+    .sync({ alter: true })
+    .then(() => {
+      console.log("Tables synced");
+    })
+    .catch((err) => {
+      console.error("Unable to sync tables:", err);
+    });
 
   // Health check
   app.get("/api/ping", (_req, res) => {
@@ -92,8 +85,9 @@ export function createServer() {
 
   // Product routes
   app.get("/api/products", getAllProducts);
-  app.get("/api/products/:id", getProductById);
   app.get("/api/products/search/suggestions", getSearchSuggestions);
+  app.get("/api/products/category/:category", getProductsByCategory);
+  app.get("/api/products/:id", getProductById);
   app.post("/api/products", authenticateToken, requireAdmin, createProduct);
   app.put("/api/products/:id", authenticateToken, requireAdmin, updateProduct);
   app.delete(

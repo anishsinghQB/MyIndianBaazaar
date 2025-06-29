@@ -10,19 +10,37 @@ import {
   calculateTotal,
   clearCart,
 } from "@/lib/cart";
-import { sampleProducts } from "@/lib/sampleData";
+import { api } from "@/lib/api";
 import { Cart as CartType, Product } from "@shared/types";
 
 export default function Cart() {
   const [cart, setCart] = useState<CartType>({ items: [], total: 0 });
-  const [products, setProducts] = useState<Product[]>(sampleProducts);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const currentCart = getCart();
-    const total = calculateTotal(currentCart, products);
-    setCart({ ...currentCart, total });
-  }, [products]);
+    const fetchProductsAndCart = async () => {
+      try {
+        setLoading(true);
+        const fetchedProducts = await api.getProducts();
+        setProducts(fetchedProducts);
+
+        const currentCart = getCart();
+        const total = calculateTotal(currentCart, fetchedProducts);
+        setCart({ ...currentCart, total });
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        // Still try to load cart with empty products array
+        const currentCart = getCart();
+        setCart({ ...currentCart, total: 0 });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductsAndCart();
+  }, []);
 
   const handleQuantityUpdate = async (
     productId: string,
@@ -68,6 +86,21 @@ export default function Cart() {
   const getProductById = (id: string) => {
     return products.find((p) => p.id === id);
   };
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="bg-gray-50">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center py-16">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <p className="text-gray-500 text-lg mt-4">Loading cart...</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   if (cart.items.length === 0) {
     return (

@@ -34,15 +34,6 @@ export const sequelize = new Sequelize(
 );
 
 export const connectToPgSqlDB = async () => {
-  // Skip database connection in development if DB_REQUIRED is false
-  if (
-    process.env.NODE_ENV === "development" &&
-    process.env.DB_REQUIRED === "false"
-  ) {
-    console.log("Database connection skipped (development mode)");
-    return;
-  }
-
   pool.connect((err, client, release) => {
     if (err) {
       console.error("Connection error: hai ", err);
@@ -60,15 +51,6 @@ export const connectToPgSqlDB = async () => {
 };
 
 export const initializeDatabase = async () => {
-  // Skip database initialization in development if DB_REQUIRED is false
-  if (
-    process.env.NODE_ENV === "development" &&
-    process.env.DB_REQUIRED === "false"
-  ) {
-    console.log("Database initialization skipped (development mode)");
-    return;
-  }
-
   try {
     // Create users table
     await pool.query(`
