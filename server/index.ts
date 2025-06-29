@@ -49,6 +49,52 @@ import {
 
 dotenv.config();
 
+async function migrateProductIds() {
+  try {
+    await sequelize.query(`
+      ALTER TABLE order_items DROP CONSTRAINT IF EXISTS order_items_product_id_fkey;
+    `);
+    await sequelize.query(`
+      ALTER TABLE reviews DROP CONSTRAINT IF EXISTS reviews_product_id_fkey;
+    `);
+
+    await sequelize.query(`
+      ALTER TABLE products
+      ALTER COLUMN id TYPE uuid USING id::uuid;
+    `);
+    await sequelize.query(`
+      ALTER TABLE order_items
+      ALTER COLUMN product_id TYPE uuid USING product_id::uuid;
+    `);
+    await sequelize.query(`
+      ALTER TABLE reviews
+      ALTER COLUMN product_id TYPE uuid USING product_id::uuid;
+    `);
+
+    await sequelize.query(`
+      ALTER TABLE order_items
+      ADD CONSTRAINT order_items_product_id_fkey
+      FOREIGN KEY (product_id) REFERENCES products(id);
+    `);
+    await sequelize.query(`
+      ALTER TABLE reviews
+      ADD CONSTRAINT reviews_product_id_fkey
+      FOREIGN KEY (product_id) REFERENCES products(id);
+    `);
+
+    console.log("Migration: Converted product IDs to uuid and fixed foreign keys.");
+  } catch (err: any) {
+    if (
+      err.message.includes("cannot be cast") ||
+      err.message.includes("already of type uuid")
+    ) {
+      console.warn("Migration: Product IDs already migrated or incompatible data.");
+    } else {
+      console.error("Migration error:", err);
+    }
+  }
+}
+
 export function createServer() {
   const app = express();
 
@@ -58,11 +104,11 @@ export function createServer() {
   app.use(express.urlencoded({ extended: true }));
 
   // Initialize database
-  initializeDatabase().catch(console.error);
   connectToPgSqlDB().catch(console.error);
+  initializeDatabase().catch(console.error);
 
   // Run migration for product IDs
-  // migrateProductIds().catch(console.error);
+  migrateProductIds().catch(console.error);
 
   sequelize
     .sync({ alter: true })
