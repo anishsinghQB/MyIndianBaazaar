@@ -58,6 +58,7 @@ export default function AddProductModal({
       height: formData.height,
       category: formData.category,
       inStock: formData.inStock,
+      stockQuantity: 100, // Default stock quantity
       reviews: [],
       faqs: formData.faqs
         .filter((faq) => faq.question.trim() !== "" && faq.answer.trim() !== "")
