@@ -312,6 +312,22 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
     const { id } = req.params;
     const validatedData = productSchema.partial().parse(req.body);
 
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const product = updateMockProduct(id, validatedData);
+      if (!product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      return res.json({
+        message: "Product updated successfully",
+        product,
+      });
+    }
+
     // Build dynamic update query
     const updateFields = [];
     const params = [];
