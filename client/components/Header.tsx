@@ -35,13 +35,12 @@ export default function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">IB</span>
-            </div>
-            <span className="text-xl font-bold text-gray-900">
-              IndianBaazaar
-            </span>
+          <Link to="/" className="flex items-center">
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2Fc0bb718ca55f4080904ee431798aa3e4%2F6e8d94dda07c4bcc989f4b6943784a3d?format=webp&width=800"
+              alt="IndianBaazaar"
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Search Bar - Hidden on mobile */}
@@ -144,13 +143,12 @@ export default function Header() {
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
             <div className="fixed inset-y-0 left-0 w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
               <div className="flex items-center justify-between p-4 border-b">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">IB</span>
-                  </div>
-                  <span className="text-xl font-bold text-gray-900">
-                    IndianBaazaar
-                  </span>
+                <div className="flex items-center">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets%2Fc0bb718ca55f4080904ee431798aa3e4%2F6e8d94dda07c4bcc989f4b6943784a3d?format=webp&width=800"
+                    alt="IndianBaazaar"
+                    className="h-8 w-auto"
+                  />
                 </div>
                 <Button
                   variant="ghost"
