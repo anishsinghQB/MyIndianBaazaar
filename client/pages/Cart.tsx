@@ -73,7 +73,7 @@ export default function Cart() {
     return (
       <Layout>
         <div className="bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 py-8">
           <div className="text-center py-16">
             <ShoppingBag className="h-24 w-24 text-gray-400 mx-auto mb-6" />
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
