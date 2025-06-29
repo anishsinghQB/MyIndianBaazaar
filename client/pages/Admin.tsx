@@ -558,7 +558,11 @@ export default function Admin() {
                             </td>
                             <td className="py-4 px-4">
                               <div className="flex items-center gap-2">
-                                <Button variant="outline" size="sm">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEditProduct(product)}
+                                >
                                   <Edit className="h-4 w-4" />
                                 </Button>
                                 <Button
