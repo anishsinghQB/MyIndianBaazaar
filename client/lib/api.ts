@@ -104,3 +104,51 @@ export const api = {
     }
   },
 };
+
+// Legacy exports for backward compatibility
+export const productApi = {
+  getAll: () => api.getProducts(),
+  getById: (id: string) => api.getProductById(id),
+  getByCategory: (category: string) => api.getProductsByCategory(category),
+  getSearchSuggestions: (query: string) => api.getSearchSuggestions(query),
+};
+
+export const adminApi = {
+  // These would be admin-specific API calls
+  // For now, using the same product API
+  getProducts: () => api.getProducts(),
+  getStats: async () => {
+    // This would call admin stats endpoint
+    const response = await fetch(`${API_BASE}/admin/stats`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch admin stats");
+    }
+    return response.json();
+  },
+  getCustomers: async () => {
+    const response = await fetch(`${API_BASE}/admin/customers`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch customers");
+    }
+    return response.json();
+  },
+  getOrders: async () => {
+    const response = await fetch(`${API_BASE}/admin/orders`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch orders");
+    }
+    return response.json();
+  },
+};
