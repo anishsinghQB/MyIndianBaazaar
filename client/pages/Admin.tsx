@@ -10,11 +10,28 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import Header from "@/components/Header";
+import AddProductModal from "@/components/AddProductModal";
 import { Button } from "@/components/ui/button";
 import { sampleProducts } from "@/lib/sampleData";
+import { Product } from "@shared/types";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("products");
+  const [products, setProducts] = useState<Product[]>(sampleProducts);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  const handleAddProduct = (productData: Omit<Product, "id" | "reviews">) => {
+    const newProduct: Product = {
+      ...productData,
+      id: (products.length + 1).toString(),
+      reviews: [],
+    };
+    setProducts((prev) => [...prev, newProduct]);
+  };
+
+  const handleDeleteProduct = (productId: string) => {
+    setProducts((prev) => prev.filter((p) => p.id !== productId));
+  };
 
   const tabs = [
     { id: "products", name: "Products", icon: Package },
@@ -56,7 +73,7 @@ export default function Admin() {
                   Total Products
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {sampleProducts.length}
+                  {products.length}
                 </p>
               </div>
               <Package className="h-8 w-8 text-primary" />
@@ -124,7 +141,7 @@ export default function Admin() {
                   <h2 className="text-xl font-semibold text-gray-900">
                     Products
                   </h2>
-                  <Button>
+                  <Button onClick={() => setIsAddModalOpen(true)}>
                     <Plus className="h-4 w-4 mr-2" />
                     Add Product
                   </Button>
@@ -152,7 +169,7 @@ export default function Admin() {
                       </tr>
                     </thead>
                     <tbody>
-                      {sampleProducts.slice(0, 5).map((product) => (
+                      {products.map((product) => (
                         <tr
                           key={product.id}
                           className="border-b border-gray-100"
@@ -196,7 +213,11 @@ export default function Admin() {
                               <Button variant="outline" size="sm">
                                 <Edit className="h-4 w-4" />
                               </Button>
-                              <Button variant="outline" size="sm">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleDeleteProduct(product.id)}
+                              >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </div>
@@ -235,6 +256,12 @@ export default function Admin() {
           </div>
         </div>
       </div>
+
+      <AddProductModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSave={handleAddProduct}
+      />
     </div>
   );
 }
