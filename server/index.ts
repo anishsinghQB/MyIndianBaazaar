@@ -29,6 +29,14 @@ import {
   getOrderById,
 } from "./routes/payments";
 
+// Admin routes
+import {
+  getAllCustomers,
+  getAllOrders,
+  getDashboardStats,
+  updateOrderStatus,
+} from "./routes/admin";
+
 dotenv.config();
 
 export function createServer() {
@@ -90,6 +98,27 @@ export function createServer() {
   app.post("/api/payments/verify", authenticateToken, verifyPayment);
   app.get("/api/orders", authenticateToken, getOrders);
   app.get("/api/orders/:id", authenticateToken, getOrderById);
+
+  // Admin routes
+  app.get(
+    "/api/admin/customers",
+    authenticateToken,
+    requireAdmin,
+    getAllCustomers,
+  );
+  app.get("/api/admin/orders", authenticateToken, requireAdmin, getAllOrders);
+  app.get(
+    "/api/admin/stats",
+    authenticateToken,
+    requireAdmin,
+    getDashboardStats,
+  );
+  app.patch(
+    "/api/admin/orders/:id/status",
+    authenticateToken,
+    requireAdmin,
+    updateOrderStatus,
+  );
 
   return app;
 }
