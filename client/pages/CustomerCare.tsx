@@ -11,7 +11,7 @@ import {
   RefreshCw,
   Truck,
 } from "lucide-react";
-import Header from "@/components/Header";
+import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 
 export default function CustomerCare() {
@@ -39,8 +39,8 @@ export default function CustomerCare() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <Layout>
+      <div className="bg-gray-50">
 
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
@@ -184,7 +184,7 @@ export default function CustomerCare() {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
 
