@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { pool } from "../database/config";
 import { AuthRequest, requireAdmin } from "../utils/auth";
 import { z } from "zod";
+import { getMockData, addMockNotification } from "../data/mockData";
 
 const notificationSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -19,8 +20,8 @@ export const getUserNotifications: RequestHandler = async (
     const userId = req.user?.id;
 
     const result = await pool.query(
-      `SELECT * FROM notifications 
-       WHERE user_id = $1 OR user_id IS NULL 
+      `SELECT * FROM notifications
+       WHERE user_id = $1 OR user_id IS NULL
        ORDER BY created_at DESC`,
       [userId],
     );
@@ -51,8 +52,8 @@ export const markNotificationAsRead: RequestHandler = async (
     const userId = req.user?.id;
 
     const result = await pool.query(
-      `UPDATE notifications 
-       SET is_read = true, updated_at = CURRENT_TIMESTAMP 
+      `UPDATE notifications
+       SET is_read = true, updated_at = CURRENT_TIMESTAMP
        WHERE id = $1 AND (user_id = $2 OR user_id IS NULL)
        RETURNING id`,
       [id, userId],
@@ -164,6 +165,21 @@ export const createProductNotification = async (
   productId: string,
 ) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      addMockNotification({
+        title: "New Product Added!",
+        message: `Check out our new product: ${productName}. Click to view details.`,
+        type: "product_added",
+        isRead: false,
+      });
+      console.log("Product notification created successfully (mock)");
+      return;
+    }
+
     await pool.query(
       `INSERT INTO notifications (title, message, type, user_id)
        VALUES ($1, $2, $3, NULL)`,

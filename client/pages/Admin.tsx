@@ -54,6 +54,8 @@ export default function Admin() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
 
@@ -154,6 +156,41 @@ export default function Admin() {
       console.error("Error adding product:", error);
       alert("Failed to add product");
     }
+  };
+
+  const handleUpdateProduct = async (
+    productId: string,
+    productData: Partial<Product>,
+  ) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`/api/products/${productId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProducts((prev) =>
+          prev.map((p) => (p.id === productId ? data.product : p)),
+        );
+      } else {
+        const errorData = await response.json();
+        alert(`Error updating product: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+      alert("Failed to update product");
+    }
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsUpdateModalOpen(true);
   };
 
   const handleDeleteProduct = async (productId: string) => {
@@ -521,7 +558,11 @@ export default function Admin() {
                             </td>
                             <td className="py-4 px-4">
                               <div className="flex items-center gap-2">
-                                <Button variant="outline" size="sm">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEditProduct(product)}
+                                >
                                   <Edit className="h-4 w-4" />
                                 </Button>
                                 <Button
@@ -762,6 +803,16 @@ export default function Admin() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddProduct}
+      />
+
+      <UpdateProductModal
+        isOpen={isUpdateModalOpen}
+        onClose={() => {
+          setIsUpdateModalOpen(false);
+          setSelectedProduct(null);
+        }}
+        onSave={handleUpdateProduct}
+        product={selectedProduct}
       />
     </Layout>
   );

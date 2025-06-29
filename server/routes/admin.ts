@@ -1,6 +1,12 @@
 import { RequestHandler } from "express";
 import { pool } from "../database/config";
 import { AuthRequest, requireAdmin } from "../utils/auth";
+import {
+  getMockStats,
+  getMockOrdersWithCustomers,
+  getMockCustomersWithStats,
+  updateMockOrderStatus,
+} from "../data/mockData";
 
 // Get all customers (admin only)
 export const getAllCustomers: RequestHandler = async (
@@ -8,18 +14,27 @@ export const getAllCustomers: RequestHandler = async (
   res,
 ) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const customers = getMockCustomersWithStats();
+      return res.json({ customers });
+    }
+
     const result = await pool.query(`
-      SELECT 
-        id, 
-        name, 
-        email, 
-        mobile_number, 
-        gender, 
-        role, 
+      SELECT
+        id,
+        name,
+        email,
+        mobile_number,
+        gender,
+        role,
         created_at,
         (SELECT COUNT(*) FROM orders WHERE user_id = users.id) as total_orders,
         (SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE user_id = users.id AND status = 'confirmed') as total_spent
-      FROM users 
+      FROM users
       ORDER BY created_at DESC
     `);
 
@@ -45,8 +60,17 @@ export const getAllCustomers: RequestHandler = async (
 // Get all orders with customer and product details (admin only)
 export const getAllOrders: RequestHandler = async (req: AuthRequest, res) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const orders = getMockOrdersWithCustomers();
+      return res.json({ orders });
+    }
+
     const result = await pool.query(`
-      SELECT 
+      SELECT
         o.id,
         o.total_amount,
         o.status,
@@ -104,6 +128,15 @@ export const getDashboardStats: RequestHandler = async (
   res,
 ) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const stats = getMockStats();
+      return res.json({ stats });
+    }
+
     // Get total products
     const productsResult = await pool.query(
       "SELECT COUNT(*) as count FROM products",
@@ -118,7 +151,7 @@ export const getDashboardStats: RequestHandler = async (
 
     // Get order statistics
     const ordersResult = await pool.query(`
-      SELECT 
+      SELECT
         COUNT(*) as total_orders,
         COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_orders,
         COUNT(CASE WHEN status = 'confirmed' THEN 1 END) as confirmed_orders,
@@ -166,6 +199,22 @@ export const updateOrderStatus: RequestHandler = async (
     ];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ error: "Invalid order status" });
+    }
+
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const order = updateMockOrderStatus(parseInt(id), status);
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+
+      return res.json({
+        message: "Order status updated successfully",
+        order,
+      });
     }
 
     const result = await pool.query(

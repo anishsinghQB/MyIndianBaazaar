@@ -3,6 +3,12 @@ import { pool } from "../database/config";
 import { AuthRequest, requireAdmin } from "../utils/auth";
 import { z } from "zod";
 import { createProductNotification } from "./notifications";
+import {
+  getMockData,
+  addMockProduct,
+  updateMockProduct,
+  deleteMockProduct,
+} from "../data/mockData";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
@@ -33,6 +39,36 @@ const productSchema = z.object({
 
 export const getAllProducts: RequestHandler = async (req, res) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const { category, search, inStock } = req.query;
+      const mockData = getMockData();
+      let products = mockData.products;
+
+      // Apply filters
+      if (category) {
+        products = products.filter((p) => p.category === category);
+      }
+
+      if (search && typeof search === "string") {
+        const searchTerm = search.toLowerCase();
+        products = products.filter(
+          (p) =>
+            p.name.toLowerCase().includes(searchTerm) ||
+            p.description.toLowerCase().includes(searchTerm),
+        );
+      }
+
+      if (inStock === "true") {
+        products = products.filter((p) => p.inStock);
+      }
+
+      return res.json({ products });
+    }
+
     const { category, search, inStock } = req.query;
 
     let query = "SELECT * FROM products WHERE 1=1";
@@ -161,6 +197,47 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       discount || Math.round(((mrp - ourPrice) / mrp) * 100);
     const afterExchangePrice = ourPrice * 0.95; // 5% discount for exchange
 
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const product = addMockProduct({
+        name,
+        description,
+        images,
+        mrp,
+        ourPrice,
+        discount: calculatedDiscount,
+        rating: 0,
+        afterExchangePrice,
+        offers: offers || [],
+        coupons: coupons || [],
+        company,
+        color,
+        size,
+        weight,
+        height,
+        category,
+        inStock,
+        stockQuantity,
+        reviews: [],
+        faqs: [],
+      });
+
+      // Create notification for all users about new product
+      try {
+        await createProductNotification(product.name, product.id);
+      } catch (err) {
+        console.log("Note: Notification creation skipped in development mode");
+      }
+
+      return res.status(201).json({
+        message: "Product created successfully",
+        product,
+      });
+    }
+
     const result = await pool.query(
       `INSERT INTO products (
         name, description, images, mrp, our_price, discount, after_exchange_price,
@@ -234,6 +311,22 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
   try {
     const { id } = req.params;
     const validatedData = productSchema.partial().parse(req.body);
+
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const product = updateMockProduct(id, validatedData);
+      if (!product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      return res.json({
+        message: "Product updated successfully",
+        product,
+      });
+    }
 
     // Build dynamic update query
     const updateFields = [];
@@ -318,6 +411,19 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
 export const deleteProduct: RequestHandler = async (req: AuthRequest, res) => {
   try {
     const { id } = req.params;
+
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const deleted = deleteMockProduct(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      return res.json({ message: "Product deleted successfully" });
+    }
 
     const result = await pool.query(
       "DELETE FROM products WHERE id = $1 RETURNING id",
