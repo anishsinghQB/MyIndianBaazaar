@@ -197,6 +197,47 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       discount || Math.round(((mrp - ourPrice) / mrp) * 100);
     const afterExchangePrice = ourPrice * 0.95; // 5% discount for exchange
 
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const product = addMockProduct({
+        name,
+        description,
+        images,
+        mrp,
+        ourPrice,
+        discount: calculatedDiscount,
+        rating: 0,
+        afterExchangePrice,
+        offers: offers || [],
+        coupons: coupons || [],
+        company,
+        color,
+        size,
+        weight,
+        height,
+        category,
+        inStock,
+        stockQuantity,
+        reviews: [],
+        faqs: [],
+      });
+
+      // Create notification for all users about new product
+      try {
+        await createProductNotification(product.name, product.id);
+      } catch (err) {
+        console.log("Note: Notification creation skipped in development mode");
+      }
+
+      return res.status(201).json({
+        message: "Product created successfully",
+        product,
+      });
+    }
+
     const result = await pool.query(
       `INSERT INTO products (
         name, description, images, mrp, our_price, discount, after_exchange_price,
