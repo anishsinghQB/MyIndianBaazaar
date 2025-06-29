@@ -12,7 +12,7 @@ import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import ImageZoom from "@/components/ImageZoom";
 import { Button } from "@/components/ui/button";
-import { sampleProducts } from "@/lib/sampleData";
+import { api } from "@/lib/api";
 import { addToCart } from "@/lib/cart";
 import { Product } from "@shared/types";
 
@@ -24,43 +24,79 @@ export default function ProductDetail() {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const foundProduct = sampleProducts.find((p) => p.id === id);
-    setProduct(foundProduct || null);
+    const fetchProduct = async () => {
+      if (!id) return;
 
-    // Get related products from same category
-    if (foundProduct) {
-      const related = sampleProducts
-        .filter(
-          (p) =>
-            p.id !== foundProduct.id && p.category === foundProduct.category,
-        )
-        .slice(0, 4);
+      try {
+        setLoading(true);
+        setError(null);
 
-      // If not enough from same category, add from other categories
-      if (related.length < 4) {
-        const additional = sampleProducts
-          .filter(
-            (p) =>
-              p.id !== foundProduct.id && !related.some((r) => r.id === p.id),
-          )
-          .slice(0, 4 - related.length);
-        setRelatedProducts([...related, ...additional]);
-      } else {
-        setRelatedProducts(related);
+        const foundProduct = await api.getProductById(id);
+        setProduct(foundProduct);
+
+        // Get related products from same category
+        if (foundProduct) {
+          const allProducts = await api.getProducts();
+          const related = allProducts
+            .filter(
+              (p) =>
+                p.id !== foundProduct.id &&
+                p.category === foundProduct.category,
+            )
+            .slice(0, 4);
+
+          // If not enough from same category, add from other categories
+          if (related.length < 4) {
+            const additional = allProducts
+              .filter(
+                (p) =>
+                  p.id !== foundProduct.id &&
+                  !related.some((r) => r.id === p.id),
+              )
+              .slice(0, 4 - related.length);
+            setRelatedProducts([...related, ...additional]);
+          } else {
+            setRelatedProducts(related);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching product:", err);
+        setError("Failed to load product. Please try again later.");
+      } finally {
+        setLoading(false);
       }
-    }
+    };
+
+    fetchProduct();
   }, [id]);
 
-  if (!product) {
+  if (loading) {
+    return (
+      <Layout>
+        <div className="bg-gray-50">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center py-16">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <p className="text-gray-500 text-lg mt-4">Loading product...</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !product) {
     return (
       <Layout>
         <div className="bg-gray-50">
           <div className="container mx-auto px-4 py-8">
             <div className="text-center">
               <h1 className="text-2xl font-bold text-gray-800 mb-4">
-                Product Not Found
+                {error || "Product Not Found"}
               </h1>
               <Link to="/">
                 <Button>Back to Home</Button>
