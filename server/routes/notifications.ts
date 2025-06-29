@@ -165,6 +165,21 @@ export const createProductNotification = async (
   productId: string,
 ) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      addMockNotification({
+        title: "New Product Added!",
+        message: `Check out our new product: ${productName}. Click to view details.`,
+        type: "product_added",
+        isRead: false,
+      });
+      console.log("Product notification created successfully (mock)");
+      return;
+    }
+
     await pool.query(
       `INSERT INTO notifications (title, message, type, user_id)
        VALUES ($1, $2, $3, NULL)`,
