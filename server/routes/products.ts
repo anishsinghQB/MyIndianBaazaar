@@ -191,6 +191,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       ]
     );
 
+    
     const row = result.rows[0];
     const product = {
       id: row.id,

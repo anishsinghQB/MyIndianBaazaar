@@ -67,7 +67,7 @@ export default function Notifications() {
     // Handle navigation based on notification type and metadata
     switch (notification.type) {
       case "product_added":
-          navigate(`/product/${notification.id}`);
+          navigate(`/product/${notification.metadata.productId}`);
         break;
       case "order":
         // Navigate to orders/account page
