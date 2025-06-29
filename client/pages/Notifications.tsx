@@ -63,11 +63,16 @@ export default function Notifications() {
       await markAsRead(notification.id);
     }
 
-    // Handle navigation based on notification type
+    // Handle navigation based on notification type and metadata
     switch (notification.type) {
       case "product_added":
-        // Navigate to home to see new products
-        navigate("/");
+        if (notification.metadata?.productId) {
+          // Navigate to specific product page
+          navigate(`/product/${notification.metadata.productId}`);
+        } else {
+          // Navigate to home to see new products
+          navigate("/");
+        }
         break;
       case "order":
         // Navigate to orders/account page
