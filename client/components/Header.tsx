@@ -72,34 +72,82 @@ export default function Header() {
           <div className="flex items-center space-x-4">
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
-              <Link
-                to="/account"
-                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
-              >
-                <User className="h-4 w-4 text-[#1690C7]" />
-                <span>Account</span>
-              </Link>
-              <Link
-                to="/notifications"
-                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
-              >
-                <Bell className="h-4 w-4 text-[#1690C7]" />
-                <span>Notifications</span>
-              </Link>
-              <Link
-                to="/customer-care"
-                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
-              >
-                <Headphones className="h-4 w-4 text-[#1690C7]" />
-                <span>Support</span>
-              </Link>
-              <Link
-                to="/admin"
-                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
-              >
-                <User className="h-4 w-4 text-[#1690C7]" />
-                <span>Admin</span>
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/notifications"
+                    className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                  >
+                    <Bell className="h-4 w-4 text-[#1690C7]" />
+                    <span>Notifications</span>
+                  </Link>
+                  <Link
+                    to="/customer-care"
+                    className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                  >
+                    <Headphones className="h-4 w-4 text-[#1690C7]" />
+                    <span>Support</span>
+                  </Link>
+                  {user?.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                    >
+                      <Settings className="h-4 w-4 text-[#1690C7]" />
+                      <span>Admin</span>
+                    </Link>
+                  )}
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                    >
+                      <User className="h-4 w-4 text-[#1690C7]" />
+                      <span>{user?.name || "Account"}</span>
+                    </button>
+                    {showUserMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border">
+                        <Link
+                          to="/account"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <User className="h-4 w-4 inline mr-2" />
+                          My Account
+                        </Link>
+                        <button
+                          onClick={() => {
+                            logout();
+                            setShowUserMenu(false);
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <LogOut className="h-4 w-4 inline mr-2" />
+                          Sign Out
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setIsAuthModalOpen(true)}
+                    className="text-gray-600 hover:text-[#1690C7]"
+                  >
+                    <User className="h-4 w-4 mr-1" />
+                    Sign In
+                  </Button>
+                  <Link
+                    to="/customer-care"
+                    className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                  >
+                    <Headphones className="h-4 w-4 text-[#1690C7]" />
+                    <span>Support</span>
+                  </Link>
+                </>
+              )}
               <Link
                 to="/cart"
                 className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors relative"
