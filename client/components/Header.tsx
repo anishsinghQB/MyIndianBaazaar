@@ -41,6 +41,12 @@ export default function Header() {
               alt="IndianBaazaar"
               className="h-10 w-auto"
             />
+            <span className="text-xl font-bold text-[#1690C7] ml-2">
+              Indian
+            </span>
+            <span className="text-xl font-bold text-[#000] inline">
+              Baazaar
+            </span>
           </Link>
 
           {/* Search Bar - Hidden on mobile */}
