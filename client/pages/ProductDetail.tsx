@@ -9,6 +9,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import Header from "@/components/Header";
+import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { sampleProducts } from "@/lib/sampleData";
 import { addToCart } from "@/lib/cart";
@@ -21,10 +22,28 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const foundProduct = sampleProducts.find((p) => p.id === id);
     setProduct(foundProduct || null);
+
+    // Get related products from same category
+    if (foundProduct) {
+      const related = sampleProducts
+        .filter(p => p.id !== foundProduct.id && p.category === foundProduct.category)
+        .slice(0, 4);
+
+      // If not enough from same category, add from other categories
+      if (related.length < 4) {
+        const additional = sampleProducts
+          .filter(p => p.id !== foundProduct.id && !related.some(r => r.id === p.id))
+          .slice(0, 4 - related.length);
+        setRelatedProducts([...related, ...additional]);
+      } else {
+        setRelatedProducts(related);
+      }
+    }
   }, [id]);
 
   if (!product) {
@@ -317,6 +336,24 @@ export default function ProductDetail() {
                   </h3>
                   <p className="text-gray-600">{faq.answer}</p>
                 </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Related Products
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map((relatedProduct) => (
+                <ProductCard
+                  key={relatedProduct.id}
+                  product={relatedProduct}
+                  onCartUpdate={() => window.dispatchEvent(new Event("storage"))}
+                />
               ))}
             </div>
           </div>
