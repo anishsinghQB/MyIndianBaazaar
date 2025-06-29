@@ -214,6 +214,9 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       faqs: [],
     };
 
+    // Create notification for all users about new product
+    await createProductNotification(product.name, product.id);
+
     res.status(201).json({
       message: "Product created successfully",
       product,
