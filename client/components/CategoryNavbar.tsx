@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { ChevronDown, Menu } from "lucide-react";
 
 interface SubCategory {
   name: string;
@@ -350,12 +350,43 @@ const categories: Category[] = [
 
 export default function CategoryNavbar() {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeMobileCategory, setActiveMobileCategory] = useState<
+    string | null
+  >(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setMobileMenuOpen(false);
+        setActiveMobileCategory(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleMobileCategoryClick = (categoryName: string) => {
+    setActiveMobileCategory(
+      activeMobileCategory === categoryName ? null : categoryName,
+    );
+  };
 
   return (
-    <div className="bg-gray-50 border-b border-gray-200 relative">
+    <div
+      className="bg-gray-50 border-b border-gray-200 relative"
+      ref={containerRef}
+    >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-center py-3">
-          <div className="flex items-center space-x-8">
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center justify-center py-3">
+          <div className="flex items-center space-x-6 lg:space-x-8">
             {categories.map((category) => (
               <div
                 key={category.name}
@@ -363,16 +394,16 @@ export default function CategoryNavbar() {
                 onMouseEnter={() => setHoveredCategory(category.name)}
                 onMouseLeave={() => setHoveredCategory(null)}
               >
-                <button className="flex items-center space-x-1 text-gray-700 hover:text-[#1690C7] font-medium text-sm transition-colors py-2">
+                <button className="flex items-center space-x-1 text-gray-700 hover:text-[#1690C7] font-medium text-sm transition-colors py-2 px-2 rounded hover:bg-blue-50">
                   <span>{category.name}</span>
                   <ChevronDown className="h-3 w-3" />
                 </button>
 
-                {/* Enhanced Dropdown Menu - Centered */}
+                {/* Desktop Dropdown Menu - Responsive positioning */}
                 {hoveredCategory === category.name && (
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-96 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-1">
-                    <div className="p-6">
-                      <div className="grid grid-cols-2 gap-8">
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-80 lg:w-96 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 mt-2">
+                    <div className="p-4 lg:p-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {category.subCategories
                           .slice(0, 2)
                           .map((subCategory, index) => (
@@ -403,9 +434,9 @@ export default function CategoryNavbar() {
                           ))}
                       </div>
 
-                      {/* Additional categories if any */}
+                      {/* Additional categories for larger screens */}
                       {category.subCategories.length > 2 && (
-                        <div className="mt-6 pt-4 border-t border-gray-100">
+                        <div className="mt-6 pt-4 border-t border-gray-100 hidden lg:block">
                           <div className="grid grid-cols-3 gap-4">
                             {category.subCategories
                               .slice(2)
@@ -436,6 +467,84 @@ export default function CategoryNavbar() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden py-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-700">
+              Shop by Category
+            </span>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="flex items-center space-x-1 text-gray-700 hover:text-[#1690C7] transition-colors"
+            >
+              <Menu className="h-4 w-4" />
+              <span className="text-sm">Menu</span>
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-xl z-50 max-h-96 overflow-y-auto">
+              <div className="p-4">
+                <div className="space-y-2">
+                  {categories.map((category) => (
+                    <div
+                      key={category.name}
+                      className="border-b border-gray-100 last:border-b-0"
+                    >
+                      <button
+                        onClick={() => handleMobileCategoryClick(category.name)}
+                        className="flex items-center justify-between w-full py-3 text-left text-gray-700 hover:text-[#1690C7] transition-colors"
+                      >
+                        <span className="font-medium">{category.name}</span>
+                        <ChevronDown
+                          className={`h-4 w-4 transition-transform ${
+                            activeMobileCategory === category.name
+                              ? "rotate-180"
+                              : ""
+                          }`}
+                        />
+                      </button>
+
+                      {/* Mobile Subcategories */}
+                      {activeMobileCategory === category.name && (
+                        <div className="pb-4 pl-4 space-y-3">
+                          {category.subCategories.map((subCategory, index) => (
+                            <div key={index}>
+                              <h3 className="font-semibold text-gray-900 mb-2 text-sm">
+                                {subCategory.name}
+                              </h3>
+                              <ul className="space-y-1 pl-2">
+                                {subCategory.items
+                                  .slice(0, 4)
+                                  .map((item, itemIndex) => (
+                                    <li key={itemIndex}>
+                                      <button className="text-gray-600 hover:text-[#1690C7] text-sm transition-colors text-left block w-full py-1">
+                                        {item}
+                                      </button>
+                                    </li>
+                                  ))}
+                                {subCategory.items.length > 4 && (
+                                  <li>
+                                    <button className="text-[#1690C7] text-sm font-medium">
+                                      View All ({subCategory.items.length - 4}{" "}
+                                      more)
+                                    </button>
+                                  </li>
+                                )}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
