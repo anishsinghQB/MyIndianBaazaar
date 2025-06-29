@@ -8,9 +8,13 @@ import {
   Bell,
   Headphones,
   X,
+  LogOut,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCart, getCartItemCount } from "@/lib/cart";
+import { useAuth } from "@/contexts/AuthContext";
+import AuthModal from "./AuthModal";
 
 export default function Header() {
   const [cartCount, setCartCount] = useState(0);
