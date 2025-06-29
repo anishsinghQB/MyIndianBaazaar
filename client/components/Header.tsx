@@ -19,6 +19,9 @@ import AuthModal from "./AuthModal";
 export default function Header() {
   const [cartCount, setCartCount] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const cart = getCart();
