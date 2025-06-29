@@ -39,6 +39,36 @@ const productSchema = z.object({
 
 export const getAllProducts: RequestHandler = async (req, res) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const { category, search, inStock } = req.query;
+      const mockData = getMockData();
+      let products = mockData.products;
+
+      // Apply filters
+      if (category) {
+        products = products.filter((p) => p.category === category);
+      }
+
+      if (search && typeof search === "string") {
+        const searchTerm = search.toLowerCase();
+        products = products.filter(
+          (p) =>
+            p.name.toLowerCase().includes(searchTerm) ||
+            p.description.toLowerCase().includes(searchTerm),
+        );
+      }
+
+      if (inStock === "true") {
+        products = products.filter((p) => p.inStock);
+      }
+
+      return res.json({ products });
+    }
+
     const { category, search, inStock } = req.query;
 
     let query = "SELECT * FROM products WHERE 1=1";
