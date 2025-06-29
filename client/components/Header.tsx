@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { getCart, getCartItemCount } from "@/lib/cart";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthModal from "./AuthModal";
+import SearchAutocomplete from "./SearchAutocomplete";
 
 export default function Header() {
   const [cartCount, setCartCount] = useState(0);
