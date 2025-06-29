@@ -110,6 +110,15 @@ export const getDashboardStats: RequestHandler = async (
   res,
 ) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const stats = getMockStats();
+      return res.json({ stats });
+    }
+
     // Get total products
     const productsResult = await pool.query(
       "SELECT COUNT(*) as count FROM products",
