@@ -4,6 +4,13 @@ import { AuthRequest, requireAdmin } from "../utils/auth";
 import { z } from "zod";
 import { createProductNotification } from "./notifications";
 
+// Function to generate unique product ID
+const generateProductId = () => {
+  const timestamp = Date.now().toString(36);
+  const randomPart = Math.random().toString(36).substring(2, 15);
+  return `${timestamp}${randomPart}`.toUpperCase();
+};
+
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
   description: z.string().min(1, "Description is required"),
@@ -58,7 +65,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
 
     res.json({
       products: result.rows.map((row) => ({
-        id: row.id.toString(),
+        id: row.id,
         name: row.name,
         description: row.description,
         images: row.images || [],
@@ -103,7 +110,7 @@ export const getProductById: RequestHandler = async (req, res) => {
 
     const row = result.rows[0];
     const product = {
-      id: row.id.toString(),
+      id: row.id,
       name: row.name,
       description: row.description,
       images: row.images || [],
@@ -160,15 +167,17 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
     const calculatedDiscount =
       discount || Math.round(((mrp - ourPrice) / mrp) * 100);
     const afterExchangePrice = ourPrice * 0.95; // 5% discount for exchange
+    const productId = generateProductId();
 
     const result = await pool.query(
       `INSERT INTO products (
-        name, description, images, mrp, our_price, discount, after_exchange_price,
+        id, name, description, images, mrp, our_price, discount, after_exchange_price,
         offers, coupons, company, color, size, weight, height, category,
         in_stock, stock_quantity
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
       RETURNING *`,
       [
+        productId,
         name,
         description,
         images,
@@ -191,7 +200,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
 
     const row = result.rows[0];
     const product = {
-      id: row.id.toString(),
+      id: row.id,
       name: row.name,
       description: row.description,
       images: row.images,
@@ -277,7 +286,7 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
 
     const row = result.rows[0];
     const product = {
-      id: row.id.toString(),
+      id: row.id,
       name: row.name,
       description: row.description,
       images: row.images,
@@ -353,7 +362,7 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
 
     res.json({
       products: result.rows.map((row) => ({
-        id: row.id.toString(),
+        id: row.id,
         name: row.name,
         description: row.description,
         images: row.images || [],
@@ -410,7 +419,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
     );
 
     const suggestions = result.rows.map((row) => ({
-      id: row.id.toString(),
+      id: row.id,
       name: row.name,
       image:
         row.images && row.images.length > 0

@@ -68,10 +68,10 @@ export const initializeDatabase = async () => {
       )
     `);
 
-    // Create products table
+    // Create products table with string-based ID
     await pool.query(`
       CREATE TABLE IF NOT EXISTS products (
-        id SERIAL PRIMARY KEY,
+        id VARCHAR(255) PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         description TEXT,
         images TEXT[],
@@ -115,7 +115,7 @@ export const initializeDatabase = async () => {
       CREATE TABLE IF NOT EXISTS order_items (
         id SERIAL PRIMARY KEY,
         order_id INTEGER REFERENCES orders(id) ON DELETE CASCADE,
-        product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
+        product_id VARCHAR(255) REFERENCES products(id) ON DELETE CASCADE,
         quantity INTEGER NOT NULL,
         price DECIMAL(10,2) NOT NULL,
         selected_size VARCHAR(100),
@@ -127,7 +127,7 @@ export const initializeDatabase = async () => {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS reviews (
         id SERIAL PRIMARY KEY,
-        product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
+        product_id VARCHAR(255) REFERENCES products(id) ON DELETE CASCADE,
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
         rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
         comment TEXT,
