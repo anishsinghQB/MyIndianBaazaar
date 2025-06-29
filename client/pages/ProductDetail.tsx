@@ -8,7 +8,7 @@ import {
   RotateCcw,
   ChevronLeft,
 } from "lucide-react";
-import Header from "@/components/Header";
+import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { sampleProducts } from "@/lib/sampleData";
@@ -31,19 +31,13 @@ export default function ProductDetail() {
     // Get related products from same category
     if (foundProduct) {
       const related = sampleProducts
-        .filter(
-          (p) =>
-            p.id !== foundProduct.id && p.category === foundProduct.category,
-        )
+        .filter(p => p.id !== foundProduct.id && p.category === foundProduct.category)
         .slice(0, 4);
 
       // If not enough from same category, add from other categories
       if (related.length < 4) {
         const additional = sampleProducts
-          .filter(
-            (p) =>
-              p.id !== foundProduct.id && !related.some((r) => r.id === p.id),
-          )
+          .filter(p => p.id !== foundProduct.id && !related.some(r => r.id === p.id))
           .slice(0, 4 - related.length);
         setRelatedProducts([...related, ...additional]);
       } else {
@@ -54,9 +48,9 @@ export default function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="container mx-auto px-4 py-8">
+      <Layout>
+        <div className="bg-gray-50">
+          <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">
               Product Not Found
@@ -66,7 +60,7 @@ export default function ProductDetail() {
             </Link>
           </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
@@ -87,8 +81,8 @@ export default function ProductDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <Layout>
+      <div className="bg-gray-50">
 
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
@@ -358,15 +352,13 @@ export default function ProductDetail() {
                 <ProductCard
                   key={relatedProduct.id}
                   product={relatedProduct}
-                  onCartUpdate={() =>
-                    window.dispatchEvent(new Event("storage"))
-                  }
+                  onCartUpdate={() => window.dispatchEvent(new Event("storage"))}
                 />
               ))}
             </div>
           </div>
         )}
       </div>
-    </div>
+    </Layout>
   );
 }
