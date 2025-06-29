@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Star, Zap, Gift, Heart } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 interface SubCategory {
   name: string;
@@ -9,17 +9,11 @@ interface SubCategory {
 interface Category {
   name: string;
   subCategories: SubCategory[];
-  featured?: string[];
-  badge?: string;
-  icon?: React.ComponentType<any>;
 }
 
 const categories: Category[] = [
   {
     name: "Trending",
-    icon: Star,
-    badge: "🔥 Hot",
-    featured: ["iPhone 15", "Samsung Galaxy", "MacBook Air", "AirPods Pro"],
     subCategories: [
       {
         name: "Hot Deals",
@@ -59,10 +53,7 @@ const categories: Category[] = [
     ],
   },
   {
-    name: "FastTravel",
-    icon: Zap,
-    badge: "⚡ Express",
-    featured: ["Same Day", "2-Hour Delivery", "Express Shipping", "Priority"],
+    name: "Fastavel",
     subCategories: [
       {
         name: "Quick Delivery",
@@ -103,9 +94,6 @@ const categories: Category[] = [
   },
   {
     name: "Gift",
-    icon: Gift,
-    badge: "🎁 Special",
-    featured: ["Gift Cards", "Personalized", "Luxury Items", "Occasion Gifts"],
     subCategories: [
       {
         name: "Gift Categories",
@@ -146,8 +134,6 @@ const categories: Category[] = [
   },
   {
     name: "Kids",
-    badge: "👶 Family",
-    featured: ["Educational Toys", "Baby Care", "Kids Fashion", "Learning"],
     subCategories: [
       {
         name: "Toys & Games",
@@ -192,8 +178,6 @@ const categories: Category[] = [
   },
   {
     name: "Kitchen",
-    badge: "🍳 Cook",
-    featured: ["Air Fryers", "Mixers", "Cookware Sets", "Smart Appliances"],
     subCategories: [
       {
         name: "Appliances",
@@ -238,8 +222,6 @@ const categories: Category[] = [
   },
   {
     name: "Sales",
-    badge: "💰 Save",
-    featured: ["Up to 70% Off", "Mega Sale", "Clearance", "End of Season"],
     subCategories: [
       {
         name: "Discounts",
@@ -281,8 +263,6 @@ const categories: Category[] = [
   },
   {
     name: "Offers",
-    badge: "🎯 Deal",
-    featured: ["Cashback", "Coupons", "Bank Offers", "Loyalty Rewards"],
     subCategories: [
       {
         name: "Coupons",
@@ -324,14 +304,6 @@ const categories: Category[] = [
   },
   {
     name: "Fashion",
-    icon: Heart,
-    badge: "👗 Style",
-    featured: [
-      "Designer Wear",
-      "Ethnic Collection",
-      "Western Wear",
-      "Accessories",
-    ],
     subCategories: [
       {
         name: "Men's Fashion",
@@ -380,139 +352,89 @@ export default function CategoryNavbar() {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   return (
-    <div className="bg-white border-b border-gray-200 relative shadow-sm">
+    <div className="bg-gray-50 border-b border-gray-200 relative">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between py-3">
-          {/* Left side categories */}
-          <div className="flex items-center space-x-6 lg:space-x-8">
-            {categories.map((category) => {
-              const Icon = category.icon;
-              return (
-                <div
-                  key={category.name}
-                  className="relative group"
-                  onMouseEnter={() => setHoveredCategory(category.name)}
-                  onMouseLeave={() => setHoveredCategory(null)}
-                >
-                  <button className="flex items-center space-x-1 text-gray-700 hover:text-[#1690C7] font-medium text-sm transition-colors py-2 px-2 rounded-lg hover:bg-blue-50">
-                    {Icon && <Icon className="h-4 w-4" />}
-                    <span>{category.name}</span>
-                    <ChevronDown className="h-3 w-3" />
-                    {category.badge && (
-                      <span className="ml-1 text-xs bg-gradient-to-r from-orange-400 to-red-500 text-white px-2 py-0.5 rounded-full">
-                        {category.badge}
-                      </span>
-                    )}
-                  </button>
+        <div className="flex items-center justify-center py-3">
+          <div className="flex items-center space-x-8">
+            {categories.map((category) => (
+              <div
+                key={category.name}
+                className="relative group"
+                onMouseEnter={() => setHoveredCategory(category.name)}
+                onMouseLeave={() => setHoveredCategory(null)}
+              >
+                <button className="flex items-center space-x-1 text-gray-700 hover:text-[#1690C7] font-medium text-sm transition-colors py-2">
+                  <span>{category.name}</span>
+                  <ChevronDown className="h-3 w-3" />
+                </button>
 
-                  {/* Enhanced Dropdown Menu */}
-                  {hoveredCategory === category.name && (
-                    <div className="absolute top-full left-0 w-[32rem] bg-white border border-gray-200 rounded-xl shadow-2xl z-50 mt-2">
-                      {/* Featured Section */}
-                      {category.featured && (
-                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-t-xl border-b border-gray-100">
-                          <h4 className="font-semibold text-gray-900 mb-2 text-sm flex items-center gap-2">
-                            <Star className="h-4 w-4 text-yellow-500" />
-                            Featured in {category.name}
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {category.featured.map((item, idx) => (
-                              <span
-                                key={idx}
-                                className="bg-white text-gray-700 px-3 py-1 rounded-full text-xs border border-gray-200 hover:border-blue-300 cursor-pointer transition-colors"
-                              >
-                                {item}
-                              </span>
-                            ))}
+                {/* Enhanced Dropdown Menu - Centered */}
+                {hoveredCategory === category.name && (
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-96 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-1">
+                    <div className="p-6">
+                      <div className="grid grid-cols-2 gap-8">
+                        {category.subCategories
+                          .slice(0, 2)
+                          .map((subCategory, index) => (
+                            <div key={index}>
+                              <h3 className="font-semibold text-gray-900 mb-3 text-sm border-b border-gray-100 pb-2">
+                                {subCategory.name}
+                              </h3>
+                              <ul className="space-y-2">
+                                {subCategory.items
+                                  .slice(0, 6)
+                                  .map((item, itemIndex) => (
+                                    <li key={itemIndex}>
+                                      <button className="text-gray-600 hover:text-[#1690C7] text-sm transition-colors text-left hover:bg-blue-50 px-2 py-1 rounded w-full">
+                                        {item}
+                                      </button>
+                                    </li>
+                                  ))}
+                                {subCategory.items.length > 6 && (
+                                  <li>
+                                    <button className="text-[#1690C7] text-sm font-medium hover:underline">
+                                      View All ({subCategory.items.length - 6}{" "}
+                                      more)
+                                    </button>
+                                  </li>
+                                )}
+                              </ul>
+                            </div>
+                          ))}
+                      </div>
+
+                      {/* Additional categories if any */}
+                      {category.subCategories.length > 2 && (
+                        <div className="mt-6 pt-4 border-t border-gray-100">
+                          <div className="grid grid-cols-3 gap-4">
+                            {category.subCategories
+                              .slice(2)
+                              .map((subCategory, index) => (
+                                <div key={index}>
+                                  <h4 className="font-medium text-gray-900 mb-2 text-xs">
+                                    {subCategory.name}
+                                  </h4>
+                                  <ul className="space-y-1">
+                                    {subCategory.items
+                                      .slice(0, 4)
+                                      .map((item, itemIndex) => (
+                                        <li key={itemIndex}>
+                                          <button className="text-gray-600 hover:text-[#1690C7] text-xs transition-colors text-left">
+                                            {item}
+                                          </button>
+                                        </li>
+                                      ))}
+                                  </ul>
+                                </div>
+                              ))}
                           </div>
                         </div>
                       )}
-
-                      {/* Categories Grid */}
-                      <div className="p-6">
-                        <div className="grid grid-cols-2 gap-8">
-                          {category.subCategories
-                            .slice(0, 2)
-                            .map((subCategory, index) => (
-                              <div key={index}>
-                                <h3 className="font-semibold text-gray-900 mb-3 text-sm border-b border-gray-100 pb-2">
-                                  {subCategory.name}
-                                </h3>
-                                <ul className="space-y-2">
-                                  {subCategory.items
-                                    .slice(0, 6)
-                                    .map((item, itemIndex) => (
-                                      <li key={itemIndex}>
-                                        <button className="text-gray-600 hover:text-[#1690C7] text-sm transition-colors text-left hover:bg-blue-50 px-2 py-1 rounded w-full">
-                                          {item}
-                                        </button>
-                                      </li>
-                                    ))}
-                                  {subCategory.items.length > 6 && (
-                                    <li>
-                                      <button className="text-[#1690C7] text-sm font-medium hover:underline">
-                                        View All ({subCategory.items.length - 6}{" "}
-                                        more)
-                                      </button>
-                                    </li>
-                                  )}
-                                </ul>
-                              </div>
-                            ))}
-                        </div>
-
-                        {/* Additional categories if any */}
-                        {category.subCategories.length > 2 && (
-                          <div className="mt-6 pt-4 border-t border-gray-100">
-                            <div className="grid grid-cols-3 gap-4">
-                              {category.subCategories
-                                .slice(2)
-                                .map((subCategory, index) => (
-                                  <div key={index}>
-                                    <h4 className="font-medium text-gray-900 mb-2 text-xs">
-                                      {subCategory.name}
-                                    </h4>
-                                    <ul className="space-y-1">
-                                      {subCategory.items
-                                        .slice(0, 4)
-                                        .map((item, itemIndex) => (
-                                          <li key={itemIndex}>
-                                            <button className="text-gray-600 hover:text-[#1690C7] text-xs transition-colors text-left">
-                                              {item}
-                                            </button>
-                                          </li>
-                                        ))}
-                                    </ul>
-                                  </div>
-                                ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Footer */}
-                        <div className="mt-6 pt-4 border-t border-gray-100 text-center">
-                          <button className="text-[#1690C7] font-medium text-sm hover:underline">
-                            Explore All {category.name} Products →
-                          </button>
-                        </div>
-                      </div>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Right side additional info */}
-          <div className="hidden lg:flex items-center space-x-4 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-orange-500" />
-              <span>Free shipping above ₹500</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Heart className="h-4 w-4 text-red-500" />
-              <span>24/7 Support</span>
-            </div>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
