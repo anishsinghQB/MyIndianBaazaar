@@ -154,6 +154,20 @@ export const initializeDatabase = async () => {
       )
     `);
 
+    // Create notifications table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS notifications (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        message TEXT NOT NULL,
+        type VARCHAR(100) NOT NULL,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        is_read BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     console.log("Database tables initialized successfully");
   } catch (error) {
     console.error("Error initializing database:", error);
