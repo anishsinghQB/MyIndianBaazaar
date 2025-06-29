@@ -1,12 +1,20 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, Search, User, Menu } from "lucide-react";
+import {
+  ShoppingCart,
+  Search,
+  User,
+  Menu,
+  Bell,
+  HeadphoneIcon,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCart, getCartItemCount } from "@/lib/cart";
 
 export default function Header() {
   const [cartCount, setCartCount] = useState(0);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const cart = getCart();
@@ -53,6 +61,27 @@ export default function Header() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
               <Link
+                to="/account"
+                className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
+              >
+                <User className="h-4 w-4" />
+                <span>Account</span>
+              </Link>
+              <Link
+                to="/notifications"
+                className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
+              >
+                <Bell className="h-4 w-4" />
+                <span>Notifications</span>
+              </Link>
+              <Link
+                to="/customer-care"
+                className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
+              >
+                <HeadphoneIcon className="h-4 w-4" />
+                <span>Support</span>
+              </Link>
+              <Link
                 to="/admin"
                 className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
               >
@@ -78,7 +107,7 @@ export default function Header() {
               variant="ghost"
               size="icon"
               className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu className="h-6 w-6" />
             </Button>
@@ -110,17 +139,90 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden border-t bg-white">
-            <div className="py-4 space-y-2">
-              <Link
-                to="/admin"
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Admin Panel
-              </Link>
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
+            <div className="fixed inset-y-0 left-0 w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
+              <div className="flex items-center justify-between p-4 border-b">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">IB</span>
+                  </div>
+                  <span className="text-xl font-bold text-gray-900">
+                    IndianBaazaar
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <X className="h-6 w-6" />
+                </Button>
+              </div>
+
+              <div className="p-4 space-y-4">
+                <Link
+                  to="/account"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User className="h-5 w-5 text-gray-400" />
+                  <span className="text-gray-700">My Account</span>
+                </Link>
+
+                <Link
+                  to="/notifications"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Bell className="h-5 w-5 text-gray-400" />
+                  <span className="text-gray-700">Notifications</span>
+                </Link>
+
+                <Link
+                  to="/customer-care"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <HeadphoneIcon className="h-5 w-5 text-gray-400" />
+                  <span className="text-gray-700">Customer Care</span>
+                </Link>
+
+                <Link
+                  to="/admin"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User className="h-5 w-5 text-gray-400" />
+                  <span className="text-gray-700">Admin Panel</span>
+                </Link>
+
+                <div className="border-t pt-4">
+                  <div className="bg-primary/10 p-4 rounded-lg">
+                    <h3 className="font-medium text-gray-900 mb-2">
+                      Quick Actions
+                    </h3>
+                    <div className="space-y-2">
+                      <Link
+                        to="/cart"
+                        className="flex items-center justify-between p-2 bg-white rounded-lg border"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <ShoppingCart className="h-4 w-4 text-primary" />
+                          <span className="text-sm font-medium">View Cart</span>
+                        </div>
+                        {cartCount > 0 && (
+                          <span className="bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                            {cartCount}
+                          </span>
+                        )}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
