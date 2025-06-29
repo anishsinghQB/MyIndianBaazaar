@@ -14,6 +14,15 @@ export const getAllCustomers: RequestHandler = async (
   res,
 ) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const customers = getMockCustomersWithStats();
+      return res.json({ customers });
+    }
+
     const result = await pool.query(`
       SELECT
         id,
