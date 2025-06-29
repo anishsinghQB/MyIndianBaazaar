@@ -6,7 +6,7 @@ import {
   User,
   Menu,
   Bell,
-  HeadphoneIcon,
+  Headphones,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -78,7 +78,7 @@ export default function Header() {
                 to="/customer-care"
                 className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
               >
-                <HeadphoneIcon className="h-4 w-4" />
+                <Headphones className="h-4 w-4" />
                 <span>Support</span>
               </Link>
               <Link
@@ -185,7 +185,7 @@ export default function Header() {
                   className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <HeadphoneIcon className="h-5 w-5 text-gray-400" />
+                  <Headphones className="h-5 w-5 text-gray-400" />
                   <span className="text-gray-700">Customer Care</span>
                 </Link>
 
