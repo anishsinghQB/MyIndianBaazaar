@@ -123,3 +123,28 @@ export interface PaymentVerificationRequest {
   razorpay_signature: string;
   orderId: number;
 }
+
+export interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  type: string;
+  isRead: boolean;
+  createdAt: string;
+  userId?: number;
+}
+
+export interface CreateNotificationRequest {
+  title: string;
+  message: string;
+  type: string;
+  userId?: number;
+}
+
+export interface SearchSuggestion {
+  id: string;
+  name: string;
+  image: string;
+  category: string;
+  price: number;
+}

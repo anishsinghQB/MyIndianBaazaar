@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { pool } from "../database/config";
 import { AuthRequest, requireAdmin } from "../utils/auth";
 import { z } from "zod";
+import { createProductNotification } from "./notifications";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
@@ -163,7 +164,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
     const result = await pool.query(
       `INSERT INTO products (
         name, description, images, mrp, our_price, discount, after_exchange_price,
-        offers, coupons, company, color, size, weight, height, category, 
+        offers, coupons, company, color, size, weight, height, category,
         in_stock, stock_quantity
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
       RETURNING *`,
@@ -212,6 +213,9 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       reviews: [],
       faqs: [],
     };
+
+    // Create notification for all users about new product
+    await createProductNotification(product.name, product.id);
 
     res.status(201).json({
       message: "Product created successfully",
@@ -327,6 +331,49 @@ export const deleteProduct: RequestHandler = async (req: AuthRequest, res) => {
     res.json({ message: "Product deleted successfully" });
   } catch (error) {
     console.error("Delete product error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getSearchSuggestions: RequestHandler = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q || typeof q !== "string" || q.trim().length < 2) {
+      return res.json({ suggestions: [] });
+    }
+
+    const searchTerm = q.trim();
+    const result = await pool.query(
+      `SELECT id, name, images, category, our_price
+       FROM products
+       WHERE (name ILIKE $1 OR description ILIKE $1)
+       AND in_stock = true
+       ORDER BY
+         CASE
+           WHEN name ILIKE $2 THEN 1
+           WHEN name ILIKE $1 THEN 2
+           ELSE 3
+         END,
+         name
+       LIMIT 10`,
+      [`%${searchTerm}%`, `${searchTerm}%`],
+    );
+
+    const suggestions = result.rows.map((row) => ({
+      id: row.id.toString(),
+      name: row.name,
+      image:
+        row.images && row.images.length > 0
+          ? row.images[0]
+          : "/placeholder.svg",
+      category: row.category,
+      price: parseFloat(row.our_price),
+    }));
+
+    res.json({ suggestions });
+  } catch (error) {
+    console.error("Search suggestions error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
