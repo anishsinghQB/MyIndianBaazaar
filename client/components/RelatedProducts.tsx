@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Product } from "@shared/types";
 import ProductCard from "./ProductCard";
-import { productApi } from "@/lib/api";
+import { api } from "@/lib/api";
 
 interface RelatedProductsProps {
   category: string;
@@ -24,15 +24,15 @@ export default function RelatedProducts({
       setError(null);
 
       try {
-        const response = await productApi.getByCategory(category);
-        const filteredProducts = response.products
+        const products = await api.getProductsByCategory(category);
+        const filteredProducts = products
           .filter((product: Product) => product.id !== currentProductId)
           .slice(0, 4);
 
         // If not enough products from same category, get from all products
         if (filteredProducts.length < 4) {
-          const allProductsResponse = await productApi.getAll();
-          const additionalProducts = allProductsResponse.products
+          const allProducts = await api.getProducts();
+          const additionalProducts = allProducts
             .filter(
               (product: Product) =>
                 product.id !== currentProductId &&
