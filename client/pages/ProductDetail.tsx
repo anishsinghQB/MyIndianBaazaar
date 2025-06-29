@@ -51,13 +51,14 @@ export default function ProductDetail() {
       <Layout>
         <div className="bg-gray-50">
           <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">
-              Product Not Found
-            </h1>
-            <Link to="/">
-              <Button>Back to Home</Button>
-            </Link>
+            <div className="text-center">
+              <h1 className="text-2xl font-bold text-gray-800 mb-4">
+                Product Not Found
+              </h1>
+              <Link to="/">
+                <Button>Back to Home</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </Layout>
