@@ -24,6 +24,7 @@ import UpdateProductModal from "@/components/UpdateProductModal";
 import { Button } from "@/components/ui/button";
 import { Product, Order, User } from "@shared/types";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNotifications } from "@/contexts/NotificationContext";
 import { productApi, adminApi } from "@/lib/api";
 
 interface DashboardStats {
@@ -58,6 +59,7 @@ export default function Admin() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { refreshNotifications } = useNotifications();
 
   // Check if user is admin
   if (user?.role !== "admin") {
@@ -148,6 +150,8 @@ export default function Admin() {
             prev ? { ...prev, totalProducts: prev.totalProducts + 1 } : null,
           );
         }
+        // Refresh notifications to show new product notification
+        refreshNotifications();
       } else {
         const errorData = await response.json();
         alert(`Error adding product: ${errorData.error}`);
