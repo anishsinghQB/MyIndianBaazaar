@@ -87,7 +87,7 @@ export interface Order {
 
 export interface OrderItem {
   id: number;
-  productId: number;
+  productId: string;
   quantity: number;
   price: number;
   selectedSize?: string;
@@ -108,7 +108,7 @@ export interface CreateOrderRequest {
   amount: number;
   currency?: string;
   items: {
-    productId: number;
+    productId: string;
     quantity: number;
     price: number;
     selectedSize?: string;
