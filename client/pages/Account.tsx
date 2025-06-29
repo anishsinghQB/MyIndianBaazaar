@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ChevronLeft,
@@ -9,11 +10,43 @@ import {
   LogOut,
   Navigation,
   Edit,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import Layout from "@/components/Layout";
+import LocationPermissionModal from "@/components/LocationPermissionModal";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "@/hooks/useLocation";
 
 export default function Account() {
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const {
+    location,
+    isLoading,
+    error,
+    hasPermission,
+    isGeolocationSupported,
+    requestLocation,
+    clearLocation,
+  } = useLocation();
+
+  const handleLocationRequest = () => {
+    if (hasPermission === false) {
+      setShowLocationModal(true);
+    } else {
+      requestLocation();
+    }
+  };
+
+  const handleAllowLocation = () => {
+    setShowLocationModal(false);
+    requestLocation();
+  };
+
+  const handleDenyLocation = () => {
+    setShowLocationModal(false);
+  };
+
   return (
     <Layout>
       <div className="bg-gray-50">
@@ -53,58 +86,128 @@ export default function Account() {
                     Delivery Location
                   </h2>
                 </div>
-                <Button variant="outline" size="sm">
-                  <Edit className="h-4 w-4 mr-2" />
-                  Change
-                </Button>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
-                  <MapPin className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="font-medium text-gray-900">
-                      Current Location
-                    </span>
-                    <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                      Active
-                    </span>
-                  </div>
-                  <p className="text-gray-700 font-medium mb-1">
-                    123 MG Road, Connaught Place
-                  </p>
-                  <p className="text-gray-600 text-sm mb-2">
-                    New Delhi, Delhi -{" "}
-                    <span className="font-medium">110001</span>
-                  </p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <span>📍 Landmark: Near Metro Station</span>
-                    <span>🏠 Home</span>
-                  </div>
+                <div className="flex items-center gap-2">
+                  {location && (
+                    <Button variant="outline" size="sm" onClick={clearLocation}>
+                      <Edit className="h-4 w-4 mr-2" />
+                      Change
+                    </Button>
+                  )}
+                  {!location && isGeolocationSupported && (
+                    <Button
+                      size="sm"
+                      onClick={handleLocationRequest}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      ) : (
+                        <Navigation className="h-4 w-4 mr-2" />
+                      )}
+                      {isLoading ? "Getting Location..." : "Get Location"}
+                    </Button>
+                  )}
                 </div>
               </div>
 
-              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                <div className="flex items-center gap-2 text-sm text-blue-800">
-                  <svg
-                    className="w-4 h-4"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>
-                    Delivery available in your area • Express delivery in 2-3
-                    hours
-                  </span>
+              {/* Location Display */}
+              {location ? (
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center">
+                    <MapPin className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="font-medium text-gray-900">
+                        Current Location
+                      </span>
+                      <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                        Detected
+                      </span>
+                    </div>
+                    <p className="text-gray-700 font-medium mb-1">
+                      {location.city}, {location.state}
+                    </p>
+                    <p className="text-gray-600 text-sm mb-2">
+                      {location.country} -{" "}
+                      <span className="font-medium">{location.pincode}</span>
+                    </p>
+                    {location.landmark && (
+                      <div className="flex items-center gap-4 text-sm text-gray-500 mb-2">
+                        <span>📍 Near: {location.landmark}</span>
+                      </div>
+                    )}
+                    <p className="text-xs text-gray-500 line-clamp-2">
+                      {location.address}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ) : error ? (
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
+                    <AlertCircle className="h-6 w-6 text-red-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900 mb-1">
+                      Location Access Required
+                    </h3>
+                    <p className="text-red-600 text-sm mb-3">{error}</p>
+                    {isGeolocationSupported && (
+                      <Button size="sm" onClick={handleLocationRequest}>
+                        <Navigation className="h-4 w-4 mr-2" />
+                        Try Again
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
+                    <MapPin className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900 mb-1">
+                      Add Your Location
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-3">
+                      Get personalized delivery options and local offers
+                    </p>
+                    {isGeolocationSupported ? (
+                      <Button size="sm" onClick={handleLocationRequest}>
+                        <Navigation className="h-4 w-4 mr-2" />
+                        Detect Location
+                      </Button>
+                    ) : (
+                      <p className="text-red-600 text-sm">
+                        Geolocation is not supported by your browser
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Delivery Info */}
+              {location && (
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                  <div className="flex items-center gap-2 text-sm text-blue-800">
+                    <svg
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>
+                      Delivery available in {location.city} • Express delivery
+                      in 2-3 hours
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -181,6 +284,13 @@ export default function Account() {
           </div>
         </div>
       </div>
+
+      <LocationPermissionModal
+        isOpen={showLocationModal}
+        onClose={() => setShowLocationModal(false)}
+        onAllow={handleAllowLocation}
+        onDeny={handleDenyLocation}
+      />
     </Layout>
   );
 }
