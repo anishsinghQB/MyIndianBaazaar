@@ -12,14 +12,19 @@ import {
   Edit,
   Loader2,
   AlertCircle,
+  Mail,
+  Phone,
+  Calendar,
 } from "lucide-react";
 import Layout from "@/components/Layout";
 import LocationPermissionModal from "@/components/LocationPermissionModal";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "@/hooks/useLocation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Account() {
   const [showLocationModal, setShowLocationModal] = useState(false);
+  const { user, logout } = useAuth();
   const {
     location,
     isLoading,
@@ -68,11 +73,121 @@ export default function Account() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900">
-                    Welcome Back!
+                    Welcome Back, {user?.name || "User"}!
                   </h1>
                   <p className="text-gray-600">
                     Manage your account and orders
                   </p>
+                </div>
+              </div>
+            </div>
+
+            {/* User Profile Details */}
+            <div className="bg-white rounded-lg border p-6 mb-8">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Profile Information
+                </h2>
+                <Button variant="outline" size="sm">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Profile
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <User className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">
+                        Full Name
+                      </p>
+                      <p className="text-gray-900">
+                        {user?.name || "Not provided"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">
+                        Email Address
+                      </p>
+                      <p className="text-gray-900">
+                        {user?.email || "Not provided"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">
+                        Mobile Number
+                      </p>
+                      <p className="text-gray-900">
+                        {user?.mobileNumber || "Not provided"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-5 w-5 flex items-center justify-center">
+                      <span className="text-gray-400">👤</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">
+                        Gender
+                      </p>
+                      <p className="text-gray-900 capitalize">
+                        {user?.gender || "Not specified"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Shield className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">
+                        Account Type
+                      </p>
+                      <p className="text-gray-900 capitalize">
+                        {user?.role === "admin" ? (
+                          <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm font-medium">
+                            Administrator
+                          </span>
+                        ) : (
+                          <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm font-medium">
+                            Customer
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-5 w-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">
+                        Member Since
+                      </p>
+                      <p className="text-gray-900">
+                        {user?.createdAt
+                          ? new Date(user.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              },
+                            )
+                          : "Recently joined"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -276,6 +391,7 @@ export default function Account() {
               <Button
                 variant="outline"
                 className="text-red-600 border-red-300 hover:bg-red-50"
+                onClick={logout}
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
