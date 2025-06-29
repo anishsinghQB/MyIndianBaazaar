@@ -1,6 +1,12 @@
 import { RequestHandler } from "express";
 import { pool } from "../database/config";
 import { AuthRequest, requireAdmin } from "../utils/auth";
+import {
+  getMockStats,
+  getMockOrdersWithCustomers,
+  getMockCustomersWithStats,
+  updateMockOrderStatus,
+} from "../data/mockData";
 
 // Get all customers (admin only)
 export const getAllCustomers: RequestHandler = async (
@@ -9,17 +15,17 @@ export const getAllCustomers: RequestHandler = async (
 ) => {
   try {
     const result = await pool.query(`
-      SELECT 
-        id, 
-        name, 
-        email, 
-        mobile_number, 
-        gender, 
-        role, 
+      SELECT
+        id,
+        name,
+        email,
+        mobile_number,
+        gender,
+        role,
         created_at,
         (SELECT COUNT(*) FROM orders WHERE user_id = users.id) as total_orders,
         (SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE user_id = users.id AND status = 'confirmed') as total_spent
-      FROM users 
+      FROM users
       ORDER BY created_at DESC
     `);
 
@@ -46,7 +52,7 @@ export const getAllCustomers: RequestHandler = async (
 export const getAllOrders: RequestHandler = async (req: AuthRequest, res) => {
   try {
     const result = await pool.query(`
-      SELECT 
+      SELECT
         o.id,
         o.total_amount,
         o.status,
@@ -118,7 +124,7 @@ export const getDashboardStats: RequestHandler = async (
 
     // Get order statistics
     const ordersResult = await pool.query(`
-      SELECT 
+      SELECT
         COUNT(*) as total_orders,
         COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_orders,
         COUNT(CASE WHEN status = 'confirmed' THEN 1 END) as confirmed_orders,
