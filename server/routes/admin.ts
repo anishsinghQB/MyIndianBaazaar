@@ -51,6 +51,15 @@ export const getAllCustomers: RequestHandler = async (
 // Get all orders with customer and product details (admin only)
 export const getAllOrders: RequestHandler = async (req: AuthRequest, res) => {
   try {
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const orders = getMockOrdersWithCustomers();
+      return res.json({ orders });
+    }
+
     const result = await pool.query(`
       SELECT
         o.id,
