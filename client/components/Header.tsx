@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { getCart, getCartItemCount } from "@/lib/cart";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNotifications } from "@/contexts/NotificationContext";
 import AuthModal from "./AuthModal";
 import SearchAutocomplete from "./SearchAutocomplete";
 
@@ -23,6 +24,7 @@ export default function Header() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
+  const { unreadCount } = useNotifications();
 
   useEffect(() => {
     const cart = getCart();
@@ -70,10 +72,15 @@ export default function Header() {
                 <>
                   <Link
                     to="/notifications"
-                    className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                    className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors relative"
                   >
                     <Bell className="h-4 w-4 text-[#1690C7]" />
                     <span>Notifications</span>
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {unreadCount > 99 ? "99+" : unreadCount}
+                      </span>
+                    )}
                   </Link>
                   <Link
                     to="/customer-care"
@@ -249,11 +256,16 @@ export default function Header() {
 
                   <Link
                     to="/notifications"
-                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors relative"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Bell className="h-5 w-5 text-[#1690C7]" />
                     <span className="text-gray-700">Notifications</span>
+                    {unreadCount > 0 && (
+                      <span className="absolute left-8 top-2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                        {unreadCount > 99 ? "99+" : unreadCount}
+                      </span>
+                    )}
                   </Link>
 
                   <Link
