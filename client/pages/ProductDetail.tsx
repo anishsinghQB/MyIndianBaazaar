@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
+import ImageZoom from "@/components/ImageZoom";
 import { Button } from "@/components/ui/button";
 import { sampleProducts } from "@/lib/sampleData";
 import { addToCart } from "@/lib/cart";
@@ -114,11 +115,11 @@ export default function ProductDetail() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
             {/* Product Images */}
             <div className="space-y-4">
-              <div className="aspect-square bg-white rounded-lg overflow-hidden border">
-                <img
+              <div className="aspect-square bg-white rounded-lg border">
+                <ImageZoom
                   src={product.images[selectedImage] || "/placeholder.svg"}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="aspect-square rounded-lg"
                 />
               </div>
               <div className="grid grid-cols-5 gap-2">
