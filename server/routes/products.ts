@@ -3,6 +3,12 @@ import { pool } from "../database/config";
 import { AuthRequest, requireAdmin } from "../utils/auth";
 import { z } from "zod";
 import { createProductNotification } from "./notifications";
+import {
+  getMockData,
+  addMockProduct,
+  updateMockProduct,
+  deleteMockProduct,
+} from "../data/mockData";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
