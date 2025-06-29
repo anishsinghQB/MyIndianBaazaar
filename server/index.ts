@@ -93,6 +93,7 @@ export function createServer() {
   // Product routes
   app.get("/api/products", getAllProducts);
   app.get("/api/products/:id", getProductById);
+  app.get("/api/products/search/suggestions", getSearchSuggestions);
   app.post("/api/products", authenticateToken, requireAdmin, createProduct);
   app.put("/api/products/:id", authenticateToken, requireAdmin, updateProduct);
   app.delete(
@@ -100,6 +101,26 @@ export function createServer() {
     authenticateToken,
     requireAdmin,
     deleteProduct,
+  );
+
+  // Notification routes
+  app.get("/api/notifications", authenticateToken, getUserNotifications);
+  app.patch(
+    "/api/notifications/:id/read",
+    authenticateToken,
+    markNotificationAsRead,
+  );
+  app.post(
+    "/api/notifications",
+    authenticateToken,
+    requireAdmin,
+    createNotification,
+  );
+  app.delete(
+    "/api/notifications/:id",
+    authenticateToken,
+    requireAdmin,
+    deleteNotification,
   );
 
   // Payment routes
