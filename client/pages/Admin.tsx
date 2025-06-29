@@ -158,6 +158,41 @@ export default function Admin() {
     }
   };
 
+  const handleUpdateProduct = async (
+    productId: string,
+    productData: Partial<Product>,
+  ) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`/api/products/${productId}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProducts((prev) =>
+          prev.map((p) => (p.id === productId ? data.product : p)),
+        );
+      } else {
+        const errorData = await response.json();
+        alert(`Error updating product: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+      alert("Failed to update product");
+    }
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsUpdateModalOpen(true);
+  };
+
   const handleDeleteProduct = async (productId: string) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
 
