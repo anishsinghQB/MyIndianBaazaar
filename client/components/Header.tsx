@@ -67,40 +67,40 @@ export default function Header() {
             <div className="hidden md:flex items-center space-x-6">
               <Link
                 to="/account"
-                className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
+                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
               >
-                <User className="h-4 w-4" />
+                <User className="h-4 w-4 text-[#1690C7]" />
                 <span>Account</span>
               </Link>
               <Link
                 to="/notifications"
-                className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
+                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
               >
-                <Bell className="h-4 w-4" />
+                <Bell className="h-4 w-4 text-[#1690C7]" />
                 <span>Notifications</span>
               </Link>
               <Link
                 to="/customer-care"
-                className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
+                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
               >
-                <Headphones className="h-4 w-4" />
+                <Headphones className="h-4 w-4 text-[#1690C7]" />
                 <span>Support</span>
               </Link>
               <Link
                 to="/admin"
-                className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
+                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
               >
-                <User className="h-4 w-4" />
+                <User className="h-4 w-4 text-[#1690C7]" />
                 <span>Admin</span>
               </Link>
               <Link
                 to="/cart"
-                className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors relative"
+                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors relative"
               >
-                <ShoppingCart className="h-4 w-4" />
+                <ShoppingCart className="h-4 w-4 text-[#1690C7]" />
                 <span>Cart</span>
                 {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-[#1690C7] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
@@ -120,11 +120,11 @@ export default function Header() {
             {/* Mobile Cart Icon */}
             <Link
               to="/cart"
-              className="md:hidden relative text-gray-700 hover:text-primary"
+              className="md:hidden relative text-gray-600 hover:text-[#1690C7]"
             >
-              <ShoppingCart className="h-6 w-6" />
+              <ShoppingCart className="h-6 w-6 text-[#1690C7]" />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-[#1690C7] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
@@ -182,7 +182,7 @@ export default function Header() {
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <User className="h-5 w-5 text-gray-400" />
+                <User className="h-5 w-5 text-[#1690C7]" />
                 <span className="text-gray-700">My Account</span>
               </Link>
 
@@ -191,7 +191,7 @@ export default function Header() {
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Bell className="h-5 w-5 text-gray-400" />
+                <Bell className="h-5 w-5 text-[#1690C7]" />
                 <span className="text-gray-700">Notifications</span>
               </Link>
 
@@ -200,7 +200,7 @@ export default function Header() {
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Headphones className="h-5 w-5 text-gray-400" />
+                <Headphones className="h-5 w-5 text-[#1690C7]" />
                 <span className="text-gray-700">Customer Care</span>
               </Link>
 
@@ -209,7 +209,7 @@ export default function Header() {
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <User className="h-5 w-5 text-gray-400" />
+                <User className="h-5 w-5 text-[#1690C7]" />
                 <span className="text-gray-700">Admin Panel</span>
               </Link>
 
@@ -225,11 +225,11 @@ export default function Header() {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <div className="flex items-center space-x-2">
-                        <ShoppingCart className="h-4 w-4 text-primary" />
+                        <ShoppingCart className="h-4 w-4 text-[#1690C7]" />
                         <span className="text-sm font-medium">View Cart</span>
                       </div>
                       {cartCount > 0 && (
-                        <span className="bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        <span className="bg-[#1690C7] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                           {cartCount}
                         </span>
                       )}

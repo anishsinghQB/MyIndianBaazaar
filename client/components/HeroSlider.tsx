@@ -29,7 +29,7 @@ const slides: Slide[] = [
     subtitle: "Latest smartphones, laptops & accessories at best prices",
     ctaText: "Explore Electronics",
     ctaLink: "#",
-     backgroundColor: "from-blue-600 to-purple-600",
+    backgroundColor: "from-blue-600 to-purple-600",
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ const slides: Slide[] = [
     subtitle: "Trendy clothes and premium beauty products for everyone",
     ctaText: "Shop Fashion",
     ctaLink: "#",
-   backgroundColor: "from-blue-600 to-purple-600",
+    backgroundColor: "from-blue-600 to-purple-600",
   },
   {
     id: 4,
@@ -56,7 +56,7 @@ const slides: Slide[] = [
     subtitle: "Up to 70% off on selected items - Limited time deals",
     ctaText: "Grab Deals",
     ctaLink: "#",
-     backgroundColor: "from-blue-600 to-purple-600",
+    backgroundColor: "from-blue-600 to-purple-600",
   },
 ];
 
@@ -188,27 +188,27 @@ export default function HeroSlider() {
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-200 backdrop-blur-sm"
+        className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-1.5 md:p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
         aria-label="Previous slide"
       >
-        <ChevronLeft className="h-6 w-6" />
+        <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-200 backdrop-blur-sm"
+        className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-1.5 md:p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
         aria-label="Next slide"
       >
-        <ChevronRight className="h-6 w-6" />
+        <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
       </button>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3">
+      <div className="absolute bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 md:space-x-3">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-200 ${
+            className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-200 ${
               index === currentSlide
                 ? "bg-white scale-110"
                 : "bg-white/50 hover:bg-white/70"
