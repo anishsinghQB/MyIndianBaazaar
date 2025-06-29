@@ -334,3 +334,46 @@ export const deleteProduct: RequestHandler = async (req: AuthRequest, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getSearchSuggestions: RequestHandler = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q || typeof q !== "string" || q.trim().length < 2) {
+      return res.json({ suggestions: [] });
+    }
+
+    const searchTerm = q.trim();
+    const result = await pool.query(
+      `SELECT id, name, images, category, our_price
+       FROM products
+       WHERE (name ILIKE $1 OR description ILIKE $1)
+       AND in_stock = true
+       ORDER BY
+         CASE
+           WHEN name ILIKE $2 THEN 1
+           WHEN name ILIKE $1 THEN 2
+           ELSE 3
+         END,
+         name
+       LIMIT 10`,
+      [`%${searchTerm}%`, `${searchTerm}%`],
+    );
+
+    const suggestions = result.rows.map((row) => ({
+      id: row.id.toString(),
+      name: row.name,
+      image:
+        row.images && row.images.length > 0
+          ? row.images[0]
+          : "/placeholder.svg",
+      category: row.category,
+      price: parseFloat(row.our_price),
+    }));
+
+    res.json({ suggestions });
+  } catch (error) {
+    console.error("Search suggestions error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
