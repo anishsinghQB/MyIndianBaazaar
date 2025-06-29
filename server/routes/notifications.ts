@@ -165,12 +165,13 @@ export const createProductNotification = async (
 ) => {
   try {
     await pool.query(
-      `INSERT INTO notifications (title, message, type, user_id)
-       VALUES ($1, $2, $3, NULL)`,
+      `INSERT INTO notifications (title, message, type, user_id, metadata)
+       VALUES ($1, $2, $3, NULL, $4)`,
       [
         "New Product Added!",
         `Check out our new product: ${productName}. Click to view details.`,
         "product_added",
+        JSON.stringify({ productId, productName }),
       ],
     );
     console.log("Product notification created successfully");
