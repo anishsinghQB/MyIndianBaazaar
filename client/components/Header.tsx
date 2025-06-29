@@ -232,41 +232,94 @@ export default function Header() {
             </div>
 
             <div className="p-4 space-y-4">
-              <Link
-                to="/account"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <User className="h-5 w-5 text-[#1690C7]" />
-                <span className="text-gray-700">My Account</span>
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <div className="bg-gray-50 p-3 rounded-lg mb-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                        <User className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {user?.name}
+                        </p>
+                        <p className="text-sm text-gray-600">{user?.email}</p>
+                      </div>
+                    </div>
+                  </div>
 
-              <Link
-                to="/notifications"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Bell className="h-5 w-5 text-[#1690C7]" />
-                <span className="text-gray-700">Notifications</span>
-              </Link>
+                  <Link
+                    to="/account"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User className="h-5 w-5 text-[#1690C7]" />
+                    <span className="text-gray-700">My Account</span>
+                  </Link>
 
-              <Link
-                to="/customer-care"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Headphones className="h-5 w-5 text-[#1690C7]" />
-                <span className="text-gray-700">Customer Care</span>
-              </Link>
+                  <Link
+                    to="/notifications"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Bell className="h-5 w-5 text-[#1690C7]" />
+                    <span className="text-gray-700">Notifications</span>
+                  </Link>
 
-              <Link
-                to="/admin"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <User className="h-5 w-5 text-[#1690C7]" />
-                <span className="text-gray-700">Admin Panel</span>
-              </Link>
+                  <Link
+                    to="/customer-care"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Headphones className="h-5 w-5 text-[#1690C7]" />
+                    <span className="text-gray-700">Customer Care</span>
+                  </Link>
+
+                  {user?.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Settings className="h-5 w-5 text-[#1690C7]" />
+                      <span className="text-gray-700">Admin Panel</span>
+                    </Link>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <LogOut className="h-5 w-5 text-red-500" />
+                    <span className="text-red-600">Sign Out</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => {
+                      setIsAuthModalOpen(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full"
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+
+                  <Link
+                    to="/customer-care"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Headphones className="h-5 w-5 text-[#1690C7]" />
+                    <span className="text-gray-700">Customer Care</span>
+                  </Link>
+                </>
+              )}
 
               <div className="border-t pt-4">
                 <div className="bg-primary/10 p-4 rounded-lg">
