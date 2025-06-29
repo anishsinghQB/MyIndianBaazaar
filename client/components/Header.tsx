@@ -8,13 +8,20 @@ import {
   Bell,
   Headphones,
   X,
+  LogOut,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCart, getCartItemCount } from "@/lib/cart";
+import { useAuth } from "@/contexts/AuthContext";
+import AuthModal from "./AuthModal";
 
 export default function Header() {
   const [cartCount, setCartCount] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     const cart = getCart();
@@ -65,34 +72,82 @@ export default function Header() {
           <div className="flex items-center space-x-4">
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
-              <Link
-                to="/account"
-                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
-              >
-                <User className="h-4 w-4 text-[#1690C7]" />
-                <span>Account</span>
-              </Link>
-              <Link
-                to="/notifications"
-                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
-              >
-                <Bell className="h-4 w-4 text-[#1690C7]" />
-                <span>Notifications</span>
-              </Link>
-              <Link
-                to="/customer-care"
-                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
-              >
-                <Headphones className="h-4 w-4 text-[#1690C7]" />
-                <span>Support</span>
-              </Link>
-              <Link
-                to="/admin"
-                className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
-              >
-                <User className="h-4 w-4 text-[#1690C7]" />
-                <span>Admin</span>
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/notifications"
+                    className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                  >
+                    <Bell className="h-4 w-4 text-[#1690C7]" />
+                    <span>Notifications</span>
+                  </Link>
+                  <Link
+                    to="/customer-care"
+                    className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                  >
+                    <Headphones className="h-4 w-4 text-[#1690C7]" />
+                    <span>Support</span>
+                  </Link>
+                  {user?.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                    >
+                      <Settings className="h-4 w-4 text-[#1690C7]" />
+                      <span>Admin</span>
+                    </Link>
+                  )}
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                    >
+                      <User className="h-4 w-4 text-[#1690C7]" />
+                      <span>{user?.name || "Account"}</span>
+                    </button>
+                    {showUserMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border">
+                        <Link
+                          to="/account"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <User className="h-4 w-4 inline mr-2" />
+                          My Account
+                        </Link>
+                        <button
+                          onClick={() => {
+                            logout();
+                            setShowUserMenu(false);
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <LogOut className="h-4 w-4 inline mr-2" />
+                          Sign Out
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setIsAuthModalOpen(true)}
+                    className="text-gray-600 hover:text-[#1690C7]"
+                  >
+                    <User className="h-4 w-4 mr-1" />
+                    Sign In
+                  </Button>
+                  <Link
+                    to="/customer-care"
+                    className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors"
+                  >
+                    <Headphones className="h-4 w-4 text-[#1690C7]" />
+                    <span>Support</span>
+                  </Link>
+                </>
+              )}
               <Link
                 to="/cart"
                 className="text-gray-600 hover:text-[#1690C7] flex items-center space-x-1 transition-colors relative"
@@ -177,41 +232,94 @@ export default function Header() {
             </div>
 
             <div className="p-4 space-y-4">
-              <Link
-                to="/account"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <User className="h-5 w-5 text-[#1690C7]" />
-                <span className="text-gray-700">My Account</span>
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <div className="bg-gray-50 p-3 rounded-lg mb-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                        <User className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {user?.name}
+                        </p>
+                        <p className="text-sm text-gray-600">{user?.email}</p>
+                      </div>
+                    </div>
+                  </div>
 
-              <Link
-                to="/notifications"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Bell className="h-5 w-5 text-[#1690C7]" />
-                <span className="text-gray-700">Notifications</span>
-              </Link>
+                  <Link
+                    to="/account"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User className="h-5 w-5 text-[#1690C7]" />
+                    <span className="text-gray-700">My Account</span>
+                  </Link>
 
-              <Link
-                to="/customer-care"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Headphones className="h-5 w-5 text-[#1690C7]" />
-                <span className="text-gray-700">Customer Care</span>
-              </Link>
+                  <Link
+                    to="/notifications"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Bell className="h-5 w-5 text-[#1690C7]" />
+                    <span className="text-gray-700">Notifications</span>
+                  </Link>
 
-              <Link
-                to="/admin"
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <User className="h-5 w-5 text-[#1690C7]" />
-                <span className="text-gray-700">Admin Panel</span>
-              </Link>
+                  <Link
+                    to="/customer-care"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Headphones className="h-5 w-5 text-[#1690C7]" />
+                    <span className="text-gray-700">Customer Care</span>
+                  </Link>
+
+                  {user?.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Settings className="h-5 w-5 text-[#1690C7]" />
+                      <span className="text-gray-700">Admin Panel</span>
+                    </Link>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <LogOut className="h-5 w-5 text-red-500" />
+                    <span className="text-red-600">Sign Out</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => {
+                      setIsAuthModalOpen(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full"
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+
+                  <Link
+                    to="/customer-care"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Headphones className="h-5 w-5 text-[#1690C7]" />
+                    <span className="text-gray-700">Customer Care</span>
+                  </Link>
+                </>
+              )}
 
               <div className="border-t pt-4">
                 <div className="bg-primary/10 p-4 rounded-lg">
@@ -241,6 +349,11 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
     </header>
   );
 }
