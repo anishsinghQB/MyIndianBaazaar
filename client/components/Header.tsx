@@ -145,9 +145,18 @@ export default function Header() {
         </div>
 
         {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden">
-            <div className="fixed inset-y-0 left-0 w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
+        <div
+          className={`fixed inset-0 bg-black transition-opacity duration-300 z-50 md:hidden ${
+            isMobileMenuOpen ? "bg-opacity-50" : "bg-opacity-0 pointer-events-none"
+          }`}
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <div
+            className={`fixed inset-y-0 right-0 w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${
+              isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
               <div className="flex items-center justify-between p-4 border-b">
                 <div className="flex items-center">
                   <img
