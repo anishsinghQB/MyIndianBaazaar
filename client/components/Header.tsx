@@ -41,10 +41,10 @@ export default function Header() {
               alt="IndianBaazaar"
               className="h-10 w-auto"
             />
-            <span className="text-xl font-bold text-[#1690C7] ml-2">
+            <span className="text-xl font-bold text-[#1690C7] ml-2 hide-span:hidden">
               Indian
             </span>
-            <span className="text-xl font-bold text-[#000] inline">
+            <span className="text-xl font-bold text-[#000] inline hide-span:hidden">
               Baazaar
             </span>
           </Link>
@@ -86,13 +86,13 @@ export default function Header() {
                 <Headphones className="h-4 w-4" />
                 <span>Support</span>
               </Link>
-              <Link
+              {/* <Link
                 to="/admin"
                 className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
               >
                 <User className="h-4 w-4" />
                 <span>Admin</span>
-              </Link>
+              </Link> */}
               <Link
                 to="/cart"
                 className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors relative"
