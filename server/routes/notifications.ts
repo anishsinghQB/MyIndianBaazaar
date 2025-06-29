@@ -31,6 +31,7 @@ export const getUserNotifications: RequestHandler = async (
       message: row.message,
       type: row.type,
       isRead: row.is_read,
+      metadata: row.metadata,
       createdAt: row.created_at,
     }));
 

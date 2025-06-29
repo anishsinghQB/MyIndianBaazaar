@@ -130,6 +130,7 @@ export interface Notification {
   message: string;
   type: string;
   isRead: boolean;
+  metadata?: any;
   createdAt: string;
   userId?: number;
 }
