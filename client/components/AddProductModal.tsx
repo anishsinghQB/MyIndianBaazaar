@@ -38,14 +38,13 @@ export default function AddProductModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const productData: Omit<Product, "id" | "reviews"> = {
+    const productData: Omit<Product, "id" | "reviews" | "rating"> = {
       name: formData.name,
       description: formData.description,
       images: formData.images.filter((img) => img.trim() !== ""),
       mrp: parseFloat(formData.mrp) || 0,
       ourPrice: parseFloat(formData.ourPrice) || 0,
       discount: parseFloat(formData.discount) || 0,
-      rating: parseFloat(formData.rating) || 0,
       afterExchangePrice: formData.afterExchangePrice
         ? parseFloat(formData.afterExchangePrice)
         : undefined,
