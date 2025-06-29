@@ -355,7 +355,7 @@ export default function CategoryNavbar() {
     <div className="bg-gray-50 border-b border-gray-200 relative">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center py-3">
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-16">
             {categories.map((category) => (
               <div
                 key={category.name}
