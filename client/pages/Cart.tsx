@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Minus, Trash2, ShoppingBag, ChevronLeft } from "lucide-react";
-import Header from "@/components/Header";
+import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import {
   getCart,
@@ -71,8 +71,8 @@ export default function Cart() {
 
   if (cart.items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
+      <Layout>
+        <div className="bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-16">
             <ShoppingBag className="h-24 w-24 text-gray-400 mx-auto mb-6" />
@@ -88,13 +88,13 @@ export default function Cart() {
             </Link>
           </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <Layout>
+      <div className="bg-gray-50">
 
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
@@ -293,6 +293,6 @@ export default function Cart() {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
