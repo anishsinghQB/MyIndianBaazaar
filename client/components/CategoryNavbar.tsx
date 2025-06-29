@@ -236,7 +236,7 @@ export default function CategoryNavbar() {
           {categories.map((category) => (
             <div
               key={category.name}
-              className="relative"
+              className="relative group"
               onMouseEnter={() => setHoveredCategory(category.name)}
               onMouseLeave={() => setHoveredCategory(null)}
             >
@@ -275,12 +275,9 @@ export default function CategoryNavbar() {
         </div>
       </div>
 
-      {/* Background overlay for dropdown */}
+      {/* Background overlay for dropdown - only for visual effect, no mouse events */}
       {hoveredCategory && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-10 z-40"
-          onMouseEnter={() => setHoveredCategory(null)}
-        />
+        <div className="fixed inset-0 bg-black bg-opacity-5 z-40 pointer-events-none" />
       )}
     </div>
   );
