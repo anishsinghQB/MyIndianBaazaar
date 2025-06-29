@@ -77,7 +77,7 @@ export default function Header() {
                     <Bell className="h-4 w-4 text-[#1690C7]" />
                     <span>Notifications</span>
                     {unreadCount > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      <span className="absolute -top-4 -left-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                         {unreadCount > 99 ? "99+" : unreadCount}
                       </span>
                     )}
@@ -262,7 +262,7 @@ export default function Header() {
                     <Bell className="h-5 w-5 text-[#1690C7]" />
                     <span className="text-gray-700">Notifications</span>
                     {unreadCount > 0 && (
-                      <span className="absolute left-8 top-2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                      <span className="absolute left-1 bottom-9 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                         {unreadCount > 99 ? "99+" : unreadCount}
                       </span>
                     )}

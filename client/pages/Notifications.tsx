@@ -58,7 +58,8 @@ export default function Notifications() {
     fetchNotifications();
   }, []);
 
-  const handleNotificationClick = async (notification: Notification) => {
+  const handleNotificationClick = async (notification: any) => {
+    console.log( "Notification clicked:", notification);
     if (!notification.isRead) {
       await markAsRead(notification.id);
     }
@@ -66,13 +67,7 @@ export default function Notifications() {
     // Handle navigation based on notification type and metadata
     switch (notification.type) {
       case "product_added":
-        if (notification.metadata?.productId) {
-          // Navigate to specific product page
-          navigate(`/product/${notification.metadata.productId}`);
-        } else {
-          // Navigate to home to see new products
-          navigate("/");
-        }
+          navigate(`/product/${notification.id}`);
         break;
       case "order":
         // Navigate to orders/account page

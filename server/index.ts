@@ -7,7 +7,6 @@ import {
   initializeDatabase,
   sequelize,
 } from "./database/config";
-import { migrateProductIds } from "./database/migrate";
 import { authenticateToken, requireAdmin } from "./utils/auth";
 
 // Auth routes
@@ -63,7 +62,7 @@ export function createServer() {
   connectToPgSqlDB().catch(console.error);
 
   // Run migration for product IDs
-  migrateProductIds().catch(console.error);
+  // migrateProductIds().catch(console.error);
 
   sequelize
     .sync({ alter: true })
