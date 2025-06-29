@@ -6,7 +6,7 @@ import { Product } from "@shared/types";
 interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (product: Omit<Product, "id" | "reviews">) => void;
+  onSave: (product: Omit<Product, "id" | "reviews" | "rating">) => void;
 }
 
 export default function AddProductModal({

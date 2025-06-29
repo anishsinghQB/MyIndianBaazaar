@@ -28,7 +28,9 @@ export const comparePassword = async (
 };
 
 export const generateToken = (user: UserPayload): string => {
-  return jwt.sign(user, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+  return jwt.sign(user, JWT_SECRET, {
+    expiresIn: JWT_EXPIRY,
+  } as jwt.SignOptions);
 };
 
 export const verifyToken = (token: string): UserPayload => {
