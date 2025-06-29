@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { handleDemo } from "./routes/demo";
-import { initializeDatabase } from "./database/config";
+import { connectToPgSqlDB, initializeDatabase, sequelize } from "./database/config";
 import { authenticateToken, requireAdmin } from "./utils/auth";
 
 // Auth routes
@@ -32,6 +32,19 @@ export function createServer() {
 
   // Initialize database
   initializeDatabase().catch(console.error);
+  connectToPgSqlDB().catch(console.error);
+
+  sequelize.sync({ alter: true })
+  .then(() => {
+    console.log('Tables synced');
+
+    app.listen(process.env.PORT || 4000, () => {
+      console.log('Server started...');
+    });
+  })
+  .catch((err) => {
+    console.error('Unable to sync tables:', err);
+  });
 
   // Middleware
   app.use(cors());
