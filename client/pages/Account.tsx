@@ -16,8 +16,8 @@ export default function Account() {
     <Layout>
       <div className="bg-gray-50">
         <div className="container mx-auto px-4 py-8">
-        {/* Back Button */}
-        <Link
+          {/* Back Button */}
+          <Link
           to="/"
           className="inline-flex items-center gap-2 mb-6 text-primary hover:underline"
         >
