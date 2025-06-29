@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { pool } from "../database/config";
 import { AuthRequest, requireAdmin } from "../utils/auth";
 import { z } from "zod";
+import { createProductNotification } from "./notifications";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
@@ -163,7 +164,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
     const result = await pool.query(
       `INSERT INTO products (
         name, description, images, mrp, our_price, discount, after_exchange_price,
-        offers, coupons, company, color, size, weight, height, category, 
+        offers, coupons, company, color, size, weight, height, category,
         in_stock, stock_quantity
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
       RETURNING *`,
