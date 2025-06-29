@@ -412,6 +412,19 @@ export const deleteProduct: RequestHandler = async (req: AuthRequest, res) => {
   try {
     const { id } = req.params;
 
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const deleted = deleteMockProduct(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      return res.json({ message: "Product deleted successfully" });
+    }
+
     const result = await pool.query(
       "DELETE FROM products WHERE id = $1 RETURNING id",
       [id],
