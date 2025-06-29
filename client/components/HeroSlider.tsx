@@ -29,7 +29,7 @@ const slides: Slide[] = [
     subtitle: "Latest smartphones, laptops & accessories at best prices",
     ctaText: "Explore Electronics",
     ctaLink: "#",
-    backgroundColor: "from-green-600 to-blue-600",
+     backgroundColor: "from-blue-600 to-purple-600",
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ const slides: Slide[] = [
     subtitle: "Trendy clothes and premium beauty products for everyone",
     ctaText: "Shop Fashion",
     ctaLink: "#",
-    backgroundColor: "from-pink-600 to-orange-600",
+   backgroundColor: "from-blue-600 to-purple-600",
   },
   {
     id: 4,
@@ -47,7 +47,7 @@ const slides: Slide[] = [
     subtitle: "Fresh groceries delivered daily & bestselling books",
     ctaText: "Order Now",
     ctaLink: "#",
-    backgroundColor: "from-teal-600 to-green-600",
+    backgroundColor: "from-blue-600 to-purple-600",
   },
   {
     id: 5,
@@ -56,7 +56,7 @@ const slides: Slide[] = [
     subtitle: "Up to 70% off on selected items - Limited time deals",
     ctaText: "Grab Deals",
     ctaLink: "#",
-    backgroundColor: "from-red-600 to-pink-600",
+     backgroundColor: "from-blue-600 to-purple-600",
   },
 ];
 
@@ -69,7 +69,7 @@ export default function HeroSlider() {
 
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
@@ -138,7 +138,7 @@ export default function HeroSlider() {
                       <Button
                         variant="outline"
                         size="lg"
-                        className="border-white text-white hover:bg-white hover:text-gray-900 font-semibold px-8 py-3 text-lg"
+                        className="border-white  text-gray-900 font-semibold px-8 py-3 text-lg"
                       >
                         Learn More
                       </Button>
