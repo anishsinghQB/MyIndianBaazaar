@@ -147,7 +147,9 @@ export default function Header() {
         {/* Mobile Menu Overlay */}
         <div
           className={`fixed inset-0 bg-black transition-opacity duration-300 z-50 md:hidden ${
-            isMobileMenuOpen ? "bg-opacity-50" : "bg-opacity-0 pointer-events-none"
+            isMobileMenuOpen
+              ? "bg-opacity-50"
+              : "bg-opacity-0 pointer-events-none"
           }`}
           onClick={() => setIsMobileMenuOpen(false)}
         >
@@ -157,82 +159,81 @@ export default function Header() {
             }`}
             onClick={(e) => e.stopPropagation()}
           >
-              <div className="flex items-center justify-between p-4 border-b">
-                <div className="flex items-center">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2Fc0bb718ca55f4080904ee431798aa3e4%2F6e8d94dda07c4bcc989f4b6943784a3d?format=webp&width=800"
-                    alt="IndianBaazaar"
-                    className="h-8 w-auto"
-                  />
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <X className="h-6 w-6" />
-                </Button>
+            <div className="flex items-center justify-between p-4 border-b">
+              <div className="flex items-center">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2Fc0bb718ca55f4080904ee431798aa3e4%2F6e8d94dda07c4bcc989f4b6943784a3d?format=webp&width=800"
+                  alt="IndianBaazaar"
+                  className="h-8 w-auto"
+                />
               </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <X className="h-6 w-6" />
+              </Button>
+            </div>
 
-              <div className="p-4 space-y-4">
-                <Link
-                  to="/account"
-                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <User className="h-5 w-5 text-gray-400" />
-                  <span className="text-gray-700">My Account</span>
-                </Link>
+            <div className="p-4 space-y-4">
+              <Link
+                to="/account"
+                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <User className="h-5 w-5 text-gray-400" />
+                <span className="text-gray-700">My Account</span>
+              </Link>
 
-                <Link
-                  to="/notifications"
-                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Bell className="h-5 w-5 text-gray-400" />
-                  <span className="text-gray-700">Notifications</span>
-                </Link>
+              <Link
+                to="/notifications"
+                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <Bell className="h-5 w-5 text-gray-400" />
+                <span className="text-gray-700">Notifications</span>
+              </Link>
 
-                <Link
-                  to="/customer-care"
-                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Headphones className="h-5 w-5 text-gray-400" />
-                  <span className="text-gray-700">Customer Care</span>
-                </Link>
+              <Link
+                to="/customer-care"
+                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <Headphones className="h-5 w-5 text-gray-400" />
+                <span className="text-gray-700">Customer Care</span>
+              </Link>
 
-                <Link
-                  to="/admin"
-                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <User className="h-5 w-5 text-gray-400" />
-                  <span className="text-gray-700">Admin Panel</span>
-                </Link>
+              <Link
+                to="/admin"
+                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <User className="h-5 w-5 text-gray-400" />
+                <span className="text-gray-700">Admin Panel</span>
+              </Link>
 
-                <div className="border-t pt-4">
-                  <div className="bg-primary/10 p-4 rounded-lg">
-                    <h3 className="font-medium text-gray-900 mb-2">
-                      Quick Actions
-                    </h3>
-                    <div className="space-y-2">
-                      <Link
-                        to="/cart"
-                        className="flex items-center justify-between p-2 bg-white rounded-lg border"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <ShoppingCart className="h-4 w-4 text-primary" />
-                          <span className="text-sm font-medium">View Cart</span>
-                        </div>
-                        {cartCount > 0 && (
-                          <span className="bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {cartCount}
-                          </span>
-                        )}
-                      </Link>
-                    </div>
+              <div className="border-t pt-4">
+                <div className="bg-primary/10 p-4 rounded-lg">
+                  <h3 className="font-medium text-gray-900 mb-2">
+                    Quick Actions
+                  </h3>
+                  <div className="space-y-2">
+                    <Link
+                      to="/cart"
+                      className="flex items-center justify-between p-2 bg-white rounded-lg border"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <ShoppingCart className="h-4 w-4 text-primary" />
+                        <span className="text-sm font-medium">View Cart</span>
+                      </div>
+                      {cartCount > 0 && (
+                        <span className="bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                          {cartCount}
+                        </span>
+                      )}
+                    </Link>
                   </div>
                 </div>
               </div>
