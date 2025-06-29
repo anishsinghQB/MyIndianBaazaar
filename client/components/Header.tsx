@@ -86,13 +86,13 @@ export default function Header() {
                 <Headphones className="h-4 w-4" />
                 <span>Support</span>
               </Link>
-              {/* <Link
+              <Link
                 to="/admin"
                 className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors"
               >
                 <User className="h-4 w-4" />
                 <span>Admin</span>
-              </Link> */}
+              </Link>
               <Link
                 to="/cart"
                 className="text-gray-700 hover:text-primary flex items-center space-x-1 transition-colors relative"

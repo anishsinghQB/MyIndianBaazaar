@@ -355,6 +355,7 @@ export default function CategoryNavbar() {
     string | null
   >(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -369,13 +370,48 @@ export default function CategoryNavbar() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      // Clean up timeout on unmount
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
   }, []);
 
   const handleMobileCategoryClick = (categoryName: string) => {
     setActiveMobileCategory(
       activeMobileCategory === categoryName ? null : categoryName,
     );
+  };
+
+  const handleMouseEnter = (categoryName: string) => {
+    // Clear any existing timeout
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setHoveredCategory(categoryName);
+  };
+
+  const handleMouseLeave = () => {
+    // Add a small delay before closing to allow mouse movement to dropdown
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoveredCategory(null);
+    }, 150);
+  };
+
+  const handleDropdownMouseEnter = () => {
+    // Cancel the close timeout if mouse enters dropdown
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+  };
+
+  const handleDropdownMouseLeave = () => {
+    // Close immediately when leaving dropdown
+    setHoveredCategory(null);
   };
 
   return (
@@ -391,17 +427,26 @@ export default function CategoryNavbar() {
               <div
                 key={category.name}
                 className="relative group"
-                onMouseEnter={() => setHoveredCategory(category.name)}
-                onMouseLeave={() => setHoveredCategory(null)}
+                onMouseEnter={() => handleMouseEnter(category.name)}
+                onMouseLeave={handleMouseLeave}
               >
-                <button className="flex items-center space-x-1 text-gray-700 hover:text-[#1690C7] font-medium text-sm transition-colors py-2 px-2 rounded hover:bg-blue-50">
+                <button className="flex items-center space-x-1 text-gray-700 hover:text-[#1690C7] font-medium text-sm transition-colors py-3 px-3 rounded hover:bg-blue-50">
                   <span>{category.name}</span>
                   <ChevronDown className="h-3 w-3" />
                 </button>
 
-                {/* Desktop Dropdown Menu - Responsive positioning */}
+                {/* Invisible bridge to prevent hover gaps */}
                 {hoveredCategory === category.name && (
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-80 lg:w-96 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 mt-2">
+                  <div className="absolute top-full left-0 right-0 h-2 z-40" />
+                )}
+
+                {/* Desktop Dropdown Menu - Improved positioning with no gap */}
+                {hoveredCategory === category.name && (
+                  <div
+                    className="absolute top-full left-1/2 transform -translate-x-1/2 w-80 lg:w-96 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 mt-1"
+                    onMouseEnter={handleDropdownMouseEnter}
+                    onMouseLeave={handleDropdownMouseLeave}
+                  >
                     <div className="p-4 lg:p-6">
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {category.subCategories
