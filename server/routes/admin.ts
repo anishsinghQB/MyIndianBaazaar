@@ -201,6 +201,22 @@ export const updateOrderStatus: RequestHandler = async (
       return res.status(400).json({ error: "Invalid order status" });
     }
 
+    // Use mock data if database is not available
+    if (
+      process.env.NODE_ENV === "development" &&
+      process.env.DB_REQUIRED === "false"
+    ) {
+      const order = updateMockOrderStatus(parseInt(id), status);
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+
+      return res.json({
+        message: "Order status updated successfully",
+        order,
+      });
+    }
+
     const result = await pool.query(
       "UPDATE orders SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *",
       [status, id],
