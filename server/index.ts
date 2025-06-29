@@ -19,7 +19,16 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  getSearchSuggestions,
 } from "./routes/products";
+
+// Notification routes
+import {
+  getUserNotifications,
+  markNotificationAsRead,
+  createNotification,
+  deleteNotification,
+} from "./routes/notifications";
 
 // Payment routes
 import {
