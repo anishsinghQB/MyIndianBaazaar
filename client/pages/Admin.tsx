@@ -9,7 +9,7 @@ import {
   BarChart3,
   ChevronLeft,
 } from "lucide-react";
-import Header from "@/components/Header";
+import Layout from "@/components/Layout";
 import AddProductModal from "@/components/AddProductModal";
 import { Button } from "@/components/ui/button";
 import { sampleProducts } from "@/lib/sampleData";
@@ -26,11 +26,11 @@ export default function Admin() {
       id: (products.length + 1).toString(),
       reviews: [],
     };
-    setProducts((prev) => [...prev, newProduct]);
+    setProducts(prev => [...prev, newProduct]);
   };
 
   const handleDeleteProduct = (productId: string) => {
-    setProducts((prev) => prev.filter((p) => p.id !== productId));
+    setProducts(prev => prev.filter(p => p.id !== productId));
   };
 
   const tabs = [
@@ -40,8 +40,8 @@ export default function Admin() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <Layout>
+      <div className="bg-gray-50">
 
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
@@ -262,6 +262,6 @@ export default function Admin() {
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddProduct}
       />
-    </div>
+    </Layout>
   );
 }
