@@ -804,6 +804,16 @@ export default function Admin() {
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddProduct}
       />
+
+      <UpdateProductModal
+        isOpen={isUpdateModalOpen}
+        onClose={() => {
+          setIsUpdateModalOpen(false);
+          setSelectedProduct(null);
+        }}
+        onSave={handleUpdateProduct}
+        product={selectedProduct}
+      />
     </Layout>
   );
 }
