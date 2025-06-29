@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import dotenv from "dotenv";
-import { Sequelize } from 'sequelize';
+import { Sequelize } from "sequelize";
 
 dotenv.config();
 
@@ -14,46 +14,61 @@ export const pool = new Pool({
 
 // Initialize database tables
 
-
 export const sequelize = new Sequelize(
-    process.env.DB_NAME  || "postgres",
-    process.env.DB_USER  || "postgres",
-    process.env.DB_PASSWORD || "IndianBaazaar@2004",
-    {
-        host: process.env.HOST_NAME,
-        port: Number(process.env.PORT_NUMBER) || 5432,
-        dialect: 'postgres',
-        pool: {
-            max: 5,
-            min: 0,
-            acquire: 30000,
-            idle: 10000
-        },
-        logging: false,
-        timezone: '+00:00',
-    }
+  process.env.DB_NAME || "postgres",
+  process.env.DB_USER || "postgres",
+  process.env.DB_PASSWORD || "IndianBaazaar@2004",
+  {
+    host: process.env.HOST_NAME,
+    port: Number(process.env.PORT_NUMBER) || 5432,
+    dialect: "postgres",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+    logging: false,
+    timezone: "+00:00",
+  },
 );
 
-
 export const connectToPgSqlDB = async () => {
-    pool.connect((err, client, release) => {
-        if (err) {
-            console.error("Connection error: hai ", err);
-            return;
-        }
+  // Skip database connection in development if DB_REQUIRED is false
+  if (
+    process.env.NODE_ENV === "development" &&
+    process.env.DB_REQUIRED === "false"
+  ) {
+    console.log("Database connection skipped (development mode)");
+    return;
+  }
 
-        client.query("SELECT NOW()", (err, result) => {
-            release();
-            if (err) {
-                return console.error("Error executing query:", err);
-            }
-            console.log("PostgreSQL Database connected @", result.rows[0].now);
-        });
+  pool.connect((err, client, release) => {
+    if (err) {
+      console.error("Connection error: hai ", err);
+      return;
+    }
+
+    client.query("SELECT NOW()", (err, result) => {
+      release();
+      if (err) {
+        return console.error("Error executing query:", err);
+      }
+      console.log("PostgreSQL Database connected @", result.rows[0].now);
     });
+  });
 };
 
-
 export const initializeDatabase = async () => {
+  // Skip database initialization in development if DB_REQUIRED is false
+  if (
+    process.env.NODE_ENV === "development" &&
+    process.env.DB_REQUIRED === "false"
+  ) {
+    console.log("Database initialization skipped (development mode)");
+    return;
+  }
+
   try {
     // Create users table
     await pool.query(`

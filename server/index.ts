@@ -2,7 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { handleDemo } from "./routes/demo";
-import { connectToPgSqlDB, initializeDatabase, sequelize } from "./database/config";
+import {
+  connectToPgSqlDB,
+  initializeDatabase,
+  sequelize,
+} from "./database/config";
 import { authenticateToken, requireAdmin } from "./utils/auth";
 
 // Auth routes
@@ -25,31 +29,44 @@ import {
   getOrderById,
 } from "./routes/payments";
 
+// Admin routes
+import {
+  getAllCustomers,
+  getAllOrders,
+  getDashboardStats,
+  updateOrderStatus,
+} from "./routes/admin";
+
 dotenv.config();
 
 export function createServer() {
   const app = express();
 
-  // Initialize database
-  initializeDatabase().catch(console.error);
-  connectToPgSqlDB().catch(console.error);
-
-  sequelize.sync({ alter: true })
-  .then(() => {
-    console.log('Tables synced');
-
-    app.listen(process.env.PORT || 4000, () => {
-      console.log('Server started...');
-    });
-  })
-  .catch((err) => {
-    console.error('Unable to sync tables:', err);
-  });
-
   // Middleware
   app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  // Initialize database only if required
+  const dbRequired =
+    process.env.DB_REQUIRED !== "false" ||
+    process.env.NODE_ENV !== "development";
+
+  if (dbRequired) {
+    initializeDatabase().catch(console.error);
+    connectToPgSqlDB().catch(console.error);
+
+    sequelize
+      .sync({ alter: true })
+      .then(() => {
+        console.log("Tables synced");
+      })
+      .catch((err) => {
+        console.error("Unable to sync tables:", err);
+      });
+  } else {
+    console.log("Database operations skipped (development mode)");
+  }
 
   // Health check
   app.get("/api/ping", (_req, res) => {
@@ -81,6 +98,27 @@ export function createServer() {
   app.post("/api/payments/verify", authenticateToken, verifyPayment);
   app.get("/api/orders", authenticateToken, getOrders);
   app.get("/api/orders/:id", authenticateToken, getOrderById);
+
+  // Admin routes
+  app.get(
+    "/api/admin/customers",
+    authenticateToken,
+    requireAdmin,
+    getAllCustomers,
+  );
+  app.get("/api/admin/orders", authenticateToken, requireAdmin, getAllOrders);
+  app.get(
+    "/api/admin/stats",
+    authenticateToken,
+    requireAdmin,
+    getDashboardStats,
+  );
+  app.patch(
+    "/api/admin/orders/:id/status",
+    authenticateToken,
+    requireAdmin,
+    updateOrderStatus,
+  );
 
   return app;
 }
