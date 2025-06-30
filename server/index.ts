@@ -46,6 +46,7 @@ import {
   getDashboardStats,
   updateOrderStatus,
 } from "./routes/admin";
+import { createReview } from "./routes/review";
 
 dotenv.config();
 
@@ -144,6 +145,8 @@ export function createServer() {
     requireAdmin,
     updateOrderStatus,
   );
+
+  app.post("/api/reviews", authenticateToken, createReview);
 
   return app;
 }
