@@ -1,4 +1,5 @@
 import { Product } from "@shared/types";
+import axios from "axios";
 
 const API_BASE = "/api";
 
@@ -64,6 +65,12 @@ export const api = {
       console.error("Error fetching product:", error);
       return null;
     }
+  },
+
+
+  async getProductsReviews(productId: string): Promise<any> {
+      const response : any = await axios.get(`${API_BASE}/products/:${productId}/reviews`);
+      return response.data;
   },
 
   async getSearchSuggestions(

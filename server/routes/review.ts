@@ -77,6 +77,8 @@ export const getProductReviews: RequestHandler = async (req, res) => {
       [productId],
     );
 
+    console.log("result : ", result);
+
     const reviews = result.rows.map((row) => ({
       id: row.id.toString(),
       userId: row.user_id,
@@ -89,8 +91,7 @@ export const getProductReviews: RequestHandler = async (req, res) => {
 
     res.json({ reviews });
   } catch (error) {
-    console.error("Get product reviews error:", error);
-    // When database is not available, return empty reviews
-    res.json({ reviews: [] });
+   console.error("Get product reviews error:", error);
+   res.status(500).json({  error });
   }
 };

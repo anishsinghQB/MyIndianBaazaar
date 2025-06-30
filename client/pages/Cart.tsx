@@ -153,9 +153,9 @@ export default function Cart() {
           {/* Back Button */}
           <Link
             to="/"
-            className="inline-flex bg-[#1690C7] items-center gap-2 mb-6 hover:underline "
+            className="inline-flex items-center gap-2 mb-6 hover:underline text-[#1690C7]"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 " />
             Continue Shopping
           </Link>
 

@@ -31,6 +31,7 @@ export default function ProductDetail() {
   const [error, setError] = useState<string | null>(null);
   const [showCheckout, setShowCheckout] = useState(false);
   const [reviewKey, setReviewKey] = useState(0);
+  const [productReviews, setProducteviews] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -41,7 +42,9 @@ export default function ProductDetail() {
         setError(null);
 
         const foundProduct = await api.getProductById(id);
+        const productReview = await api.getProductsReviews(id);
         setProduct(foundProduct);
+        setProducteviews(productReview);
 
         // Get related products from same category
         if (foundProduct) {
@@ -168,6 +171,8 @@ export default function ProductDetail() {
         total: product.ourPrice * quantity,
       }
     : { items: [], total: 0 };
+              
+    console.log("one",product)
 
   return (
     <Layout>
@@ -445,7 +450,7 @@ export default function ProductDetail() {
             <ReviewSection
               key={reviewKey}
               productId={product.id}
-              reviews={product.reviews}
+              reviews={productReviews.reviews || []}
               onReviewAdded={handleReviewAdded}
             />
           </div>

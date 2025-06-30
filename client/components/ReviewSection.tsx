@@ -35,6 +35,7 @@ export default function ReviewSection({
   reviews,
   onReviewAdded,
 }: ReviewSectionProps) {
+  console.log("first us eEffect",reviews);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -79,6 +80,8 @@ export default function ReviewSection({
           comment: data.comment,
         }),
       });
+
+      console.log("product response", response);
 
       if (!response.ok) {
         const errorData = await response.json();
