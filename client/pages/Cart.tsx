@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Plus, Minus, Trash2, ShoppingBag, ChevronLeft } from "lucide-react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
+import CheckoutModal from "@/components/CheckoutModal";
 import {
   getCart,
   updateQuantity,
@@ -18,6 +19,8 @@ export default function Cart() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProductsAndCart = async () => {
@@ -85,6 +88,23 @@ export default function Cart() {
 
   const getProductById = (id: string) => {
     return products.find((p) => p.id === id);
+  };
+
+  const handleCheckout = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirect to login or show login modal
+      navigate("/account");
+      return;
+    }
+    setShowCheckout(true);
+  };
+
+  const handleOrderSuccess = (orderId: number) => {
+    // Navigate to order confirmation or account page
+    navigate("/account", {
+      state: { message: `Order #${orderId} placed successfully!` },
+    });
   };
 
   if (loading) {
@@ -304,7 +324,7 @@ export default function Cart() {
                 </div>
 
                 <div className="space-y-3">
-                  <Button className="w-full" size="lg">
+                  <Button className="w-full" size="lg" onClick={handleCheckout}>
                     Proceed to Checkout
                   </Button>
                   <p className="text-xs text-gray-500 text-center">
@@ -328,6 +348,15 @@ export default function Cart() {
           </div>
         </div>
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        cart={cart}
+        products={products}
+        onOrderSuccess={handleOrderSuccess}
+      />
     </Layout>
   );
 }

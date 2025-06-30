@@ -113,6 +113,112 @@ export const productApi = {
   getSearchSuggestions: (query: string) => api.getSearchSuggestions(query),
 };
 
+// Review APIs
+export const reviewApi = {
+  async createReview(productId: string, rating: number, comment: string) {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE}/reviews`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ productId, rating, comment }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to create review");
+    }
+
+    return response.json();
+  },
+
+  async getProductReviews(productId: string) {
+    try {
+      const response = await fetch(`${API_BASE}/products/${productId}/reviews`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch reviews");
+      }
+      return response.json();
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      return { reviews: [] };
+    }
+  },
+};
+
+// Order APIs
+export const orderApi = {
+  async createOrder(orderData: any) {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE}/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to create order");
+    }
+
+    return response.json();
+  },
+
+  async verifyPayment(paymentData: any) {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE}/payments/verify`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(paymentData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Payment verification failed");
+    }
+
+    return response.json();
+  },
+
+  async getOrders() {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE}/orders`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch orders");
+    }
+
+    return response.json();
+  },
+
+  async getOrderById(orderId: string) {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE}/orders/${orderId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch order");
+    }
+
+    return response.json();
+  },
+};
+
 export const adminApi = {
   // These would be admin-specific API calls
   // For now, using the same product API

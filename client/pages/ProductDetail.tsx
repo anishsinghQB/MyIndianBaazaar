@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Star,
   Heart,
@@ -11,13 +11,16 @@ import {
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import ImageZoom from "@/components/ImageZoom";
+import CheckoutModal from "@/components/CheckoutModal";
+import ReviewSection from "@/components/ReviewSection";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { addToCart } from "@/lib/cart";
-import { Product } from "@shared/types";
+import { Product, Cart } from "@shared/types";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -26,6 +29,8 @@ export default function ProductDetail() {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [reviewKey, setReviewKey] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -123,6 +128,46 @@ export default function ProductDetail() {
       setIsAddingToCart(false);
     }
   };
+
+  const handleBuyNow = () => {
+    if (!product) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/account");
+      return;
+    }
+
+    // Add to cart first
+    addToCart(product.id, quantity);
+
+    // Open checkout modal
+    setShowCheckout(true);
+  };
+
+  const handleOrderSuccess = (orderId: number) => {
+    navigate("/account", {
+      state: { message: `Order #${orderId} placed successfully!` },
+    });
+  };
+
+  const handleReviewAdded = () => {
+    // Refresh the product data to get updated reviews
+    setReviewKey((prev) => prev + 1);
+  };
+
+  // Create cart object for checkout
+  const currentCart: Cart = product
+    ? {
+        items: [
+          {
+            productId: product.id,
+            quantity: quantity,
+          },
+        ],
+        total: product.ourPrice * quantity,
+      }
+    : { items: [], total: 0 };
 
   return (
     <Layout>
@@ -333,7 +378,13 @@ export default function ProductDetail() {
                         ? "Out of Stock"
                         : "Add to Cart"}
                   </Button>
-                  <Button variant="outline" size="lg" className="w-full">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full"
+                    onClick={handleBuyNow}
+                    disabled={!product.inStock}
+                  >
                     Buy Now
                   </Button>
                 </div>
@@ -389,6 +440,16 @@ export default function ProductDetail() {
             </div>
           )}
 
+          {/* Reviews Section */}
+          <div className="mt-12">
+            <ReviewSection
+              key={reviewKey}
+              productId={product.id}
+              reviews={product.reviews}
+              onReviewAdded={handleReviewAdded}
+            />
+          </div>
+
           {/* Related Products */}
           {relatedProducts.length > 0 && (
             <div className="mt-12">
@@ -410,6 +471,15 @@ export default function ProductDetail() {
           )}
         </div>
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        cart={currentCart}
+        products={product ? [product] : []}
+        onOrderSuccess={handleOrderSuccess}
+      />
     </Layout>
   );
 }

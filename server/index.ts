@@ -46,7 +46,7 @@ import {
   getDashboardStats,
   updateOrderStatus,
 } from "./routes/admin";
-import { createReview } from "./routes/review";
+import { createReview, getProductReviews } from "./routes/review";
 
 dotenv.config();
 
@@ -61,7 +61,6 @@ export function createServer() {
   // Initialize database
   connectToPgSqlDB().catch(console.error);
   initializeDatabase().catch(console.error);
-
 
   sequelize
     .sync({ alter: true })
@@ -147,6 +146,7 @@ export function createServer() {
   );
 
   app.post("/api/reviews", authenticateToken, createReview);
+  app.get("/api/products/:productId/reviews", getProductReviews);
 
   return app;
 }
