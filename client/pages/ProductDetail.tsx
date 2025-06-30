@@ -440,6 +440,16 @@ export default function ProductDetail() {
             </div>
           )}
 
+          {/* Reviews Section */}
+          <div className="mt-12">
+            <ReviewSection
+              key={reviewKey}
+              productId={product.id}
+              reviews={product.reviews}
+              onReviewAdded={handleReviewAdded}
+            />
+          </div>
+
           {/* Related Products */}
           {relatedProducts.length > 0 && (
             <div className="mt-12">
@@ -461,6 +471,15 @@ export default function ProductDetail() {
           )}
         </div>
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        cart={currentCart}
+        products={product ? [product] : []}
+        onOrderSuccess={handleOrderSuccess}
+      />
     </Layout>
   );
 }
