@@ -49,3 +49,41 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getProductReviews: RequestHandler = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const result = await pool.query(
+      `
+      SELECT
+        r.id,
+        r.rating,
+        r.comment,
+        r.verified,
+        r.created_at as date,
+        u.name as user_name
+      FROM reviews r
+      JOIN users u ON r.user_id = u.id
+      WHERE r.product_id = $1
+      ORDER BY r.created_at DESC
+      `,
+      [productId],
+    );
+
+    const reviews = result.rows.map((row) => ({
+      id: row.id.toString(),
+      userId: row.user_id,
+      userName: row.user_name,
+      rating: row.rating,
+      comment: row.comment,
+      date: row.date,
+      verified: row.verified,
+    }));
+
+    res.json({ reviews });
+  } catch (error) {
+    console.error("Get product reviews error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
