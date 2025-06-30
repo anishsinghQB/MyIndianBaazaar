@@ -4,7 +4,6 @@ import { AuthRequest, requireAdmin } from "../utils/auth";
 import { z } from "zod";
 import { createProductNotification } from "./notifications";
 
-
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
   description: z.string().min(1, "Description is required"),
@@ -31,6 +30,137 @@ const productSchema = z.object({
   inStock: z.boolean().default(true),
   stockQuantity: z.number().int().min(0).default(0),
 });
+
+// Sample products data for fallback when database is unavailable
+const sampleProducts = [
+  {
+    id: "1",
+    name: "Premium Wireless Headphones",
+    description:
+      "High-quality wireless headphones with noise cancellation and premium sound quality. Perfect for music lovers and professionals.",
+    images: ["/placeholder.svg", "/placeholder.svg"],
+    mrp: 8999,
+    ourPrice: 6999,
+    discount: 22,
+    rating: 4.5,
+    afterExchangePrice: 5999,
+    offers: ["Free shipping", "1 year warranty", "30-day return policy"],
+    coupons: ["SAVE20", "FIRST10"],
+    company: "AudioTech",
+    color: "Black",
+    size: "One Size",
+    weight: "250g",
+    height: "20cm",
+    category: "electronics" as const,
+    inStock: true,
+    stockQuantity: 50,
+    reviews: [
+      {
+        id: "r1",
+        userId: "u1",
+        userName: "John Doe",
+        rating: 5,
+        comment:
+          "Excellent sound quality and comfortable to wear for long periods.",
+        date: "2024-01-15T10:30:00Z",
+        verified: true,
+      },
+      {
+        id: "r2",
+        userId: "u2",
+        userName: "Jane Smith",
+        rating: 4,
+        comment: "Great headphones, but could use better battery life.",
+        date: "2024-01-12T14:20:00Z",
+        verified: true,
+      },
+    ],
+    faqs: [
+      {
+        id: "f1",
+        question: "What is the battery life?",
+        answer:
+          "The battery lasts up to 30 hours with noise cancellation off and 20 hours with it on.",
+      },
+      {
+        id: "f2",
+        question: "Are they compatible with all devices?",
+        answer:
+          "Yes, they work with any Bluetooth-enabled device including phones, tablets, and computers.",
+      },
+    ],
+  },
+  {
+    id: "2",
+    name: "Organic Cotton T-Shirt",
+    description:
+      "Comfortable and sustainable organic cotton t-shirt. Made from 100% organic cotton with a soft feel and perfect fit.",
+    images: ["/placeholder.svg", "/placeholder.svg"],
+    mrp: 1299,
+    ourPrice: 899,
+    discount: 31,
+    rating: 4.2,
+    offers: ["Free shipping above ₹500", "Easy returns"],
+    coupons: ["ORGANIC15"],
+    company: "EcoWear",
+    color: "White",
+    size: "M",
+    weight: "180g",
+    height: "70cm",
+    category: "clothes" as const,
+    inStock: true,
+    stockQuantity: 100,
+    reviews: [
+      {
+        id: "r3",
+        userId: "u3",
+        userName: "Mike Johnson",
+        rating: 4,
+        comment: "Very comfortable and good quality material.",
+        date: "2024-01-10T09:15:00Z",
+        verified: true,
+      },
+    ],
+    faqs: [
+      {
+        id: "f3",
+        question: "How should I wash this t-shirt?",
+        answer:
+          "Machine wash cold with like colors. Tumble dry low or hang to dry.",
+      },
+    ],
+  },
+  {
+    id: "3",
+    name: "Vitamin C Serum",
+    description:
+      "Brightening vitamin C serum that helps reduce dark spots and gives you glowing, healthy skin. Suitable for all skin types.",
+    images: ["/placeholder.svg", "/placeholder.svg"],
+    mrp: 2499,
+    ourPrice: 1899,
+    discount: 24,
+    rating: 4.7,
+    offers: ["Buy 2 get 1 free", "Free shipping"],
+    coupons: ["GLOW25", "SKINCARE10"],
+    company: "GlowCare",
+    color: "Clear",
+    size: "30ml",
+    weight: "50g",
+    height: "10cm",
+    category: "beauty" as const,
+    inStock: true,
+    stockQuantity: 75,
+    reviews: [],
+    faqs: [
+      {
+        id: "f4",
+        question: "Can I use this during the day?",
+        answer:
+          "Yes, but always follow with sunscreen as vitamin C can make your skin more sensitive to sun.",
+      },
+    ],
+  },
+];
 
 export const getAllProducts: RequestHandler = async (req, res) => {
   try {
@@ -188,10 +318,9 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
         category,
         inStock,
         stockQuantity,
-      ]
+      ],
     );
 
-    
     const row = result.rows[0];
     const product = {
       id: row.id,
