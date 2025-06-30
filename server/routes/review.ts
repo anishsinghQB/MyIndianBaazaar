@@ -46,7 +46,13 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: error.errors[0].message });
     }
-    res.status(500).json({ error: "Internal server error" });
+    // Database not available - return appropriate error
+    res
+      .status(503)
+      .json({
+        error:
+          "Database not available. Review submission is currently unavailable.",
+      });
   }
 };
 
