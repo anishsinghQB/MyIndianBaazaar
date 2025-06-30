@@ -163,9 +163,9 @@ const sampleProducts = [
 ];
 
 export const getAllProducts: RequestHandler = async (req, res) => {
-  try {
-    const { category, search, inStock } = req.query;
+  const { category, search, inStock } = req.query;
 
+  try {
     let query = "SELECT * FROM products WHERE 1=1";
     const params: any[] = [];
 
@@ -505,12 +505,10 @@ export const deleteProduct: RequestHandler = async (req: AuthRequest, res) => {
   } catch (error) {
     console.error("Delete product error:", error);
     // Database not available - return appropriate error
-    res
-      .status(503)
-      .json({
-        error:
-          "Database not available. Product deletion is currently unavailable.",
-      });
+    res.status(503).json({
+      error:
+        "Database not available. Product deletion is currently unavailable.",
+    });
   }
 };
 
