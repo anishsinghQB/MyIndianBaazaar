@@ -3,8 +3,7 @@ import { pool } from "../database/config";
 import { AuthRequest } from "../utils/auth";
 import { z } from "zod";
 import Razorpay from "razorpay";
-import  crypto from "crypto";
-
+import crypto from "crypto";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "test_key_id",
@@ -36,7 +35,7 @@ const verifyPaymentSchema = z.object({
   razorpay_order_id: z.string(),
   razorpay_payment_id: z.string(),
   razorpay_signature: z.string(),
-  orderId: z.string()
+  orderId: z.string(),
 });
 
 export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
@@ -50,7 +49,7 @@ export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
     });
 
     const orderResult = await pool.query(
-      `INSERT INTO orders (user_id, total_amount, payment_id, shipping_address) 
+      `INSERT INTO orders (user_id, total_amount, payment_id, shipping_address)
        VALUES ($1, $2, $3, $4) RETURNING id`,
       [req.user.id, amount, razorpayOrder.id, JSON.stringify(shippingAddress)],
     );
@@ -89,7 +88,13 @@ export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
     });
   } catch (error) {
     console.error("Create order error:", error);
-    res.status(500).json({ error });
+    // Database not available - return appropriate error
+    res
+      .status(503)
+      .json({
+        error:
+          "Database not available. Order creation is currently unavailable.",
+      });
   }
 };
 
@@ -104,7 +109,7 @@ export const verifyPayment: RequestHandler = async (req: AuthRequest, res) => {
     } = validatedData;
 
     // Verify signature
-    
+
     const expectedSignature = crypto
       .createHmac(
         "sha256",
@@ -119,8 +124,8 @@ export const verifyPayment: RequestHandler = async (req: AuthRequest, res) => {
 
     // Update order status
     await pool.query(
-      `UPDATE orders SET 
-       status = 'confirmed', 
+      `UPDATE orders SET
+       status = 'confirmed',
        payment_status = 'completed',
        payment_id = $1,
        updated_at = CURRENT_TIMESTAMP
@@ -148,7 +153,7 @@ export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
     }
 
     const result = await pool.query(
-      `SELECT 
+      `SELECT
         o.*,
         json_agg(
           json_build_object(
@@ -199,7 +204,7 @@ export const getOrderById: RequestHandler = async (req: AuthRequest, res) => {
     const { id } = req.params;
 
     const result = await pool.query(
-      `SELECT 
+      `SELECT
         o.*,
         json_agg(
           json_build_object(
