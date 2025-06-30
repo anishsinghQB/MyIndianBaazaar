@@ -89,12 +89,9 @@ export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
   } catch (error) {
     console.error("Create order error:", error);
     // Database not available - return appropriate error
-    res
-      .status(503)
-      .json({
-        error:
-          "Database not available. Order creation is currently unavailable.",
-      });
+    res.status(503).json({
+      error: "Database not available. Order creation is currently unavailable.",
+    });
   }
 };
 
@@ -142,7 +139,13 @@ export const verifyPayment: RequestHandler = async (req: AuthRequest, res) => {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: error.errors[0].message });
     }
-    res.status(500).json({ error: "Internal server error" });
+    // Database not available - return appropriate error
+    res
+      .status(503)
+      .json({
+        error:
+          "Database not available. Payment verification is currently unavailable.",
+      });
   }
 };
 
