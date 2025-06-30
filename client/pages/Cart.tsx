@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Plus, Minus, Trash2, ShoppingBag, ChevronLeft } from "lucide-react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
+import CheckoutModal from "@/components/CheckoutModal";
 import {
   getCart,
   updateQuantity,
