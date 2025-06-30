@@ -348,6 +348,15 @@ export default function Cart() {
           </div>
         </div>
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        cart={cart}
+        products={products}
+        onOrderSuccess={handleOrderSuccess}
+      />
     </Layout>
   );
 }
