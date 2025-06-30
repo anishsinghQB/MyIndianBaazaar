@@ -19,6 +19,8 @@ export default function Cart() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProductsAndCart = async () => {
