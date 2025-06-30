@@ -324,7 +324,7 @@ export default function Cart() {
                 </div>
 
                 <div className="space-y-3">
-                  <Button className="w-full" size="lg">
+                  <Button className="w-full" size="lg" onClick={handleCheckout}>
                     Proceed to Checkout
                   </Button>
                   <p className="text-xs text-gray-500 text-center">
