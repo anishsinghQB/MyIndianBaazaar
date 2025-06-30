@@ -146,6 +146,7 @@ export function createServer() {
   );
 
   app.post("/api/reviews", authenticateToken, createReview);
+  app.get("/api/products/:productId/reviews", getProductReviews);
 
   return app;
 }
