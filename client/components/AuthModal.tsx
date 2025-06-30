@@ -246,7 +246,7 @@ export default function AuthModal({
                 <button
                   type="button"
                   onClick={() => setMode("register")}
-                  className="text-primary hover:underline font-medium"
+                  className="text-[#1690C7] hover:underline font-medium"
                 >
                   Sign up
                 </button>
@@ -257,7 +257,7 @@ export default function AuthModal({
                 <button
                   type="button"
                   onClick={() => setMode("login")}
-                  className="text-primary hover:underline font-medium"
+                  className="text-[#1690C7] hover:underline font-medium"
                 >
                   Sign in
                 </button>

@@ -72,7 +72,7 @@ export default function ProductCard({
 
       <div className="p-4">
         <div className="mb-2">
-          <h3 className="font-medium text-gray-900 line-clamp-2 group-hover:text-primary transition-colors">
+          <h3 className="font-medium text-gray-900 line-clamp-2 group-hover:text-[#1690C7] transition-colors">
             {product.name}
           </h3>
           <p className="text-sm text-gray-500 mt-1">{product.company}</p>
@@ -101,7 +101,7 @@ export default function ProductCard({
         <Button
           onClick={handleAddToCart}
           disabled={!product.inStock || isAddingToCart}
-          className="w-full"
+          className="w-full bg-[#1690C7]"
           size="sm"
         >
           {isAddingToCart

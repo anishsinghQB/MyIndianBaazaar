@@ -51,10 +51,10 @@ export default function Header() {
               alt="IndianBaazaar"
               className="h-10 w-auto"
             />
-            <span className="text-xl font-bold text-[#1690C7] ml-2 hide-span:hidden">
+            <span className="text-xl font-bold text-[#000] ml-2 hide-span:hidden">
               Indian
             </span>
-            <span className="text-xl font-bold text-[#000] inline hide-span:hidden">
+            <span className="text-xl font-bold text-[#1690C7] inline hide-span:hidden">
               Baazaar
             </span>
           </Link>
@@ -233,7 +233,7 @@ export default function Header() {
                 <>
                   <div className="bg-gray-50 p-3 rounded-lg mb-4">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                      <div className="w-10 h-10 bg-[#1690C7]  rounded-full flex items-center justify-center">
                         <User className="h-5 w-5 text-white" />
                       </div>
                       <div>
@@ -324,7 +324,7 @@ export default function Header() {
               )}
 
               <div className="border-t pt-4">
-                <div className="bg-primary/10 p-4 rounded-lg">
+                <div className="bg-[#1690C7] /10 p-4 rounded-lg">
                   <h3 className="font-medium text-gray-900 mb-2">
                     Quick Actions
                   </h3>

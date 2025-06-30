@@ -103,8 +103,8 @@ export default function ProductDetail() {
               <h1 className="text-2xl font-bold text-gray-800 mb-4">
                 {error || "Product Not Found"}
               </h1>
-              <Link to="/">
-                <Button>Back to Home</Button>
+              <Link to="/" className="text-[#1690C7]">
+                <Button className="text-[#1690C7]">Back to Home</Button>
               </Link>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function ProductDetail() {
         <div className="container mx-auto px-4 py-8">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 mb-6 text-sm text-gray-600">
-            <Link to="/" className="hover:text-primary">
+            <Link to="/" className="hover:text-[#1690C7]">
               Home
             </Link>
             <span>/</span>
@@ -187,7 +187,7 @@ export default function ProductDetail() {
           {/* Back Button */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 mb-6 text-primary hover:underline"
+            className="inline-flex items-center gap-2 mb-6 text-[#1690C7] hover:underline"
           >
             <ChevronLeft className="h-4 w-4" />
             Back to Products
@@ -369,7 +369,7 @@ export default function ProductDetail() {
                   <Button
                     onClick={handleAddToCart}
                     disabled={!product.inStock || isAddingToCart}
-                    className="w-full"
+                   className="w-full bg-[#1690C7]"
                     size="lg"
                   >
                     {isAddingToCart
@@ -393,15 +393,15 @@ export default function ProductDetail() {
               {/* Services */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-white rounded-lg border">
-                  <Truck className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <Truck className="h-8 w-8 text-[#1690C7] mx-auto mb-2" />
                   <p className="text-sm font-medium">Free Shipping</p>
                 </div>
                 <div className="text-center p-4 bg-white rounded-lg border">
-                  <RotateCcw className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <RotateCcw className="h-8 w-8 text-[#1690C7] mx-auto mb-2" />
                   <p className="text-sm font-medium">Easy Returns</p>
                 </div>
                 <div className="text-center p-4 bg-white rounded-lg border">
-                  <Shield className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <Shield className="h-8 w-8 text-[#1690C7] mx-auto mb-2" />
                   <p className="text-sm font-medium">Warranty</p>
                 </div>
               </div>

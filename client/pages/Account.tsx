@@ -59,16 +59,16 @@ export default function Account() {
           {/* Back Button */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 mb-6 text-primary hover:underline"
+            className="inline-flex items-center gap-2 text-[#1690C7] mb-6 hover:underline"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 " />
             Back to Home
           </Link>
 
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-lg border p-6 mb-8">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 bg-[#1690C7]  rounded-full flex items-center justify-center">
                   <User className="h-8 w-8 text-white" />
                 </div>
                 <div>
@@ -196,7 +196,7 @@ export default function Account() {
             <div className="bg-white rounded-lg border p-6 mb-8">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <Navigation className="h-6 w-6 text-primary" />
+                  <Navigation className="h-6 w-6 text-[#1690C7]" />
                   <h2 className="text-lg font-semibold text-gray-900">
                     Delivery Location
                   </h2>
@@ -278,7 +278,7 @@ export default function Account() {
               ) : (
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <MapPin className="h-6 w-6 text-primary" />
+                    <MapPin className="h-6 w-6 text-[#1690C7]" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-900 mb-1">
@@ -328,7 +328,7 @@ export default function Account() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg border p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <MapPin className="h-6 w-6 text-primary" />
+                  <MapPin className="h-6 w-6 text-[#1690C7]" />
                   <h2 className="text-lg font-semibold text-gray-900">
                     Addresses
                   </h2>
@@ -343,7 +343,7 @@ export default function Account() {
 
               <div className="bg-white rounded-lg border p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <CreditCard className="h-6 w-6 text-primary" />
+                  <CreditCard className="h-6 w-6 text-[#1690C7]" />
                   <h2 className="text-lg font-semibold text-gray-900">
                     Payment Methods
                   </h2>
@@ -358,7 +358,7 @@ export default function Account() {
 
               <div className="bg-white rounded-lg border p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Shield className="h-6 w-6 text-primary" />
+                  <Shield className="h-6 w-6 text-[#1690C7]" />
                   <h2 className="text-lg font-semibold text-gray-900">
                     Security
                   </h2>
@@ -373,7 +373,7 @@ export default function Account() {
 
               <div className="bg-white rounded-lg border p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Bell className="h-6 w-6 text-primary" />
+                  <Bell className="h-6 w-6 text-[#1690C7]" />
                   <h2 className="text-lg font-semibold text-gray-900">
                     Preferences
                   </h2>

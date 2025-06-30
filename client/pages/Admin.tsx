@@ -72,7 +72,7 @@ export default function Admin() {
           <p className="text-gray-600 mb-4">
             You don't have permission to access this page.
           </p>
-          <Link to="/" className="text-primary hover:underline">
+          <Link to="/" className="text-[#1690C7] hover:underline">
             Return to Home
           </Link>
         </div>
@@ -304,7 +304,7 @@ export default function Admin() {
           {/* Back Button */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 mb-6 text-primary hover:underline"
+            className="inline-flex items-center gap-2 mb-6 text-[#1690C7] hover:underline"
           >
             <ChevronLeft className="h-4 w-4" />
             Back to Store
@@ -334,7 +334,7 @@ export default function Admin() {
                       {stats.totalProducts}
                     </p>
                   </div>
-                  <Package className="h-8 w-8 text-primary" />
+                  <Package className="h-8 w-8 text-[#1690C7]" />
                 </div>
               </div>
 
@@ -392,7 +392,7 @@ export default function Admin() {
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm ${
                         activeTab === tab.id
-                          ? "border-primary text-primary"
+                          ? "border-primary text-[#1690C7]"
                           : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                       }`}
                     >

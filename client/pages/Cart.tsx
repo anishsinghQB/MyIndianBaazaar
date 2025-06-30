@@ -137,7 +137,7 @@ export default function Cart() {
                 shopping to fill it up!
               </p>
               <Link to="/">
-                <Button size="lg">Continue Shopping</Button>
+                <Button className="bg-[#1690C7]" size="lg">Continue Shopping</Button>
               </Link>
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function Cart() {
           {/* Back Button */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 mb-6 text-primary hover:underline"
+            className="inline-flex bg-[#1690C7] items-center gap-2 mb-6 hover:underline "
           >
             <ChevronLeft className="h-4 w-4" />
             Continue Shopping
@@ -324,7 +324,7 @@ export default function Cart() {
                 </div>
 
                 <div className="space-y-3">
-                  <Button className="w-full" size="lg" onClick={handleCheckout}>
+                  <Button className="w-full bg-[#1690C7]" size="lg" onClick={handleCheckout}>
                     Proceed to Checkout
                   </Button>
                   <p className="text-xs text-gray-500 text-center">

@@ -100,16 +100,16 @@ export default function Notifications() {
           {/* Back Button */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 mb-6 text-primary hover:underline"
+            className="inline-flex items-center gap-2 mb-6 hover:underline text-[#1690C7]"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 " />
             Back to Home
           </Link>
 
           <div className="max-w-2xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
-                <Bell className="h-8 w-8 text-primary" />
+                <Bell className="h-8 w-8 text-[#1690C7]" />
                 <h1 className="text-3xl font-bold text-gray-900">
                   Notifications
                 </h1>
@@ -159,8 +159,8 @@ export default function Notifications() {
                     >
                       <div className="flex items-start gap-4">
                         <div className="flex-shrink-0">
-                          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                            <Icon className="h-5 w-5 text-primary" />
+                          <div className="w-10 h-10 bg-[#1690C7] /10 rounded-full flex items-center justify-center">
+                            <Icon className="h-5 w-5 text-[#1690C7]" />
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
@@ -183,7 +183,7 @@ export default function Notifications() {
                           </p>
                           {!notification.isRead && (
                             <div className="flex items-center gap-2 mt-3">
-                              <span className="text-xs text-primary font-medium">
+                              <span className="text-xs text-[#1690C7] font-medium">
                                 Click to view and mark as read
                               </span>
                             </div>

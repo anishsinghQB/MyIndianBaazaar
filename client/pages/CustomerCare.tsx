@@ -46,16 +46,16 @@ export default function CustomerCare() {
           {/* Back Button */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 mb-6 text-primary hover:underline"
+            className="inline-flex items-center gap-2 mb-6 hover:underline text-[#1690C7]"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 text-[#1690C7]" />
             Back to Home
           </Link>
 
           <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="text-center mb-12">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#1690C7]  rounded-full flex items-center justify-center mx-auto mb-4">
                 <Headphones className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
@@ -70,7 +70,7 @@ export default function CustomerCare() {
             {/* Contact Options */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               <div className="bg-white rounded-lg border p-6 text-center hover:shadow-md transition-shadow">
-                <Phone className="h-8 w-8 text-primary mx-auto mb-4" />
+                <Phone className="h-8 w-8 text-[#1690C7] mx-auto mb-4" />
                 <h3 className="font-semibold text-gray-900 mb-2">Call Us</h3>
                 <p className="text-gray-600 text-sm mb-4">
                   Speak with our support team
@@ -80,7 +80,7 @@ export default function CustomerCare() {
               </div>
 
               <div className="bg-white rounded-lg border p-6 text-center hover:shadow-md transition-shadow">
-                <MessageCircle className="h-8 w-8 text-primary mx-auto mb-4" />
+                <MessageCircle className="h-8 w-8 text-[#1690C7] mx-auto mb-4" />
                 <h3 className="font-semibold text-gray-900 mb-2">Live Chat</h3>
                 <p className="text-gray-600 text-sm mb-4">
                   Chat with us in real-time
@@ -93,14 +93,14 @@ export default function CustomerCare() {
               </div>
 
               <div className="bg-white rounded-lg border p-6 text-center hover:shadow-md transition-shadow">
-                <Mail className="h-8 w-8 text-primary mx-auto mb-4" />
+                <Mail className="h-8 w-8 text-[#1690C7] mx-auto mb-4" />
                 <h3 className="font-semibold text-gray-900 mb-2">
                   Email Support
                 </h3>
                 <p className="text-gray-600 text-sm mb-4">
                   Send us detailed queries
                 </p>
-                <Button variant="outline" className="w-full">
+                <Button  className="w-full bg-[#1690C7]">
                   Send Email
                 </Button>
                 <p className="text-xs text-gray-500 mt-2">
@@ -123,8 +123,8 @@ export default function CustomerCare() {
                       className="bg-white rounded-lg border p-6 hover:shadow-md transition-shadow cursor-pointer"
                     >
                       <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <Icon className="h-6 w-6 text-primary" />
+                        <div className="w-12 h-12 bg-[#1690C7] /10 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Icon className="h-6 w-6 text-[#1690C7]" />
                         </div>
                         <div>
                           <h3 className="font-semibold text-gray-900 mb-2">
@@ -144,7 +144,7 @@ export default function CustomerCare() {
             {/* FAQ Section */}
             <div className="bg-white rounded-lg border p-8 mb-8">
               <div className="text-center">
-                <HelpCircle className="h-12 w-12 text-primary mx-auto mb-4" />
+                <HelpCircle className="h-12 w-12 text-[#1690C7] mx-auto mb-4" />
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   Frequently Asked Questions
                 </h2>
@@ -160,7 +160,7 @@ export default function CustomerCare() {
             {/* Business Hours */}
             <div className="bg-blue-50 rounded-lg p-6">
               <div className="flex items-center gap-3 mb-4">
-                <Clock className="h-6 w-6 text-primary" />
+                <Clock className="h-6 w-6 text-[#1690C7]" />
                 <h3 className="font-semibold text-gray-900">Business Hours</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">

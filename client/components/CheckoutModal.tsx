@@ -367,16 +367,16 @@ export default function CheckoutModal({
                         variant="outline"
                         onClick={onClose}
                         disabled={isProcessing}
-                        className="flex-1"
+                        className="flex-1 "
                       >
                         Cancel
                       </Button>
                       <Button
                         type="submit"
                         disabled={isProcessing}
-                        className="flex-1"
+                        className="flex-1 bg-[#1690C7]"
                       >
-                        <CreditCard className="h-4 w-4 mr-2" />
+                        <CreditCard className="h-4 w-4 mr-2 " />
                         {isProcessing
                           ? "Processing..."
                           : `Pay ₹${finalTotal.toLocaleString()}`}

@@ -184,7 +184,7 @@ export default function Footer() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
             <p className="text-gray-400 text-sm">
-              &copy; 2024 IndianBaazaar. All rights reserved.
+              &copy; 2025 IndianBaazaar. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link

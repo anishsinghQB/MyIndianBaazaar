@@ -100,7 +100,7 @@ export default function Index() {
                     selectedCategory === category.id ? "default" : "outline"
                   }
                   onClick={() => setSelectedCategory(category.id)}
-                  className="text-sm"
+                  className={`text-sm ${ selectedCategory === category.id && "bg-[#1690C7] hover:*:bg-[#1690C7] text-white"}`}
                 >
                   {category.name}
                 </Button>

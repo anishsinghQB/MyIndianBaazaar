@@ -193,7 +193,7 @@ export default function SearchAutocomplete({
                     {suggestion.category}
                   </span>
                   <span className="text-xs text-gray-300">•</span>
-                  <span className="text-xs font-medium text-primary">
+                  <span className="text-xs font-medium text-[#1690C7]">
                     ₹{suggestion.price.toLocaleString()}
                   </span>
                 </div>
