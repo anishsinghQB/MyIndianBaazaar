@@ -91,7 +91,7 @@ export default function Cart() {
   };
 
   const handleCheckout = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     if (!token) {
       // Redirect to login or show login modal
       navigate("/account");

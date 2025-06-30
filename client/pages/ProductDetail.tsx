@@ -132,7 +132,7 @@ export default function ProductDetail() {
   const handleBuyNow = () => {
     if (!product) return;
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     if (!token) {
       navigate("/account");
       return;

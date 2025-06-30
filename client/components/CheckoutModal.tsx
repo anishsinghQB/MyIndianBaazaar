@@ -22,6 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ShoppingBag, MapPin, CreditCard } from "lucide-react";
 import { Cart, Product, CreateOrderRequest } from "@shared/types";
+import axios from "axios";
 
 const shippingSchema = z.object({
   street: z.string().min(5, "Street address must be at least 5 characters"),
@@ -72,7 +73,7 @@ export default function CheckoutModal({
     setError(null);
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken");
       if (!token) {
         throw new Error("Authentication required");
       }
@@ -93,7 +94,7 @@ export default function CheckoutModal({
         .filter(Boolean) as CreateOrderRequest["items"];
 
       // Create order
-      const createOrderResponse = await fetch("/api/orders", {
+      const createOrderResponse : any = await axios.post("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

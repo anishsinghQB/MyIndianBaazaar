@@ -50,7 +50,7 @@ export default function ReviewSection({
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     setIsAuthenticated(!!token);
   }, []);
 
@@ -62,7 +62,7 @@ export default function ReviewSection({
     setSuccess(false);
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken");
       if (!token) {
         throw new Error("Please login to submit a review");
       }

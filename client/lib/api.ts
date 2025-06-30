@@ -116,7 +116,7 @@ export const productApi = {
 // Review APIs
 export const reviewApi = {
   async createReview(productId: string, rating: number, comment: string) {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     const response = await fetch(`${API_BASE}/reviews`, {
       method: "POST",
       headers: {
@@ -151,7 +151,7 @@ export const reviewApi = {
 // Order APIs
 export const orderApi = {
   async createOrder(orderData: any) {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     const response = await fetch(`${API_BASE}/orders`, {
       method: "POST",
       headers: {
@@ -170,7 +170,7 @@ export const orderApi = {
   },
 
   async verifyPayment(paymentData: any) {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     const response = await fetch(`${API_BASE}/payments/verify`, {
       method: "POST",
       headers: {
@@ -189,7 +189,7 @@ export const orderApi = {
   },
 
   async getOrders() {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     const response = await fetch(`${API_BASE}/orders`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -204,7 +204,7 @@ export const orderApi = {
   },
 
   async getOrderById(orderId: string) {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
     const response = await fetch(`${API_BASE}/orders/${orderId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
