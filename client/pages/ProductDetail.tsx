@@ -129,6 +129,46 @@ export default function ProductDetail() {
     }
   };
 
+  const handleBuyNow = () => {
+    if (!product) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/account");
+      return;
+    }
+
+    // Add to cart first
+    addToCart(product.id, quantity);
+
+    // Open checkout modal
+    setShowCheckout(true);
+  };
+
+  const handleOrderSuccess = (orderId: number) => {
+    navigate("/account", {
+      state: { message: `Order #${orderId} placed successfully!` },
+    });
+  };
+
+  const handleReviewAdded = () => {
+    // Refresh the product data to get updated reviews
+    setReviewKey((prev) => prev + 1);
+  };
+
+  // Create cart object for checkout
+  const currentCart: Cart = product
+    ? {
+        items: [
+          {
+            productId: product.id,
+            quantity: quantity,
+          },
+        ],
+        total: product.ourPrice * quantity,
+      }
+    : { items: [], total: 0 };
+
   return (
     <Layout>
       <div className="bg-gray-50">
