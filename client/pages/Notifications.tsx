@@ -13,7 +13,6 @@ import {
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/contexts/NotificationContext";
-import { Notification } from "@shared/types";
 
 const getNotificationIcon = (type: string) => {
   switch (type) {

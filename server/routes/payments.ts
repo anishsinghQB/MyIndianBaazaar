@@ -3,6 +3,8 @@ import { pool } from "../database/config";
 import { AuthRequest } from "../utils/auth";
 import { z } from "zod";
 import Razorpay from "razorpay";
+import  crypto from "crypto";
+
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "test_key_id",
@@ -14,7 +16,7 @@ const createOrderSchema = z.object({
   currency: z.string().default("INR"),
   items: z.array(
     z.object({
-      productId: z.number(),
+      productId: z.string(),
       quantity: z.number().positive(),
       price: z.number().positive(),
       selectedSize: z.string().optional(),
@@ -34,26 +36,19 @@ const verifyPaymentSchema = z.object({
   razorpay_order_id: z.string(),
   razorpay_payment_id: z.string(),
   razorpay_signature: z.string(),
-  orderId: z.string().uuid(), 
+  orderId: z.string()
 });
 
 export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
   try {
-    if (!req.user) {
-      return res.status(401).json({ error: "Authentication required" });
-    }
-
     const validatedData = createOrderSchema.parse(req.body);
     const { amount, currency, items, shippingAddress } = validatedData;
-
-    // Create Razorpay order
     const razorpayOrder = await razorpay.orders.create({
-      amount: Math.round(amount * 100), // Convert to paise
+      amount: Math.round(amount * 100),
       currency,
       receipt: `order_${Date.now()}`,
     });
 
-    // Create order in database
     const orderResult = await pool.query(
       `INSERT INTO orders (user_id, total_amount, payment_id, shipping_address) 
        VALUES ($1, $2, $3, $4) RETURNING id`,
@@ -77,7 +72,6 @@ export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
         ],
       );
 
-      // Update product stock
       await pool.query(
         "UPDATE products SET stock_quantity = stock_quantity - $1 WHERE id = $2",
         [item.quantity, item.productId],
@@ -95,19 +89,12 @@ export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
     });
   } catch (error) {
     console.error("Create order error:", error);
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.errors[0].message });
-    }
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error });
   }
 };
 
 export const verifyPayment: RequestHandler = async (req: AuthRequest, res) => {
   try {
-    if (!req.user) {
-      return res.status(401).json({ error: "Authentication required" });
-    }
-
     const validatedData = verifyPaymentSchema.parse(req.body);
     const {
       razorpay_order_id,
@@ -117,7 +104,7 @@ export const verifyPayment: RequestHandler = async (req: AuthRequest, res) => {
     } = validatedData;
 
     // Verify signature
-    const crypto = require("crypto");
+    
     const expectedSignature = crypto
       .createHmac(
         "sha256",
