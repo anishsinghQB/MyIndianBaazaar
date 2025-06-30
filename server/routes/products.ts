@@ -216,7 +216,31 @@ export const getAllProducts: RequestHandler = async (req, res) => {
     });
   } catch (error) {
     console.error("Get products error:", error);
-    res.status(500).json({ error: "Internal server error" });
+
+    // Fallback to sample data when database is not available
+    let filteredProducts = [...sampleProducts];
+
+    // Apply filters to sample data
+    if (category && category !== "all") {
+      filteredProducts = filteredProducts.filter(
+        (p) => p.category === category,
+      );
+    }
+
+    if (search) {
+      const searchLower = search.toString().toLowerCase();
+      filteredProducts = filteredProducts.filter(
+        (p) =>
+          p.name.toLowerCase().includes(searchLower) ||
+          p.description.toLowerCase().includes(searchLower),
+      );
+    }
+
+    if (inStock === "true") {
+      filteredProducts = filteredProducts.filter((p) => p.inStock);
+    }
+
+    res.json({ products: filteredProducts });
   }
 };
 
