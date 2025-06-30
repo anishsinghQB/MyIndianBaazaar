@@ -90,6 +90,7 @@ export const getProductReviews: RequestHandler = async (req, res) => {
     res.json({ reviews });
   } catch (error) {
     console.error("Get product reviews error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    // When database is not available, return empty reviews
+    res.json({ reviews: [] });
   }
 };
