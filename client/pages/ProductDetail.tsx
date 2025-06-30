@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Star,
   Heart,
@@ -11,10 +11,12 @@ import {
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import ImageZoom from "@/components/ImageZoom";
+import CheckoutModal from "@/components/CheckoutModal";
+import ReviewSection from "@/components/ReviewSection";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { addToCart } from "@/lib/cart";
-import { Product } from "@shared/types";
+import { Product, Cart } from "@shared/types";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
