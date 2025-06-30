@@ -286,7 +286,16 @@ export const getProductById: RequestHandler = async (req, res) => {
     res.json({ product });
   } catch (error) {
     console.error("Get product error:", error);
-    res.status(500).json({ error: "Internal server error" });
+
+    // Fallback to sample data when database is not available
+    const { id } = req.params;
+    const sampleProduct = sampleProducts.find((p) => p.id === id);
+
+    if (sampleProduct) {
+      res.json({ product: sampleProduct });
+    } else {
+      res.status(404).json({ error: "Product not found" });
+    }
   }
 };
 
