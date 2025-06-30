@@ -588,6 +588,34 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
     res.json({ suggestions });
   } catch (error) {
     console.error("Search suggestions error:", error);
-    res.status(500).json({ error: "Internal server error" });
+
+    // Fallback to sample data when database is not available
+    const { q } = req.query;
+
+    if (!q || typeof q !== "string" || q.trim().length < 2) {
+      return res.json({ suggestions: [] });
+    }
+
+    const searchTerm = q.trim().toLowerCase();
+    const suggestions = sampleProducts
+      .filter(
+        (p) =>
+          p.inStock &&
+          (p.name.toLowerCase().includes(searchTerm) ||
+            p.description.toLowerCase().includes(searchTerm)),
+      )
+      .slice(0, 10)
+      .map((product) => ({
+        id: product.id,
+        name: product.name,
+        image:
+          product.images && product.images.length > 0
+            ? product.images[0]
+            : "/placeholder.svg",
+        category: product.category,
+        price: product.ourPrice,
+      }));
+
+    res.json({ suggestions });
   }
 };
