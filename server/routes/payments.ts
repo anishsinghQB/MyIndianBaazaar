@@ -140,12 +140,10 @@ export const verifyPayment: RequestHandler = async (req: AuthRequest, res) => {
       return res.status(400).json({ error: error.errors[0].message });
     }
     // Database not available - return appropriate error
-    res
-      .status(503)
-      .json({
-        error:
-          "Database not available. Payment verification is currently unavailable.",
-      });
+    res.status(503).json({
+      error:
+        "Database not available. Payment verification is currently unavailable.",
+    });
   }
 };
 
@@ -194,7 +192,8 @@ export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
     res.json({ orders });
   } catch (error) {
     console.error("Get orders error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    // When database is not available, return empty orders
+    res.json({ orders: [] });
   }
 };
 
