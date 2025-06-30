@@ -17,12 +17,12 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
       `
       SELECT 1 FROM orders o
       JOIN order_items oi ON o.id = oi.order_id
-      WHERE o.user_id = $1 
+      WHERE o.user_id = $1
       AND oi.product_id = $2
       AND o.status = 'confirmed'
       LIMIT 1
       `,
-      [req.user.id, productId]
+      [req.user.id, productId],
     );
 
     console.log("req.user.id:", req.user.id);
@@ -37,7 +37,7 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
       INSERT INTO reviews (product_id, user_id, rating, comment, verified)
       VALUES ($1, $2, $3, $4, $5)
       `,
-      [productId, req.user.id, rating, comment, true]
+      [productId, req.user.id, rating, comment, true],
     );
 
     res.status(201).json({ message: "Review submitted successfully." });
