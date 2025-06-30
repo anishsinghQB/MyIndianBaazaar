@@ -378,7 +378,13 @@ export default function ProductDetail() {
                         ? "Out of Stock"
                         : "Add to Cart"}
                   </Button>
-                  <Button variant="outline" size="lg" className="w-full">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full"
+                    onClick={handleBuyNow}
+                    disabled={!product.inStock}
+                  >
                     Buy Now
                   </Button>
                 </div>
