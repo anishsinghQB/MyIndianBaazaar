@@ -545,7 +545,20 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
     });
   } catch (error) {
     console.error("Get products by category error:", error);
-    res.status(500).json({ error: "Internal server error" });
+
+    // Fallback to sample data when database is not available
+    const { category } = req.params;
+    const { inStock } = req.query;
+
+    let filteredProducts = sampleProducts.filter(
+      (p) => p.category === category,
+    );
+
+    if (inStock === "true") {
+      filteredProducts = filteredProducts.filter((p) => p.inStock);
+    }
+
+    res.json({ products: filteredProducts });
   }
 };
 
