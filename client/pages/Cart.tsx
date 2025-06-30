@@ -90,6 +90,23 @@ export default function Cart() {
     return products.find((p) => p.id === id);
   };
 
+  const handleCheckout = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirect to login or show login modal
+      navigate("/account");
+      return;
+    }
+    setShowCheckout(true);
+  };
+
+  const handleOrderSuccess = (orderId: number) => {
+    // Navigate to order confirmation or account page
+    navigate("/account", {
+      state: { message: `Order #${orderId} placed successfully!` },
+    });
+  };
+
   if (loading) {
     return (
       <Layout>
