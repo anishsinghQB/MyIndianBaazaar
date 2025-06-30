@@ -248,6 +248,7 @@ export const getOrderById: RequestHandler = async (req: AuthRequest, res) => {
     res.json({ order });
   } catch (error) {
     console.error("Get order error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    // When database is not available, return 404
+    res.status(404).json({ error: "Order not found" });
   }
 };
