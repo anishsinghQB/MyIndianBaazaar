@@ -481,12 +481,10 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
       return res.status(400).json({ error: error.errors[0].message });
     }
     // Database not available - return appropriate error
-    res
-      .status(503)
-      .json({
-        error:
-          "Database not available. Product updates are currently unavailable.",
-      });
+    res.status(503).json({
+      error:
+        "Database not available. Product updates are currently unavailable.",
+    });
   }
 };
 
@@ -506,7 +504,13 @@ export const deleteProduct: RequestHandler = async (req: AuthRequest, res) => {
     res.json({ message: "Product deleted successfully" });
   } catch (error) {
     console.error("Delete product error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    // Database not available - return appropriate error
+    res
+      .status(503)
+      .json({
+        error:
+          "Database not available. Product deletion is currently unavailable.",
+      });
   }
 };
 
