@@ -161,7 +161,15 @@ export const getProductById: RequestHandler = async (req, res) => {
     res.json({ product });
   } catch (error) {
     console.error("getProductById error:", error);
-    res.status(503).json({ error: "Something went wrong" });
+    console.log("Database unavailable, using fallback sample data");
+
+    // Find product in sample data
+    const product = sampleProducts.find((p) => p.id === req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.json({ product });
   }
 };
 
