@@ -311,7 +311,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
     const filteredProducts = sampleProducts
       .filter(
         (product) =>
-          product.name.toLowerCase().includes(term) && product.in_stock,
+          product.name.toLowerCase().includes(term) && product.inStock,
       )
       .slice(0, 10);
 
@@ -320,7 +320,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
       name: p.name,
       image: p.images?.[0] || "/placeholder.svg",
       category: p.category,
-      price: p.our_price,
+      price: p.ourPrice,
     }));
 
     res.json({ suggestions });
