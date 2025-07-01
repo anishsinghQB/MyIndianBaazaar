@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
 import { AuthRequest } from "../utils/auth";
 import { z } from "zod";
-import { Product } from "server/models/productModel";
-import { createProductNotification } from "server/routes/notifications";
+import { Product } from "../models/productModel";
+import { createProductNotification } from "../routes/notifications";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
@@ -42,7 +42,10 @@ export const getAllProducts: RequestHandler = async (req, res) => {
       whereClause.name = { $iLike: `%${search}%` };
     }
 
-    const products = await Product.findAll({ where: whereClause, order: [["createdAt", "DESC"]] });
+    const products = await Product.findAll({
+      where: whereClause,
+      order: [["createdAt", "DESC"]],
+    });
     res.json({ products });
   } catch (error) {
     console.error("getAllProducts error:", error);
@@ -65,10 +68,12 @@ export const getProductById: RequestHandler = async (req, res) => {
 export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
   try {
     const data = productSchema.parse(req.body);
-    const discount = data.discount || Math.round(((data.mrp - data.ourPrice) / data.mrp) * 100);
+    const discount =
+      data.discount ||
+      Math.round(((data.mrp - data.ourPrice) / data.mrp) * 100);
     const afterExchangePrice = parseFloat((data.ourPrice * 0.95).toFixed(2));
 
-    const product : any = await Product.create({
+    const product: any = await Product.create({
       ...data,
       our_price: data.ourPrice,
       discount,
@@ -81,7 +86,8 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
     res.status(201).json({ message: "Product created", product });
   } catch (error) {
     console.error("createProduct error:", error);
-    if (error instanceof z.ZodError) return res.status(400).json({ error: error.errors[0].message });
+    if (error instanceof z.ZodError)
+      return res.status(400).json({ error: error.errors[0].message });
     res.status(503).json({ error: "Could not create product" });
   }
 };
@@ -104,7 +110,8 @@ export const updateProduct: RequestHandler = async (req, res) => {
     res.json({ message: "Product updated", product });
   } catch (error) {
     console.error("updateProduct error:", error);
-    if (error instanceof z.ZodError) return res.status(400).json({ error: error.errors[0].message });
+    if (error instanceof z.ZodError)
+      return res.status(400).json({ error: error.errors[0].message });
     res.status(503).json({ error: "Could not update product" });
   }
 };
@@ -128,7 +135,10 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
     const whereClause: any = { category };
     if (inStock === "true") whereClause.in_stock = true;
 
-    const products = await Product.findAll({ where: whereClause, order: [["createdAt", "DESC"]] });
+    const products = await Product.findAll({
+      where: whereClause,
+      order: [["createdAt", "DESC"]],
+    });
     res.json({ products });
   } catch (error) {
     console.error("getProductsByCategory error:", error);
@@ -152,7 +162,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
       limit: 10,
     });
 
-    const suggestions = products.map((p : any) => ({
+    const suggestions = products.map((p: any) => ({
       id: p.id,
       name: p.name,
       image: p.images?.[0] || "/placeholder.svg",
