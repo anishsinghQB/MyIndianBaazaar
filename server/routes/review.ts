@@ -28,9 +28,9 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
     console.log("req.user.id:", req.user.id);
     console.log("productId :", productId);
 
-    // if (purchaseResult.rowCount === 0) {
-    //   return res.status(403).json({ error: "You can only review products you purchased." });
-    // }
+    if (purchaseResult.rowCount === 0) {
+      return res.status(403).json({ error: "You can only review products you purchased." });
+    }
 
     await pool.query(
       `
