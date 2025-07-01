@@ -292,6 +292,29 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
     res.json({ suggestions });
   } catch (error) {
     console.error("getSearchSuggestions error:", error);
-    res.status(503).json({ error: "Failed to get suggestions" });
+    console.log("Database unavailable, using fallback sample data");
+
+    const { q } = req.query;
+    if (!q || typeof q !== "string" || q.trim().length < 2) {
+      return res.json({ suggestions: [] });
+    }
+
+    const term = q.trim().toLowerCase();
+    const filteredProducts = sampleProducts
+      .filter(
+        (product) =>
+          product.name.toLowerCase().includes(term) && product.in_stock,
+      )
+      .slice(0, 10);
+
+    const suggestions = filteredProducts.map((p) => ({
+      id: p.id,
+      name: p.name,
+      image: p.images?.[0] || "/placeholder.svg",
+      category: p.category,
+      price: p.our_price,
+    }));
+
+    res.json({ suggestions });
   }
 };
