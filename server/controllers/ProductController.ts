@@ -266,7 +266,7 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
     );
 
     if (inStock === "true") {
-      filteredProducts = filteredProducts.filter((product) => product.in_stock);
+      filteredProducts = filteredProducts.filter((product) => product.inStock);
     }
 
     res.json({ products: filteredProducts });
