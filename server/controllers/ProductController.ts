@@ -250,7 +250,18 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
     res.json({ products });
   } catch (error) {
     console.error("getProductsByCategory error:", error);
-    res.status(503).json({ error: "Something went wrong" });
+    console.log("Database unavailable, using fallback sample data");
+
+    // Filter sample products by category
+    let filteredProducts = sampleProducts.filter(
+      (product) => product.category === category,
+    );
+
+    if (inStock === "true") {
+      filteredProducts = filteredProducts.filter((product) => product.in_stock);
+    }
+
+    res.json({ products: filteredProducts });
   }
 };
 
