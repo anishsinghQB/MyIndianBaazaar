@@ -4,19 +4,26 @@ import { User } from "../models/userModel";
 import { Order } from "../models/orderModel";
 import { Product } from "../models/productModel";
 import { Op, fn, col, literal } from "sequelize";
-import { OrderItem } from "server/models/OrderdItem";
+import { OrderItem } from "../models/OrderdItem";
 
-export const getAllCustomers: RequestHandler = async (req: AuthRequest, res) => {
+export const getAllCustomers: RequestHandler = async (
+  req: AuthRequest,
+  res,
+) => {
   try {
     const customers = await User.findAll({
       attributes: {
         include: [
           [
-            literal(`(SELECT COUNT(*) FROM orders WHERE orders.user_id = "User".id)`),
+            literal(
+              `(SELECT COUNT(*) FROM orders WHERE orders.user_id = "User".id)`,
+            ),
             "totalOrders",
           ],
           [
-            literal(`(SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE orders.user_id = "User".id AND status = 'confirmed')`),
+            literal(
+              `(SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE orders.user_id = "User".id AND status = 'confirmed')`,
+            ),
             "totalSpent",
           ],
         ],
@@ -44,7 +51,7 @@ export const getAllOrders: RequestHandler = async (req: AuthRequest, res) => {
           include: [
             {
               model: Product,
-              attributes: ["name", [literal('images[1]'), "productImage"]],
+              attributes: ["name", [literal("images[1]"), "productImage"]],
             },
           ],
         },
@@ -59,7 +66,10 @@ export const getAllOrders: RequestHandler = async (req: AuthRequest, res) => {
   }
 };
 
-export const getDashboardStats: RequestHandler = async (req: AuthRequest, res) => {
+export const getDashboardStats: RequestHandler = async (
+  req: AuthRequest,
+  res,
+) => {
   try {
     const totalProducts = await Product.count();
     const totalCustomers = await User.count({ where: { role: "user" } });
@@ -67,11 +77,31 @@ export const getDashboardStats: RequestHandler = async (req: AuthRequest, res) =
     const orderStats = await Order.findAll({
       attributes: [
         [fn("COUNT", col("id")), "totalOrders"],
-        [fn("SUM", literal(`CASE WHEN status = 'confirmed' THEN total_amount ELSE 0 END`)), "totalRevenue"],
-        [fn("COUNT", literal(`CASE WHEN status = 'pending' THEN 1 END`)), "pendingOrders"],
-        [fn("COUNT", literal(`CASE WHEN status = 'confirmed' THEN 1 END`)), "confirmedOrders"],
-        [fn("COUNT", literal(`CASE WHEN status = 'shipped' THEN 1 END`)), "shippedOrders"],
-        [fn("COUNT", literal(`CASE WHEN status = 'delivered' THEN 1 END`)), "deliveredOrders"],
+        [
+          fn(
+            "SUM",
+            literal(
+              `CASE WHEN status = 'confirmed' THEN total_amount ELSE 0 END`,
+            ),
+          ),
+          "totalRevenue",
+        ],
+        [
+          fn("COUNT", literal(`CASE WHEN status = 'pending' THEN 1 END`)),
+          "pendingOrders",
+        ],
+        [
+          fn("COUNT", literal(`CASE WHEN status = 'confirmed' THEN 1 END`)),
+          "confirmedOrders",
+        ],
+        [
+          fn("COUNT", literal(`CASE WHEN status = 'shipped' THEN 1 END`)),
+          "shippedOrders",
+        ],
+        [
+          fn("COUNT", literal(`CASE WHEN status = 'delivered' THEN 1 END`)),
+          "deliveredOrders",
+        ],
       ],
       raw: true,
     });
@@ -89,17 +119,26 @@ export const getDashboardStats: RequestHandler = async (req: AuthRequest, res) =
   }
 };
 
-export const updateOrderStatus: RequestHandler = async (req: AuthRequest, res) => {
+export const updateOrderStatus: RequestHandler = async (
+  req: AuthRequest,
+  res,
+) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
 
-    const validStatuses = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
+    const validStatuses = [
+      "pending",
+      "confirmed",
+      "shipped",
+      "delivered",
+      "cancelled",
+    ];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ error: "Invalid order status" });
     }
 
-    const order : any = await Order.findByPk(id);
+    const order: any = await Order.findByPk(id);
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }

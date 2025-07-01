@@ -5,7 +5,7 @@ import crypto from "crypto";
 import { AuthRequest } from "../utils/auth";
 import { Order } from "../models/orderModel";
 import { Product } from "../models/productModel";
-import { OrderItem } from "server/models/OrderdItem";
+import { OrderItem } from "../models/OrderdItem";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -22,7 +22,7 @@ const createOrderSchema = z.object({
       price: z.number().positive(),
       selectedSize: z.string().optional(),
       selectedColor: z.string().optional(),
-    })
+    }),
   ),
   shippingAddress: z.object({
     street: z.string(),
@@ -42,7 +42,8 @@ const verifyPaymentSchema = z.object({
 
 export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
   try {
-    const { amount, currency, items, shippingAddress } = createOrderSchema.parse(req.body);
+    const { amount, currency, items, shippingAddress } =
+      createOrderSchema.parse(req.body);
 
     const razorpayOrder = await razorpay.orders.create({
       amount: Math.round(amount * 100),
@@ -50,7 +51,7 @@ export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
       receipt: `order_${Date.now()}`,
     });
 
-    const newOrder : any = await Order.create({
+    const newOrder: any = await Order.create({
       user_id: req.user.id,
       total_amount: amount,
       payment_id: razorpayOrder.id,
@@ -92,7 +93,12 @@ export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
 
 export const verifyPayment: RequestHandler = async (req: AuthRequest, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = verifyPaymentSchema.parse(req.body);
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      orderId,
+    } = verifyPaymentSchema.parse(req.body);
 
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -111,21 +117,26 @@ export const verifyPayment: RequestHandler = async (req: AuthRequest, res) => {
       },
       {
         where: { id: orderId, user_id: req.user.id },
-      }
+      },
     );
 
-    res.json({ message: "Payment verified successfully", paymentId: razorpay_payment_id });
+    res.json({
+      message: "Payment verified successfully",
+      paymentId: razorpay_payment_id,
+    });
   } catch (error) {
     console.error("Verify payment error:", error);
     res.status(503).json({
-      error: "Database not available. Payment verification is currently unavailable.",
+      error:
+        "Database not available. Payment verification is currently unavailable.",
     });
   }
 };
 
 export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
   try {
-    if (!req.user) return res.status(401).json({ error: "Authentication required" });
+    if (!req.user)
+      return res.status(401).json({ error: "Authentication required" });
 
     const orders = await Order.findAll({
       where: { user_id: req.user.id },
@@ -143,7 +154,7 @@ export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    const formattedOrders = orders.map((order : any) => ({
+    const formattedOrders = orders.map((order: any) => ({
       id: order.id,
       totalAmount: parseFloat(order.total_amount as any),
       status: order.status,
@@ -152,16 +163,17 @@ export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
       shippingAddress: order.shipping_address,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
-      items: (order as any).OrderItems?.map((item: any) => ({
-        id: item.id,
-        productId: item.product_id,
-        quantity: item.quantity,
-        price: item.price,
-        selectedSize: item.selected_size,
-        selectedColor: item.selected_color,
-        productName: item.Product?.name,
-        productImage: item.Product?.images?.[1],
-      })) || [],
+      items:
+        (order as any).OrderItems?.map((item: any) => ({
+          id: item.id,
+          productId: item.product_id,
+          quantity: item.quantity,
+          price: item.price,
+          selectedSize: item.selected_size,
+          selectedColor: item.selected_color,
+          productName: item.Product?.name,
+          productImage: item.Product?.images?.[1],
+        })) || [],
     }));
 
     res.json({ orders: formattedOrders });
@@ -173,11 +185,12 @@ export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
 
 export const getOrderById: RequestHandler = async (req: AuthRequest, res) => {
   try {
-    if (!req.user) return res.status(401).json({ error: "Authentication required" });
+    if (!req.user)
+      return res.status(401).json({ error: "Authentication required" });
 
     const { id } = req.params;
 
-    const order : any = await Order.findOne({
+    const order: any = await Order.findOne({
       where: {
         id,
         user_id: req.user.id,
@@ -206,16 +219,17 @@ export const getOrderById: RequestHandler = async (req: AuthRequest, res) => {
       shippingAddress: order.shipping_address,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
-      items: (order as any).OrderItems?.map((item: any) => ({
-        id: item.id,
-        productId: item.product_id,
-        quantity: item.quantity,
-        price: item.price,
-        selectedSize: item.selected_size,
-        selectedColor: item.selected_color,
-        productName: item.Product?.name,
-        productImage: item.Product?.images?.[1],
-      })) || [],
+      items:
+        (order as any).OrderItems?.map((item: any) => ({
+          id: item.id,
+          productId: item.product_id,
+          quantity: item.quantity,
+          price: item.price,
+          selectedSize: item.selected_size,
+          selectedColor: item.selected_color,
+          productName: item.Product?.name,
+          productImage: item.Product?.images?.[1],
+        })) || [],
     };
 
     res.json({ order: formattedOrder });
@@ -224,5 +238,3 @@ export const getOrderById: RequestHandler = async (req: AuthRequest, res) => {
     res.status(404).json({ error: "Order not found" });
   }
 };
-
-

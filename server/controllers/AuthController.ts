@@ -6,7 +6,7 @@ import {
   AuthRequest,
 } from "../utils/auth";
 import { z } from "zod";
-import { User } from "server/models/userModel";
+import { User } from "../models/userModel";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -33,7 +33,7 @@ export const register: RequestHandler = async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
-    const user : any = await User.create({
+    const user: any = await User.create({
       name,
       email,
       password: hashedPassword,
@@ -71,7 +71,7 @@ export const login: RequestHandler = async (req, res) => {
     const validatedData = loginSchema.parse(req.body);
     const { email, password } = validatedData;
 
-    const user : any = await User.findOne({ where: { email } });
+    const user: any = await User.findOne({ where: { email } });
 
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
@@ -111,7 +111,7 @@ export const googleAuthCallback: RequestHandler = async (req, res) => {
   try {
     const { googleId, email, name } = req.body;
 
-    let user : any = await User.findOne({ where: { google_id: googleId } });
+    let user: any = await User.findOne({ where: { google_id: googleId } });
 
     if (!user) {
       const existingUser = await User.findOne({ where: { email } });
@@ -154,12 +154,12 @@ export const getProfile: RequestHandler = async (req: AuthRequest, res) => {
     if (!req.user) {
       return res.status(401).json({ error: "Authentication required" });
     }
-    const user : any = await User.findByPk(req.user.id);
+    const user: any = await User.findByPk(req.user.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json({user});
+    res.json({ user });
   } catch (error) {
     console.error("Profile error:", error);
     res.status(500).json({ error: "Internal server error" });

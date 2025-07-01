@@ -3,8 +3,8 @@ import { z } from "zod";
 import { AuthRequest } from "../utils/auth";
 import { Review } from "../models/reviewModel";
 import { Order } from "../models/orderModel";
-import { OrderItem } from "server/models/OrderdItem";
-import { User } from "server/models/userModel";
+import { OrderItem } from "../models/OrderdItem";
+import { User } from "../models/userModel";
 
 const reviewSchema = z.object({
   productId: z.string().uuid(),
