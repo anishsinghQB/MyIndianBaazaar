@@ -108,8 +108,10 @@ const sampleProducts = [
 ];
 
 export const getAllProducts: RequestHandler = async (req, res) => {
+  // Extract query parameters outside try-catch to access in catch block
+  const { category, search, inStock } = req.query;
+
   try {
-    const { category, search, inStock } = req.query;
     const whereClause: any = {};
 
     if (category) whereClause.category = category;
