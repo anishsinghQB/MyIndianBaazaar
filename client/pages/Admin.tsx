@@ -357,7 +357,7 @@ export default function Admin() {
                   <div>
                     <p className="text-sm font-medium text-gray-600">Revenue</p>
                     <p className="text-2xl font-bold text-gray-900">
-                      ₹{stats.totalRevenue.toLocaleString()}
+                      ₹{stats.totalRevenue?.toLocaleString()}
                     </p>
                   </div>
                   <DollarSign className="h-8 w-8 text-blue-500" />
@@ -477,7 +477,7 @@ export default function Admin() {
                           Total Revenue
                         </h3>
                         <p className="text-3xl font-bold">
-                          ₹{stats.totalRevenue.toLocaleString()}
+                          ₹{stats.totalRevenue?.toLocaleString()}
                         </p>
                       </div>
                       <TrendingUp className="h-12 w-12 opacity-75" />
@@ -547,7 +547,7 @@ export default function Admin() {
                               {product.category}
                             </td>
                             <td className="py-4 px-4 font-medium text-gray-900">
-                              ₹{product.ourPrice.toLocaleString()}
+                              ₹{product.ourPrice?.toLocaleString()}
                             </td>
                             <td className="py-4 px-4">
                               <span
@@ -620,7 +620,7 @@ export default function Admin() {
                           </div>
                           <div className="text-right">
                             <p className="font-medium text-gray-900">
-                              ₹{order.totalAmount.toLocaleString()}
+                              ₹{order.totalAmount?.toLocaleString()}
                             </p>
                             <p className="text-sm text-gray-500">
                               {new Date(order.createdAt).toLocaleDateString()}
@@ -770,7 +770,7 @@ export default function Admin() {
                               {customer.totalOrders}
                             </td>
                             <td className="py-4 px-4 font-medium text-gray-900">
-                              ₹{customer.totalSpent.toLocaleString()}
+                              ₹{customer.totalSpent?.toLocaleString()}
                             </td>
                             <td className="py-4 px-4 text-gray-600">
                               {customer.createdAt

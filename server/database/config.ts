@@ -8,7 +8,7 @@ export const pool = new Pool({
   user: process.env.DB_USER || "postgres",
   host: process.env.DB_HOST || "localhost",
   database: process.env.DB_NAME || "postgres",
-  password: process.env.DB_PASSWORD || "IndianBaazaar@2004",
+  password: process.env.DB_PASSWORD || "postgres",
   port: parseInt(process.env.DB_PORT || "5432"),
 });
 
@@ -17,7 +17,7 @@ export const pool = new Pool({
 export const sequelize = new Sequelize(
   process.env.DB_NAME || "postgres",
   process.env.DB_USER || "postgres",
-  process.env.DB_PASSWORD || "IndianBaazaar@2004",
+  process.env.DB_PASSWORD || "postgres",
   {
     host: process.env.HOST_NAME,
     port: Number(process.env.PORT_NUMBER) || 5432,

@@ -194,7 +194,7 @@ export default function SearchAutocomplete({
                   </span>
                   <span className="text-xs text-gray-300">•</span>
                   <span className="text-xs font-medium text-[#1690C7]">
-                    ₹{suggestion.price.toLocaleString()}
+                    ₹{suggestion.price?.toLocaleString()}
                   </span>
                 </div>
               </div>

@@ -46,7 +46,7 @@ export function createServer() {
 
 
   sequelize
-    .sync({ alter: true })
+sequelize.sync({ force: false, alter: true })
     .then(() => {
       console.log("Tables synced");
     })

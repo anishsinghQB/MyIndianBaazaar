@@ -234,7 +234,7 @@ export default function CheckoutModal({
                         </div>
                       </div>
                       <p className="font-medium">
-                        ₹{(product.ourPrice * item.quantity).toLocaleString()}
+                        ₹{(product.ourPrice * item.quantity)?.toLocaleString()}
                       </p>
                     </div>
                   );
@@ -245,7 +245,7 @@ export default function CheckoutModal({
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>₹{cart.total.toLocaleString()}</span>
+                    <span>₹{cart.total?.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping</span>
@@ -253,12 +253,12 @@ export default function CheckoutModal({
                   </div>
                   <div className="flex justify-between">
                     <span>Tax (18%)</span>
-                    <span>₹{taxAmount.toLocaleString()}</span>
+                    <span>₹{taxAmount?.toLocaleString()}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between font-bold text-lg">
                     <span>Total</span>
-                    <span>₹{finalTotal.toLocaleString()}</span>
+                    <span>₹{finalTotal?.toLocaleString()}</span>
                   </div>
                 </div>
               </CardContent>
@@ -379,7 +379,7 @@ export default function CheckoutModal({
                         <CreditCard className="h-4 w-4 mr-2 " />
                         {isProcessing
                           ? "Processing..."
-                          : `Pay ₹${finalTotal.toLocaleString()}`}
+                          : `Pay ₹${finalTotal?.toLocaleString()}`}
                       </Button>
                     </div>
                   </form>

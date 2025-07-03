@@ -266,12 +266,12 @@ export default function Cart() {
                               ₹
                               {(
                                 product.ourPrice * item.quantity
-                              ).toLocaleString()}
+                              )?.toLocaleString()}
                             </p>
                             {product.mrp > product.ourPrice && (
                               <p className="text-sm text-gray-500 line-through">
                                 ₹
-                                {(product.mrp * item.quantity).toLocaleString()}
+                                {(product.mrp * item.quantity)?.toLocaleString()}
                               </p>
                             )}
                           </div>
@@ -298,7 +298,7 @@ export default function Cart() {
                       items)
                     </span>
                     <span className="font-medium">
-                      ₹{cart.total.toLocaleString()}
+                      ₹{cart.total?.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -308,7 +308,7 @@ export default function Cart() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Tax</span>
                     <span className="font-medium">
-                      ₹{Math.round(cart.total * 0.18).toLocaleString()}
+                      ₹{Math.round(cart.total * 0.18)?.toLocaleString()}
                     </span>
                   </div>
                   <div className="border-t pt-4">
@@ -317,7 +317,7 @@ export default function Cart() {
                         Total
                       </span>
                       <span className="text-lg font-bold text-gray-900">
-                        ₹{Math.round(cart.total * 1.18).toLocaleString()}
+                        ₹{Math.round(cart.total * 1.18)?.toLocaleString()}
                       </span>
                     </div>
                   </div>

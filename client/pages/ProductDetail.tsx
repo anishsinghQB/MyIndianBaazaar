@@ -265,12 +265,12 @@ export default function ProductDetail() {
               <div className="bg-white p-6 rounded-lg border">
                 <div className="flex items-center gap-4 mb-4">
                   <span className="text-3xl font-bold text-gray-900">
-                    ₹{product.ourPrice.toLocaleString()}
+                    ₹{product.ourPrice?.toLocaleString()}
                   </span>
                   {product.mrp > product.ourPrice && (
                     <>
                       <span className="text-xl text-gray-500 line-through">
-                        ₹{product.mrp.toLocaleString()}
+                        ₹{product.mrp?.toLocaleString()}
                       </span>
                       <span className="bg-green-500 text-white px-2 py-1 rounded text-sm font-medium">
                         {discountPercentage}% OFF
@@ -282,7 +282,7 @@ export default function ProductDetail() {
                 {product.afterExchangePrice && (
                   <p className="text-sm text-gray-600 mb-4">
                     Exchange Price: ₹
-                    {product.afterExchangePrice.toLocaleString()}
+                    {product.afterExchangePrice?.toLocaleString()}
                   </p>
                 )}
 
