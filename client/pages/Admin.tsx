@@ -239,8 +239,8 @@ export default function Admin() {
       });
 
       if (response.ok) {
-        setOrders((prev : any) =>
-          prev.map((order : any) =>
+        setOrders((prev: any) =>
+          prev.map((order: any) =>
             order.id === orderId
               ? { ...order, status: newStatus as any }
               : order,
@@ -521,7 +521,7 @@ export default function Admin() {
                         </tr>
                       </thead>
                       <tbody>
-                        {products.map((product : any) => (
+                        {products.map((product: any) => (
                           <tr
                             key={product.id}
                             className="border-b border-gray-100"
@@ -547,7 +547,7 @@ export default function Admin() {
                               {product.category}
                             </td>
                             <td className="py-4 px-4 font-medium text-gray-900">
-                              ₹{product.ourPrice?.toLocaleString()}
+                              ₹{(product.ourPrice || 0)?.toLocaleString()}
                             </td>
                             <td className="py-4 px-4">
                               <span
@@ -596,7 +596,7 @@ export default function Admin() {
                   </h2>
 
                   <div className="space-y-4">
-                    {orders.map((order : any) => (
+                    {orders.map((order: any) => (
                       <div
                         key={order.id}
                         className="bg-gray-50 border rounded-lg p-4"
