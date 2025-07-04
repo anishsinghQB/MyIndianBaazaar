@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { AuthRequest } from "../utils/auth";
 import { z } from "zod";
+import { Op } from "sequelize";
 import { Product } from "../models/productModel";
 import { createProductNotification } from "./NotificationController";
 
@@ -123,7 +124,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
     if (category) whereClause.category = category;
     if (inStock === "true") whereClause.in_stock = true;
     if (search) {
-      whereClause.name = { $iLike: `%${search}%` };
+      whereClause.name = { [Op.iLike]: `%${search}%` };
     }
 
     const products = await Product.findAll({
@@ -289,7 +290,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
     const term = q.trim();
     const products = await Product.findAll({
       where: {
-        name: { $iLike: `%${term}%` },
+        name: { [Op.iLike]: `%${term}%` },
         in_stock: true,
       },
       limit: 10,
