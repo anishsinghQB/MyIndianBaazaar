@@ -65,8 +65,8 @@ export default function CheckoutModal({
     return products.find((p) => p.id === id);
   };
 
-  const taxAmount = Math.round(cart.total * 0.18);
-  const finalTotal = cart.total + taxAmount;
+  const taxAmount = Math.round((cart.total || 0) * 0.18);
+  const finalTotal = (cart.total || 0) + taxAmount;
 
   const onSubmit = async (shippingData: z.infer<typeof shippingSchema>) => {
     setIsProcessing(true);
