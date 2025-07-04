@@ -145,7 +145,7 @@ export default function CheckoutModal({
             }
 
             // Clear cart
-            localStorage.removeItem("cart");
+            localStorage.removeItem("indianbaazaar-cart");
             window.dispatchEvent(new Event("storage"));
 
             onOrderSuccess(orderId);
