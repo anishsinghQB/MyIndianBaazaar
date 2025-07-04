@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { z } from "zod";
 import { AuthRequest } from "../utils/auth";
 import { Notification } from "../models/notificationModel";
+import { Op } from "sequelize";
 
 const notificationSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -18,7 +19,9 @@ export const getUserNotifications: RequestHandler = async (
     const userId = req.user?.id;
 
     const notifications = await Notification.findAll({
-      where: { user_id: userId },
+      where: {
+        [Op.or]: [{ user_id: userId }, { user_id: null }],
+      },
       order: [["createdAt", "DESC"]],
     });
 
@@ -39,11 +42,23 @@ export const getUserNotifications: RequestHandler = async (
   }
 };
 
-export const markNotificationAsRead: RequestHandler = async (req: AuthRequest,res) => {
+export const markNotificationAsRead: RequestHandler = async (
+  req: AuthRequest,
+  res,
+) => {
   try {
     const { id } = req.params;
     const userId = req.user?.id;
-    const [updatedCount] = await Notification.update({ is_read: true }, { where: { id, user_id: userId }});
+
+    const [updatedCount] = await Notification.update(
+      { is_read: true },
+      {
+        where: {
+          id,
+          [Op.or]: [{ user_id: userId }, { user_id: null }],
+        },
+      },
+    );
 
     if (updatedCount === 0) {
       return res.status(404).json({ error: "Notification not found" });
@@ -56,23 +71,37 @@ export const markNotificationAsRead: RequestHandler = async (req: AuthRequest,re
   }
 };
 
-export const createNotification: RequestHandler = async (req: AuthRequest, res) => {
+export const createNotification: RequestHandler = async (
+  req: AuthRequest,
+  res,
+) => {
   try {
     const validatedData = notificationSchema.parse(req.body);
     const { title, message, type, userId } = validatedData;
 
-    const notification = await Notification.create({
+    const notification: any = await Notification.create({
       title,
       message,
       type,
       user_id: userId || null,
     });
 
+    const formattedNotification = {
+      id: notification.id,
+      title: notification.title,
+      message: notification.message,
+      type: notification.type,
+      userId: notification.user_id,
+      isRead: notification.is_read,
+      metadata: notification.metadata,
+      createdAt: notification.createdAt,
+    };
+
     res.status(201).json({
       message: userId
         ? "Notification created successfully"
         : "Notification sent to all users",
-      notification,
+      notification: formattedNotification,
     });
   } catch (error) {
     console.error("Create notification error:", error);
