@@ -79,6 +79,10 @@ export function createServer() {
   Product.hasMany(Review, { foreignKey: "product_id", as: "reviews" });
   Review.belongsTo(Product, { foreignKey: "product_id", as: "Product" });
 
+  // Notification and User associations
+  User.hasMany(Notification, { foreignKey: "user_id", as: "notifications" });
+  Notification.belongsTo(User, { foreignKey: "user_id", as: "User" });
+
   // Sync database tables - models updated
   sequelize
     .sync({ force: false, alter: false })
