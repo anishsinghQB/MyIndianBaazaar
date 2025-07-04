@@ -34,6 +34,21 @@ export const User = sequelize.define(
     google_id: {
       type: DataTypes.STRING,
     },
+    address: {
+      type: DataTypes.TEXT,
+    },
+    city: {
+      type: DataTypes.STRING,
+    },
+    state: {
+      type: DataTypes.STRING,
+    },
+    country: {
+      type: DataTypes.STRING,
+    },
+    postal_code: {
+      type: DataTypes.STRING,
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,

@@ -18,12 +18,14 @@ import {
 } from "lucide-react";
 import Layout from "@/components/Layout";
 import LocationPermissionModal from "@/components/LocationPermissionModal";
+import EditProfileModal from "@/components/EditProfileModal";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "@/hooks/useLocation";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Account() {
   const [showLocationModal, setShowLocationModal] = useState(false);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const { user, logout } = useAuth();
   const {
     location,
@@ -88,7 +90,11 @@ export default function Account() {
                 <h2 className="text-xl font-semibold text-gray-900">
                   Profile Information
                 </h2>
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowEditProfileModal(true)}
+                >
                   <Edit className="h-4 w-4 mr-2" />
                   Edit Profile
                 </Button>
@@ -131,6 +137,28 @@ export default function Account() {
                       </p>
                     </div>
                   </div>
+
+                  {(user?.address || user?.city) && (
+                    <div className="flex items-center gap-3">
+                      <MapPin className="h-5 w-5 text-gray-400" />
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          Location
+                        </p>
+                        <p className="text-gray-900">
+                          {user?.city && user?.state
+                            ? `${user.city}, ${user.state}`
+                            : user?.city || user?.address || "Not provided"}
+                        </p>
+                        {user?.country && (
+                          <p className="text-sm text-gray-600">
+                            {user.country}
+                            {user.postalCode && ` - ${user.postalCode}`}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-4">
@@ -407,6 +435,14 @@ export default function Account() {
         onAllow={handleAllowLocation}
         onDeny={handleDenyLocation}
       />
+
+      {user && (
+        <EditProfileModal
+          isOpen={showEditProfileModal}
+          onClose={() => setShowEditProfileModal(false)}
+          user={user}
+        />
+      )}
     </Layout>
   );
 }
