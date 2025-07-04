@@ -17,23 +17,22 @@ export const getUserNotifications: RequestHandler = async (
   try {
     const userId = req.user?.id;
 
-    const result : any = await Notification.findAll({
+    const notifications = await Notification.findAll({
       where: { user_id: userId },
       order: [["createdAt", "DESC"]],
     });
 
-
-    const notifications = result.rows.map((row) => ({
-      id: row.id,
-      title: row.title,
-      message: row.message,
-      type: row.type,
-      isRead: row.is_read,
-      metadata: row.metadata,
-      createdAt: row.created_at,
+    const formattedNotifications = notifications.map((notification: any) => ({
+      id: notification.id,
+      title: notification.title,
+      message: notification.message,
+      type: notification.type,
+      isRead: notification.is_read,
+      metadata: notification.metadata,
+      createdAt: notification.createdAt,
     }));
 
-    res.json({ notifications });
+    res.json({ notifications: formattedNotifications });
   } catch (error) {
     console.error("Get notifications error:", error);
     res.status(500).json({ error: "Internal server error" });

@@ -237,7 +237,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
     }
 
     if (inStock === "true") {
-      filteredProducts = filteredProducts.filter((p) => p.inStock);
+      filteredProducts = filteredProducts.filter((p) => p.in_stock);
     }
 
     res.json({ products: filteredProducts });
@@ -567,7 +567,7 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
     );
 
     if (inStock === "true") {
-      filteredProducts = filteredProducts.filter((p) => p.inStock);
+      filteredProducts = filteredProducts.filter((p) => p.in_stock);
     }
 
     res.json({ products: filteredProducts });
@@ -625,7 +625,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
     const suggestions = sampleProducts
       .filter(
         (p) =>
-          p.inStock &&
+          p.in_stock &&
           (p.name.toLowerCase().includes(searchTerm) ||
             p.description.toLowerCase().includes(searchTerm)),
       )

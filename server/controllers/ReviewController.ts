@@ -24,6 +24,7 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
       },
       include: {
         model: OrderItem,
+        as: "OrderItems",
         where: { product_id: productId },
       },
     });
@@ -58,11 +59,20 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
 export const getProductReviews: RequestHandler = async (req, res) => {
   try {
     const { productId } = req.params;
+    
+    // Validate UUID format
+    if (!productId || typeof productId !== 'string') {
+      return res.status(400).json({ error: "Invalid product ID" });
+    }
+    
+    // Remove any colon prefix if present
+    const cleanProductId = productId.startsWith(':') ? productId.substring(1) : productId;
 
     const reviews = await Review.findAll({
-      where: { product_id: productId },
+      where: { product_id: cleanProductId },
       include: {
         model: User,
+        as: "User",
         attributes: ["name"],
       },
       order: [["createdAt", "DESC"]],

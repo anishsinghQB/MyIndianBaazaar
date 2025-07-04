@@ -59,6 +59,14 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
 export const getProductReviews: RequestHandler = async (req, res) => {
   try {
     const { productId } = req.params;
+    
+    // Validate and clean product ID
+    if (!productId || typeof productId !== 'string') {
+      return res.status(400).json({ error: "Invalid product ID" });
+    }
+    
+    // Remove any colon prefix if present
+    const cleanProductId = productId.startsWith(':') ? productId.substring(1) : productId;
 
     const result = await pool.query(
       `
@@ -74,7 +82,7 @@ export const getProductReviews: RequestHandler = async (req, res) => {
       WHERE r.product_id = $1
       ORDER BY r.created_at DESC
       `,
-      [productId],
+      [cleanProductId],
     );
 
     console.log("result : ", result);

@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { sequelize } from "../database/config";
 
 export const User = sequelize.define(
@@ -34,8 +34,19 @@ export const User = sequelize.define(
     google_id: {
       type: DataTypes.STRING,
     },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
-    timestamps: true,
+    timestamps: false,
+    tableName: "users",
   },
 );

@@ -154,7 +154,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
     }
 
     if (inStock === "true") {
-      filteredProducts = filteredProducts.filter((product) => product.inStock);
+      filteredProducts = filteredProducts.filter((product : any) => product.in_stock);
     }
 
     res.json({ products: filteredProducts });
@@ -183,7 +183,7 @@ export const getProductById: RequestHandler = async (req, res) => {
 
 export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
   try {
-    const data = productSchema.parse(req.body);
+    const data : any = productSchema.parse(req.body);
     const discount =
       data.discount ||
       Math.round(((data.mrp - data.ourPrice) / data.mrp) * 100);
@@ -194,7 +194,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       our_price: data.ourPrice,
       discount,
       after_exchange_price: afterExchangePrice,
-      in_stock: data.inStock,
+      in_stock: data.in_stock,
       stock_quantity: data.stockQuantity,
     });
 
@@ -211,7 +211,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
 export const updateProduct: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = productSchema.partial().parse(req.body);
+    const data : any = productSchema.partial().parse(req.body);
 
     const product = await Product.findByPk(id);
     if (!product) return res.status(404).json({ error: "Product not found" });
@@ -219,7 +219,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
     await product.update({
       ...data,
       our_price: data.ourPrice,
-      in_stock: data.inStock,
+      in_stock: data.in_stock,
       stock_quantity: data.stockQuantity,
     });
 
@@ -261,12 +261,14 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
     console.log("Database unavailable, using fallback sample data");
 
     // Filter sample products by category
+    const { category } = req.params;
+    const { inStock } = req.query;
     let filteredProducts = sampleProducts.filter(
       (product) => product.category === category,
     );
 
     if (inStock === "true") {
-      filteredProducts = filteredProducts.filter((product) => product.inStock);
+      filteredProducts = filteredProducts.filter((product : any) => product.in_stock);
     }
 
     res.json({ products: filteredProducts });
@@ -310,8 +312,8 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
     const term = q.trim().toLowerCase();
     const filteredProducts = sampleProducts
       .filter(
-        (product) =>
-          product.name.toLowerCase().includes(term) && product.inStock,
+        (product : any) =>
+          product.name.toLowerCase().includes(term) && product.in_stock,
       )
       .slice(0, 10);
 

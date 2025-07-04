@@ -29,24 +29,31 @@ export function createServer() {
 
   connectToPgSqlDB().catch(console.error);
 
-  Order.hasMany(OrderItem, { foreignKey: "order_id" });
-  OrderItem.belongsTo(Order, { foreignKey: "order_id" });
-  OrderItem.belongsTo(Product, { foreignKey: "product_id" });
-  Product.hasMany(OrderItem, { foreignKey: "product_id" });
+  // Define associations after all models are loaded
+  // Order and User associations
+  User.hasMany(Order, { foreignKey: "user_id", as: "orders" });
+  Order.belongsTo(User, { foreignKey: "user_id", as: "User" });
 
-  Review.belongsTo(User, { foreignKey: "user_id" });
-  User.hasMany(Review, { foreignKey: "user_id" });
+  // Order and OrderItem associations
+  Order.hasMany(OrderItem, { foreignKey: "order_id", as: "OrderItems" });
+  OrderItem.belongsTo(Order, { foreignKey: "order_id", as: "Order" });
 
-  Review.belongsTo(Product, { foreignKey: "product_id" });
-  Product.hasMany(Review, { foreignKey: "product_id" });
+  // Product and OrderItem associations
+  Product.hasMany(OrderItem, { foreignKey: "product_id", as: "OrderItems" });
+  OrderItem.belongsTo(Product, { foreignKey: "product_id", as: "Product" });
 
-  Order.hasMany(OrderItem, { foreignKey: "order_id" });
-  OrderItem.belongsTo(Order, { foreignKey: "order_id" });
+  // Review and User associations
+  User.hasMany(Review, { foreignKey: "user_id", as: "reviews" });
+  Review.belongsTo(User, { foreignKey: "user_id", as: "User" });
+
+  // Review and Product associations
+  Product.hasMany(Review, { foreignKey: "product_id", as: "reviews" });
+  Review.belongsTo(Product, { foreignKey: "product_id", as: "Product" });
 
 
 
-  sequelize
-sequelize.sync({ force: false, alter: true })
+  // Sync database tables - models updated
+  sequelize.sync({ force: false, alter: false })
     .then(() => {
       console.log("Tables synced");
     })

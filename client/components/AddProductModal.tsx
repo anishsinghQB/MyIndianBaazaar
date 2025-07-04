@@ -56,7 +56,7 @@ export default function AddProductModal({
       weight: formData.weight,
       height: formData.height,
       category: formData.category,
-      inStock: formData.inStock,
+      inStock: formData.in_stock,
       stockQuantity: 100, // Default stock quantity
       faqs: formData.faqs
         .filter((faq) => faq.question.trim() !== "" && faq.answer.trim() !== "")
@@ -458,7 +458,7 @@ export default function AddProductModal({
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  checked={formData.inStock}
+                  checked={formData.in_stock}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,

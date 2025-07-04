@@ -58,14 +58,14 @@ export default function ProductDetail() {
             .slice(0, 4);
 
           // If not enough from same category, add from other categories
-          if (related.length < 4) {
+          if (related?.length < 4) {
             const additional = allProducts
               .filter(
                 (p) =>
                   p.id !== foundProduct.id &&
                   !related.some((r) => r.id === p.id),
               )
-              .slice(0, 4 - related.length);
+              .slice(0, 4 - related?.length);
             setRelatedProducts([...related, ...additional]);
           } else {
             setRelatedProducts(related);
@@ -243,7 +243,7 @@ export default function ProductDetail() {
                       {product.rating}
                     </span>
                     <span className="text-gray-600 ml-2">
-                      ({product.reviews.length} reviews)
+                      ({product.reviews?.length} reviews)
                     </span>
                   </div>
                   <button
@@ -287,7 +287,7 @@ export default function ProductDetail() {
                 )}
 
                 {/* Offers */}
-                {product.offers.length > 0 && (
+                {product.offers?.length > 0 && (
                   <div className="mb-4">
                     <h3 className="font-medium text-gray-900 mb-2">
                       Available Offers
@@ -303,7 +303,7 @@ export default function ProductDetail() {
                 )}
 
                 {/* Coupons */}
-                {product.coupons.length > 0 && (
+                {product.coupons?.length > 0 && (
                   <div className="mb-4">
                     <h3 className="font-medium text-gray-900 mb-2">
                       Coupons for you
@@ -373,13 +373,13 @@ export default function ProductDetail() {
                 <div className="space-y-3">
                   <Button
                     onClick={handleAddToCart}
-                    disabled={!product.inStock || isAddingToCart}
+                    disabled={!product.in_stock || isAddingToCart}
                    className="w-full bg-[#1690C7]"
                     size="lg"
                   >
                     {isAddingToCart
                       ? "Adding..."
-                      : !product.inStock
+                      : !product.in_stock
                         ? "Out of Stock"
                         : "Add to Cart"}
                   </Button>
@@ -388,7 +388,7 @@ export default function ProductDetail() {
                     size="lg"
                     className="w-full"
                     onClick={handleBuyNow}
-                    disabled={!product.inStock}
+                    disabled={!product.in_stock}
                   >
                     Buy Now
                   </Button>
@@ -424,7 +424,7 @@ export default function ProductDetail() {
           </div>
 
           {/* FAQs */}
-          {product.faqs.length > 0 && (
+          {product.faqs?.length > 0 && (
             <div className="bg-white p-6 rounded-lg border mb-8">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
                 Frequently Asked Questions
@@ -456,7 +456,7 @@ export default function ProductDetail() {
           </div>
 
           {/* Related Products */}
-          {relatedProducts.length > 0 && (
+          {relatedProducts?.length > 0 && (
             <div className="mt-12">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Related Products

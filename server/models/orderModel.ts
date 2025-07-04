@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { sequelize } from "../database/config";
 import { User } from "./userModel";
 
@@ -38,5 +38,6 @@ export const Order = sequelize.define(
   },
   {
     timestamps: true,
+    tableName: "orders",
   },
 );

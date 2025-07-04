@@ -60,7 +60,7 @@ export default function UpdateProductModal({
         weight: product.weight || "",
         height: product.height || "",
         category: product.category || "clothes",
-        inStock: product.inStock ?? true,
+        inStock: product.in_stock ?? true,
         stockQuantity: product.stockQuantity?.toString() || "",
         faqs:
           product.faqs.length > 0
@@ -96,7 +96,7 @@ export default function UpdateProductModal({
       weight: formData.weight,
       height: formData.height,
       category: formData.category,
-      inStock: formData.inStock,
+      inStock: formData.in_stock,
       stockQuantity: formData.stockQuantity
         ? parseInt(formData.stockQuantity)
         : undefined,
@@ -495,7 +495,7 @@ export default function UpdateProductModal({
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  checked={formData.inStock}
+                  checked={formData.in_stock}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,

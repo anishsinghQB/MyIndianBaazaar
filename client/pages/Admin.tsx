@@ -239,8 +239,8 @@ export default function Admin() {
       });
 
       if (response.ok) {
-        setOrders((prev) =>
-          prev.map((order) =>
+        setOrders((prev : any) =>
+          prev.map((order : any) =>
             order.id === orderId
               ? { ...order, status: newStatus as any }
               : order,
@@ -521,7 +521,7 @@ export default function Admin() {
                         </tr>
                       </thead>
                       <tbody>
-                        {products.map((product) => (
+                        {products.map((product : any) => (
                           <tr
                             key={product.id}
                             className="border-b border-gray-100"
@@ -552,12 +552,12 @@ export default function Admin() {
                             <td className="py-4 px-4">
                               <span
                                 className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                  product.inStock
+                                  product.in_stock
                                     ? "bg-green-100 text-green-800"
                                     : "bg-red-100 text-red-800"
                                 }`}
                               >
-                                {product.inStock ? "In Stock" : "Out of Stock"}
+                                {product.in_stock ? "In Stock" : "Out of Stock"}
                               </span>
                             </td>
                             <td className="py-4 px-4">
@@ -596,7 +596,7 @@ export default function Admin() {
                   </h2>
 
                   <div className="space-y-4">
-                    {orders.map((order) => (
+                    {orders.map((order : any) => (
                       <div
                         key={order.id}
                         className="bg-gray-50 border rounded-lg p-4"

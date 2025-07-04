@@ -5,15 +5,10 @@ import { Button } from "@/components/ui/button";
 import { addToCart } from "@/lib/cart";
 import { useState } from "react";
 
-interface ProductCardProps {
-  product: Product;
-  onCartUpdate?: () => void;
-}
-
 export default function ProductCard({
   product,
   onCartUpdate,
-}: ProductCardProps) {
+}: any) {
   const [isLiked, setIsLiked] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
@@ -100,13 +95,13 @@ export default function ProductCard({
 
         <Button
           onClick={handleAddToCart}
-          disabled={!product.inStock || isAddingToCart}
+          disabled={!product.in_stock || isAddingToCart}
           className="w-full bg-[#1690C7]"
           size="sm"
         >
           {isAddingToCart
             ? "Adding..."
-            : !product.inStock
+            : !product.in_stock
               ? "Out of Stock"
               : "Add to Cart"}
         </Button>

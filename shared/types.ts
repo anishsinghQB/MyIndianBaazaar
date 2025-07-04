@@ -58,7 +58,7 @@ export interface Cart {
 }
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   mobileNumber?: string;
@@ -74,7 +74,7 @@ export interface AuthResponse {
 }
 
 export interface Order {
-  id: number;
+  id: string;
   totalAmount: number;
   status: "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
   paymentStatus: "pending" | "completed" | "failed";
@@ -86,7 +86,7 @@ export interface Order {
 }
 
 export interface OrderItem {
-  id: number;
+  id: string;
   productId: string;
   quantity: number;
   price: number;
@@ -121,25 +121,25 @@ export interface PaymentVerificationRequest {
   razorpay_order_id: string;
   razorpay_payment_id: string;
   razorpay_signature: string;
-  orderId: number;
+  orderId: string;
 }
 
 export interface Notification {
-  id: number;
+  id: string;
   title: string;
   message: string;
   type: string;
   isRead: boolean;
   metadata?: any;
   createdAt: string;
-  userId?: number;
+  userId?: string;
 }
 
 export interface CreateNotificationRequest {
   title: string;
   message: string;
   type: string;
-  userId?: number;
+  userId?: string;
 }
 
 export interface SearchSuggestion {

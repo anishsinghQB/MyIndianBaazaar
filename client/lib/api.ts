@@ -26,7 +26,7 @@ export const api = {
   async getProducts(params?: {
     category?: string;
     search?: string;
-    inStock?: boolean;
+    in_stock?: boolean;
   }): Promise<Product[]> {
     const searchParams = new URLSearchParams();
 
@@ -36,7 +36,7 @@ export const api = {
     if (params?.search) {
       searchParams.append("search", params.search);
     }
-    if (params?.inStock) {
+    if (params?.in_stock) {
       searchParams.append("inStock", "true");
     }
 
@@ -69,7 +69,7 @@ export const api = {
 
 
   async getProductsReviews(productId: string): Promise<any> {
-      const response : any = await axios.get(`${API_BASE}/products/:${productId}/reviews`);
+      const response : any = await axios.get(`${API_BASE}/products/${productId}/reviews`);
       return response.data;
   },
 

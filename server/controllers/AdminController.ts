@@ -44,14 +44,17 @@ export const getAllOrders: RequestHandler = async (req: AuthRequest, res) => {
       include: [
         {
           model: User,
+          as: "User",
           attributes: ["name", "email"],
         },
         {
           model: OrderItem,
+          as: "OrderItems",
           include: [
             {
               model: Product,
-              attributes: ["name", [literal("images[1]"), "productImage"]],
+              as: "Product",
+              attributes: ["name", "images"],
             },
           ],
         },
@@ -59,7 +62,31 @@ export const getAllOrders: RequestHandler = async (req: AuthRequest, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    res.json({ orders });
+    // Format the response to match the expected structure
+    const formattedOrders = orders.map((order: any) => ({
+      id: order.id,
+      totalAmount: parseFloat(order.total_amount),
+      status: order.status,
+      paymentStatus: order.payment_status,
+      paymentId: order.payment_id,
+      shippingAddress: order.shipping_address,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
+      customerName: order.User?.name || "Unknown",
+      customerEmail: order.User?.email || "Unknown",
+      items: order.OrderItems?.map((item: any) => ({
+        id: item.id,
+        productId: item.product_id,
+        quantity: item.quantity,
+        price: parseFloat(item.price),
+        selectedSize: item.selected_size,
+        selectedColor: item.selected_color,
+        productName: item.Product?.name || "Unknown Product",
+        productImage: item.Product?.images?.[0] || null,
+      })) || [],
+    }));
+
+    res.json({ orders: formattedOrders });
   } catch (error) {
     console.error("Get all orders error:", error);
     res.status(500).json({ error: "Internal server error" });

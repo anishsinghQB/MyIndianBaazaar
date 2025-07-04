@@ -59,7 +59,7 @@ export const createOrder: RequestHandler = async (req: AuthRequest, res) => {
     });
 
     for (const item of items) {
-      await Order.create({
+      await OrderItem.create({
         order_id: newOrder.id,
         product_id: item.productId,
         quantity: item.quantity,
@@ -143,9 +143,11 @@ export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
       include: [
         {
           model: OrderItem,
+          as: "OrderItems",
           include: [
             {
               model: Product,
+              as: "Product",
               attributes: ["name", "images"],
             },
           ],
@@ -198,9 +200,11 @@ export const getOrderById: RequestHandler = async (req: AuthRequest, res) => {
       include: [
         {
           model: OrderItem,
+          as: "OrderItems",
           include: [
             {
               model: Product,
+              as: "Product",
               attributes: ["name", "images"],
             },
           ],

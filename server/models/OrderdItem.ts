@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { sequelize } from "../database/config";
 import { Order } from "./orderModel";
 import { Product } from "./productModel";
@@ -44,5 +44,6 @@ export const OrderItem = sequelize.define(
   },
   {
     timestamps: true,
+    tableName: "order_items",
   },
 );
