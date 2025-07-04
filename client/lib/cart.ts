@@ -103,7 +103,7 @@ export const calculateTotal = (cart: Cart, products: Product[]): number => {
 };
 
 export const getCartItemCount = (cart: Cart): number => {
-  return cart.items.reduce((count, item) => count + item.quantity, 0);
+  return cart.items.reduce((count, item) => count + (item.quantity || 0), 0);
 };
 
 export const clearCart = (): Cart => {
