@@ -64,6 +64,11 @@ export interface User {
   mobileNumber?: string;
   gender?: "male" | "female" | "other";
   role: "user" | "admin";
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
   createdAt?: string;
 }
 

@@ -14,6 +14,7 @@ import {
   googleAuthCallback,
   login,
   register,
+  updateProfile,
 } from "./controllers/AuthController.ts";
 import {
   createProduct,
@@ -102,6 +103,7 @@ export function createServer() {
   app.post("/api/auth/login", login);
   app.post("/api/auth/google", googleAuthCallback);
   app.get("/api/auth/profile", authenticateToken, getProfile);
+  app.put("/api/auth/profile", authenticateToken, updateProfile);
 
   app.get("/api/products", getAllProducts);
   app.get("/api/products/search/suggestions", getSearchSuggestions);
