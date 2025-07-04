@@ -137,7 +137,9 @@ export default function Cart() {
                 shopping to fill it up!
               </p>
               <Link to="/">
-                <Button className="bg-[#1690C7]" size="lg">Continue Shopping</Button>
+                <Button className="bg-[#1690C7]" size="lg">
+                  Continue Shopping
+                </Button>
               </Link>
             </div>
           </div>
@@ -265,13 +267,15 @@ export default function Cart() {
                             <p className="text-lg font-bold text-gray-900">
                               ₹
                               {(
-                                product.ourPrice * item.quantity
-                              )?.toLocaleString()}
+                                (product.ourPrice || 0) * (item.quantity || 0)
+                              )?.toLocaleString() || "0"}
                             </p>
                             {product.mrp > product.ourPrice && (
                               <p className="text-sm text-gray-500 line-through">
                                 ₹
-                                {(product.mrp * item.quantity)?.toLocaleString()}
+                                {(
+                                  (product.mrp || 0) * (item.quantity || 0)
+                                )?.toLocaleString() || "0"}
                               </p>
                             )}
                           </div>
@@ -324,7 +328,11 @@ export default function Cart() {
                 </div>
 
                 <div className="space-y-3">
-                  <Button className="w-full bg-[#1690C7]" size="lg" onClick={handleCheckout}>
+                  <Button
+                    className="w-full bg-[#1690C7]"
+                    size="lg"
+                    onClick={handleCheckout}
+                  >
                     Proceed to Checkout
                   </Button>
                   <p className="text-xs text-gray-500 text-center">
