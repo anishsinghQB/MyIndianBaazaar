@@ -56,7 +56,11 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  connectToPgSqlDB().catch(console.error);
+  connectToPgSqlDB().catch((error) => {
+    console.error("Database connection failed:", error.message);
+    console.log("⚠️  Running in development mode without database");
+    console.log("📊 Using mock data for API responses");
+  });
 
   // Define associations after all models are loaded
   // Order and User associations
@@ -87,10 +91,11 @@ export function createServer() {
   sequelize
     .sync({ force: false, alter: false })
     .then(() => {
-      console.log("Tables synced");
+      console.log("✅ Database tables synced successfully");
     })
     .catch((err) => {
-      console.error("Unable to sync tables:", err);
+      console.error("❌ Unable to sync tables:", err.message);
+      console.log("🔄 API will use mock data fallbacks");
     });
 
   app.post("/api/auth/register", register);
