@@ -526,7 +526,8 @@ export default function Admin() {
                             key={product.id}
                             className="border-b border-gray-100"
                           >
-                            <td className="py-4 px-4">
+                            <td className="py-4 px-4 cursor-pointer">
+                              <Link  to={`/product/${product.id}`}>
                               <div className="flex items-center gap-3">
                                 <img
                                   src={product.images[0] || "/placeholder.svg"}
@@ -542,6 +543,7 @@ export default function Admin() {
                                   </p>
                                 </div>
                               </div>
+                              </Link>
                             </td>
                             <td className="py-4 px-4 capitalize text-gray-600">
                               {product.category}
