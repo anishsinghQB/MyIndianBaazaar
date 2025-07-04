@@ -266,3 +266,83 @@ export const adminApi = {
     return response.json();
   },
 };
+
+// Notification APIs
+export const notificationApi = {
+  async getNotifications() {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(`${API_BASE}/notifications`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch notifications");
+    }
+
+    return response.json();
+  },
+
+  async markAsRead(notificationId: string) {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(
+      `${API_BASE}/notifications/${notificationId}/read`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to mark notification as read");
+    }
+
+    return response.json();
+  },
+
+  async createNotification(notificationData: {
+    title: string;
+    message: string;
+    type: string;
+    userId?: string;
+  }) {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(`${API_BASE}/notifications`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(notificationData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to create notification");
+    }
+
+    return response.json();
+  },
+
+  async deleteNotification(notificationId: string) {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(
+      `${API_BASE}/notifications/${notificationId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete notification");
+    }
+
+    return response.json();
+  },
+};
