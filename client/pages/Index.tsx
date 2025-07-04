@@ -59,10 +59,14 @@ export default function Index() {
     // Sort products
     switch (sortBy) {
       case "price-low":
-        filtered = [...filtered].sort((a, b) => a.ourPrice - b.ourPrice);
+        filtered = [...filtered].sort(
+          (a, b) => (a.ourPrice || 0) - (b.ourPrice || 0),
+        );
         break;
       case "price-high":
-        filtered = [...filtered].sort((a, b) => b.ourPrice - a.ourPrice);
+        filtered = [...filtered].sort(
+          (a, b) => (b.ourPrice || 0) - (a.ourPrice || 0),
+        );
         break;
       case "rating":
         filtered = [...filtered].sort((a, b) => b.rating - a.rating);
@@ -100,7 +104,7 @@ export default function Index() {
                     selectedCategory === category.id ? "default" : "outline"
                   }
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`text-sm ${ selectedCategory === category.id && "bg-[#1690C7] hover:*:bg-[#1690C7] text-white"}`}
+                  className={`text-sm ${selectedCategory === category.id && "bg-[#1690C7] hover:*:bg-[#1690C7] text-white"}`}
                 >
                   {category.name}
                 </Button>
