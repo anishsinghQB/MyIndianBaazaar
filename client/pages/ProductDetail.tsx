@@ -117,7 +117,7 @@ export default function ProductDetail() {
   }
 
   const discountPercentage = Math.round(
-    ((product.mrp - product.ourPrice) / product.mrp) * 100,
+    (((product.mrp || 0) - (product.ourPrice || 0)) / (product.mrp || 1)) * 100,
   );
 
   const handleAddToCart = async () => {
