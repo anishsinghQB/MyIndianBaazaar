@@ -65,8 +65,8 @@ export default function CheckoutModal({
     return products.find((p) => p.id === id);
   };
 
-  const taxAmount = Math.round(cart.total * 0.18);
-  const finalTotal = cart.total + taxAmount;
+  const taxAmount = Math.round((cart.total || 0) * 0.18);
+  const finalTotal = (cart.total || 0) + taxAmount;
 
   const onSubmit = async (shippingData: z.infer<typeof shippingSchema>) => {
     setIsProcessing(true);
@@ -86,7 +86,7 @@ export default function CheckoutModal({
           return {
             productId: item.productId,
             quantity: item.quantity,
-            price: product.ourPrice,
+            price: product.ourPrice || 0,
             selectedSize: item.selectedSize,
             selectedColor: item.selectedColor,
           };
@@ -94,7 +94,7 @@ export default function CheckoutModal({
         .filter(Boolean) as CreateOrderRequest["items"];
 
       // Create order
-      const createOrderResponse : any = await axios.post("/api/orders", {
+      const createOrderResponse = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -145,7 +145,7 @@ export default function CheckoutModal({
             }
 
             // Clear cart
-            localStorage.removeItem("cart");
+            localStorage.removeItem("indianbaazaar-cart");
             window.dispatchEvent(new Event("storage"));
 
             onOrderSuccess(orderId);
@@ -234,7 +234,10 @@ export default function CheckoutModal({
                         </div>
                       </div>
                       <p className="font-medium">
-                        ₹{(product.ourPrice * item.quantity)?.toLocaleString()}
+                        ₹
+                        {(
+                          (product.ourPrice || 0) * (item.quantity || 0)
+                        )?.toLocaleString()}
                       </p>
                     </div>
                   );
@@ -245,7 +248,7 @@ export default function CheckoutModal({
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>₹{cart.total?.toLocaleString()}</span>
+                    <span>₹{(cart.total || 0)?.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping</span>
@@ -253,12 +256,12 @@ export default function CheckoutModal({
                   </div>
                   <div className="flex justify-between">
                     <span>Tax (18%)</span>
-                    <span>₹{taxAmount?.toLocaleString()}</span>
+                    <span>₹{(taxAmount || 0)?.toLocaleString()}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between font-bold text-lg">
                     <span>Total</span>
-                    <span>₹{finalTotal?.toLocaleString()}</span>
+                    <span>₹{(finalTotal || 0)?.toLocaleString()}</span>
                   </div>
                 </div>
               </CardContent>
@@ -379,7 +382,7 @@ export default function CheckoutModal({
                         <CreditCard className="h-4 w-4 mr-2 " />
                         {isProcessing
                           ? "Processing..."
-                          : `Pay ₹${finalTotal?.toLocaleString()}`}
+                          : `Pay ₹${(finalTotal || 0)?.toLocaleString()}`}
                       </Button>
                     </div>
                   </form>

@@ -193,12 +193,12 @@ export const getAllProducts: RequestHandler = async (req, res) => {
         name: row.name,
         description: row.description,
         images: row.images || [],
-        mrp: parseFloat(row.mrp),
-        ourPrice: parseFloat(row.our_price),
+        mrp: parseFloat(row.mrp) || 0,
+        ourPrice: parseFloat(row.our_price) || 0,
         discount: row.discount || 0,
         rating: parseFloat(row.rating) || 0,
         afterExchangePrice: row.after_exchange_price
-          ? parseFloat(row.after_exchange_price)
+          ? parseFloat(row.after_exchange_price) || 0
           : undefined,
         offers: row.offers || [],
         coupons: row.coupons || [],
@@ -209,7 +209,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
         height: row.height,
         category: row.category,
         inStock: row.in_stock,
-        stockQuantity: row.stock_quantity,
+        stockQuantity: row.stock_quantity || 0,
         reviews: [], // TODO: Fetch reviews separately
         faqs: [], // TODO: Fetch FAQs separately
       })),
@@ -262,12 +262,12 @@ export const getProductById: RequestHandler = async (req, res) => {
       name: row.name,
       description: row.description,
       images: row.images || [],
-      mrp: parseFloat(row.mrp),
-      ourPrice: parseFloat(row.our_price),
+      mrp: parseFloat(row.mrp) || 0,
+      ourPrice: parseFloat(row.our_price) || 0,
       discount: row.discount || 0,
       rating: parseFloat(row.rating) || 0,
       afterExchangePrice: row.after_exchange_price
-        ? parseFloat(row.after_exchange_price)
+        ? parseFloat(row.after_exchange_price) || 0
         : undefined,
       offers: row.offers || [],
       coupons: row.coupons || [],
@@ -278,7 +278,7 @@ export const getProductById: RequestHandler = async (req, res) => {
       height: row.height,
       category: row.category,
       inStock: row.in_stock,
-      stockQuantity: row.stock_quantity,
+      stockQuantity: row.stock_quantity || 0,
       reviews: [], // TODO: Fetch reviews
       faqs: [], // TODO: Fetch FAQs
     };
@@ -360,11 +360,11 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       name: row.name,
       description: row.description,
       images: row.images,
-      mrp: parseFloat(row.mrp),
-      ourPrice: parseFloat(row.our_price),
-      discount: row.discount,
-      rating: parseFloat(row.rating),
-      afterExchangePrice: parseFloat(row.after_exchange_price),
+      mrp: parseFloat(row.mrp) || 0,
+      ourPrice: parseFloat(row.our_price) || 0,
+      discount: row.discount || 0,
+      rating: parseFloat(row.rating) || 0,
+      afterExchangePrice: parseFloat(row.after_exchange_price) || 0,
       offers: row.offers,
       coupons: row.coupons,
       company: row.company,
@@ -374,7 +374,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       height: row.height,
       category: row.category,
       inStock: row.in_stock,
-      stockQuantity: row.stock_quantity,
+      stockQuantity: row.stock_quantity || 0,
       reviews: [],
       faqs: [],
     };
@@ -450,12 +450,12 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
       name: row.name,
       description: row.description,
       images: row.images,
-      mrp: parseFloat(row.mrp),
-      ourPrice: parseFloat(row.our_price),
-      discount: row.discount,
-      rating: parseFloat(row.rating),
+      mrp: parseFloat(row.mrp) || 0,
+      ourPrice: parseFloat(row.our_price) || 0,
+      discount: row.discount || 0,
+      rating: parseFloat(row.rating) || 0,
       afterExchangePrice: row.after_exchange_price
-        ? parseFloat(row.after_exchange_price)
+        ? parseFloat(row.after_exchange_price) || 0
         : undefined,
       offers: row.offers,
       coupons: row.coupons,
@@ -466,7 +466,7 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
       height: row.height,
       category: row.category,
       inStock: row.in_stock,
-      stockQuantity: row.stock_quantity,
+      stockQuantity: row.stock_quantity || 0,
       reviews: [],
       faqs: [],
     };
@@ -534,12 +534,12 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
         name: row.name,
         description: row.description,
         images: row.images || [],
-        mrp: parseFloat(row.mrp),
-        ourPrice: parseFloat(row.our_price),
+        mrp: parseFloat(row.mrp) || 0,
+        ourPrice: parseFloat(row.our_price) || 0,
         discount: row.discount || 0,
         rating: parseFloat(row.rating) || 0,
         afterExchangePrice: row.after_exchange_price
-          ? parseFloat(row.after_exchange_price)
+          ? parseFloat(row.after_exchange_price) || 0
           : undefined,
         offers: row.offers || [],
         coupons: row.coupons || [],
@@ -550,7 +550,7 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
         height: row.height,
         category: row.category,
         inStock: row.in_stock,
-        stockQuantity: row.stock_quantity,
+        stockQuantity: row.stock_quantity || 0,
         reviews: [],
         faqs: [],
       })),
@@ -607,7 +607,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
           ? row.images[0]
           : "/placeholder.svg",
       category: row.category,
-      price: parseFloat(row.our_price),
+      price: parseFloat(row.our_price) || 0,
     }));
 
     res.json({ suggestions });

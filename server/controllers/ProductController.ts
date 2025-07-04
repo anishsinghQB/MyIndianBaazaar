@@ -301,7 +301,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
       name: p.name,
       image: p.images?.[0] || "/placeholder.svg",
       category: p.category,
-      price: parseFloat(p.our_price as any),
+      price: parseFloat(p.our_price as any) || 0,
     }));
 
     res.json({ suggestions });

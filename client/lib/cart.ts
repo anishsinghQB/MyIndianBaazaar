@@ -88,12 +88,22 @@ export const updateQuantity = (
 export const calculateTotal = (cart: Cart, products: Product[]): number => {
   return cart.items.reduce((total, item) => {
     const product = products.find((p) => p.id === item.productId);
-    return total + (product ? product.ourPrice * item.quantity : 0);
+    if (
+      !product ||
+      !product.ourPrice ||
+      isNaN(product.ourPrice) ||
+      !item.quantity ||
+      isNaN(item.quantity)
+    ) {
+      return total;
+    }
+    const itemTotal = product.ourPrice * item.quantity;
+    return total + (isNaN(itemTotal) ? 0 : itemTotal);
   }, 0);
 };
 
 export const getCartItemCount = (cart: Cart): number => {
-  return cart.items.reduce((count, item) => count + item.quantity, 0);
+  return cart.items.reduce((count, item) => count + (item.quantity || 0), 0);
 };
 
 export const clearCart = (): Cart => {

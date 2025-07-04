@@ -137,7 +137,9 @@ export default function Cart() {
                 shopping to fill it up!
               </p>
               <Link to="/">
-                <Button className="bg-[#1690C7]" size="lg">Continue Shopping</Button>
+                <Button className="bg-[#1690C7]" size="lg">
+                  Continue Shopping
+                </Button>
               </Link>
             </div>
           </div>
@@ -265,13 +267,15 @@ export default function Cart() {
                             <p className="text-lg font-bold text-gray-900">
                               ₹
                               {(
-                                product.ourPrice * item.quantity
-                              )?.toLocaleString()}
+                                (product.ourPrice || 0) * (item.quantity || 0)
+                              )?.toLocaleString() || "0"}
                             </p>
                             {product.mrp > product.ourPrice && (
                               <p className="text-sm text-gray-500 line-through">
                                 ₹
-                                {(product.mrp * item.quantity)?.toLocaleString()}
+                                {(
+                                  (product.mrp || 0) * (item.quantity || 0)
+                                )?.toLocaleString() || "0"}
                               </p>
                             )}
                           </div>
@@ -294,11 +298,14 @@ export default function Cart() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">
                       Subtotal (
-                      {cart.items.reduce((acc, item) => acc + item.quantity, 0)}{" "}
+                      {cart.items.reduce(
+                        (acc, item) => acc + (item.quantity || 0),
+                        0,
+                      )}{" "}
                       items)
                     </span>
                     <span className="font-medium">
-                      ₹{cart.total?.toLocaleString()}
+                      ₹{(cart.total || 0)?.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -308,7 +315,7 @@ export default function Cart() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Tax</span>
                     <span className="font-medium">
-                      ₹{Math.round(cart.total * 0.18)?.toLocaleString()}
+                      ₹{Math.round((cart.total || 0) * 0.18)?.toLocaleString()}
                     </span>
                   </div>
                   <div className="border-t pt-4">
@@ -317,14 +324,19 @@ export default function Cart() {
                         Total
                       </span>
                       <span className="text-lg font-bold text-gray-900">
-                        ₹{Math.round(cart.total * 1.18)?.toLocaleString()}
+                        ₹
+                        {Math.round((cart.total || 0) * 1.18)?.toLocaleString()}
                       </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <Button className="w-full bg-[#1690C7]" size="lg" onClick={handleCheckout}>
+                  <Button
+                    className="w-full bg-[#1690C7]"
+                    size="lg"
+                    onClick={handleCheckout}
+                  >
                     Proceed to Checkout
                   </Button>
                   <p className="text-xs text-gray-500 text-center">
