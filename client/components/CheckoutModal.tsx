@@ -382,7 +382,7 @@ export default function CheckoutModal({
                         <CreditCard className="h-4 w-4 mr-2 " />
                         {isProcessing
                           ? "Processing..."
-                          : `Pay ₹${finalTotal?.toLocaleString()}`}
+                          : `Pay ₹${(finalTotal || 0)?.toLocaleString()}`}
                       </Button>
                     </div>
                   </form>
