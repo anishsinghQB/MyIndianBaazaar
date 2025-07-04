@@ -117,7 +117,8 @@ export default function ProductDetail() {
   }
 
   const discountPercentage = Math.round(
-    (((product.mrp || 0) - (product.our_price || 0)) / (product.mrp || 1)) * 100,
+    (((product.mrp || 0) - (product.our_price || 0)) / (product.mrp || 1)) *
+      100,
   );
 
   const handleAddToCart = async () => {
@@ -395,6 +396,14 @@ export default function ProductDetail() {
                 </div>
               </div>
 
+              {/* Product Description */}
+              <div className="bg-white p-6 rounded-lg border">
+                <h3 className="font-medium text-gray-900 mb-4">Description</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {product.description}
+                </p>
+              </div>
+
               {/* Services */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-white rounded-lg border">
@@ -403,24 +412,14 @@ export default function ProductDetail() {
                 </div>
                 <div className="text-center p-4 bg-white rounded-lg border">
                   <RotateCcw className="h-8 w-8 text-[#1690C7] mx-auto mb-2" />
-                  <p className="text-sm font-medium">Easy Returns</p>
+                  <p className="text-sm font-medium">Warranty</p>
                 </div>
                 <div className="text-center p-4 bg-white rounded-lg border">
                   <Shield className="h-8 w-8 text-[#1690C7] mx-auto mb-2" />
-                  <p className="text-sm font-medium">Warranty</p>
+                  <p className="text-sm font-medium">Easy Returns</p>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Product Description */}
-          <div className="bg-white p-6 rounded-lg border mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Description
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              {product.description}
-            </p>
           </div>
 
           {/* FAQs */}
