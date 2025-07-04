@@ -158,7 +158,7 @@ export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
 
     const formattedOrders = orders.map((order: any) => ({
       id: order.id,
-      totalAmount: parseFloat(order.total_amount as any),
+      totalAmount: parseFloat(order.total_amount as any) || 0,
       status: order.status,
       paymentStatus: order.payment_status,
       paymentId: order.payment_id,
@@ -169,12 +169,12 @@ export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
         (order as any).OrderItems?.map((item: any) => ({
           id: item.id,
           productId: item.product_id,
-          quantity: item.quantity,
-          price: item.price,
+          quantity: item.quantity || 0,
+          price: parseFloat(item.price) || 0,
           selectedSize: item.selected_size,
           selectedColor: item.selected_color,
           productName: item.Product?.name,
-          productImage: item.Product?.images?.[1],
+          productImage: item.Product?.images?.[0],
         })) || [],
     }));
 
