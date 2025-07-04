@@ -1,25 +1,22 @@
 import { Product } from "@shared/types";
+import {
+  ProductsResponse,
+  ProductResponse,
+  SearchSuggestionsResponse,
+  ReviewsResponse,
+  CreateReviewResponse,
+  OrdersResponse,
+  OrderResponse,
+  CreateOrderResponse,
+  PaymentVerificationResponse,
+  NotificationsResponse,
+  AdminStatsResponse,
+  AdminCustomersResponse,
+  AdminOrdersResponse,
+} from "@shared/api";
 import axios from "axios";
 
 const API_BASE = "/api";
-
-interface ProductsResponse {
-  products: Product[];
-}
-
-interface ProductResponse {
-  product: Product;
-}
-
-interface SearchSuggestionsResponse {
-  suggestions: Array<{
-    id: string;
-    name: string;
-    image: string;
-    category: string;
-    price: number;
-  }>;
-}
 
 export const api = {
   // Product APIs
