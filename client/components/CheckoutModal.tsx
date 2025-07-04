@@ -248,7 +248,7 @@ export default function CheckoutModal({
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>₹{cart.total?.toLocaleString()}</span>
+                    <span>₹{(cart.total || 0)?.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping</span>
@@ -256,12 +256,12 @@ export default function CheckoutModal({
                   </div>
                   <div className="flex justify-between">
                     <span>Tax (18%)</span>
-                    <span>₹{taxAmount?.toLocaleString()}</span>
+                    <span>₹{(taxAmount || 0)?.toLocaleString()}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between font-bold text-lg">
                     <span>Total</span>
-                    <span>₹{finalTotal?.toLocaleString()}</span>
+                    <span>₹{(finalTotal || 0)?.toLocaleString()}</span>
                   </div>
                 </div>
               </CardContent>
