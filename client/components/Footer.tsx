@@ -134,18 +134,17 @@ export default function Footer() {
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-[#1690C7]" />
                 <span className="text-gray-400 text-sm">
-                  support@indianbaazaar.com
+                  anishsinghrawat5@gmail.com
                 </span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-[#1690C7]" />
-                <span className="text-gray-400 text-sm">+91 98765 43210</span>
+                <span className="text-gray-400 text-sm">+91 6395607666</span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="h-4 w-4 text-[#1690C7]" />
                 <span className="text-gray-400 text-sm">
-                  Mumbai, Maharashtra, India
-                </span>
+                  Ludhiana , Punjab ,indian                </span>
               </div>
             </div>
           </div>
