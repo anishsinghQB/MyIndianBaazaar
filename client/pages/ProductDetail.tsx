@@ -228,6 +228,14 @@ export default function ProductDetail() {
                   </button>
                 ))}
               </div>
+            <div className="mt-12">
+            <ReviewSection
+              key={reviewKey}
+              productId={product.id}
+              reviews={productReviews.reviews || []}
+              onReviewAdded={handleReviewAdded}
+            />
+          </div>
             </div>
 
             {/* Product Info */}
@@ -260,6 +268,13 @@ export default function ProductDetail() {
                     />
                   </button>
                 </div>
+              </div>
+
+               <div className="bg-white p-6 rounded-lg border">
+                <h3 className="font-medium text-gray-900 mb-4">Description</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {product.description}
+                </p>
               </div>
 
               {/* Pricing */}
@@ -412,13 +427,6 @@ export default function ProductDetail() {
                 </div>
               </div>
 
-              {/* Product Description */}
-              <div className="bg-white p-6 rounded-lg border">
-                <h3 className="font-medium text-gray-900 mb-4">Description</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {product.description}
-                </p>
-              </div>
 
               {/* Services */}
               <div className="grid grid-cols-3 gap-4">
@@ -435,6 +443,8 @@ export default function ProductDetail() {
                   <p className="text-sm font-medium">Easy Returns</p>
                 </div>
               </div>
+
+              
             </div>
           </div>
 
