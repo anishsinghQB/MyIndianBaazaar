@@ -234,7 +234,10 @@ export default function CheckoutModal({
                         </div>
                       </div>
                       <p className="font-medium">
-                        ₹{(product.ourPrice * item.quantity)?.toLocaleString()}
+                        ₹
+                        {(
+                          (product.ourPrice || 0) * (item.quantity || 0)
+                        )?.toLocaleString()}
                       </p>
                     </div>
                   );
