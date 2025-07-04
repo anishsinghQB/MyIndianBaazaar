@@ -13,7 +13,7 @@ interface NotificationContextType {
   unreadCount: number;
   loading: boolean;
   fetchNotifications: () => Promise<void>;
-  markAsRead: (id: number) => Promise<void>;
+  markAsRead: (id: string) => Promise<void>;
   refreshNotifications: () => void;
 }
 
@@ -72,7 +72,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     }
   };
 
-  const markAsRead = async (id: number) => {
+  const markAsRead = async (id: string) => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(`/api/notifications/${id}/read`, {
