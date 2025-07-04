@@ -86,7 +86,7 @@ export default function CheckoutModal({
           return {
             productId: item.productId,
             quantity: item.quantity,
-            price: product.ourPrice,
+            price: product.ourPrice || 0,
             selectedSize: item.selectedSize,
             selectedColor: item.selectedColor,
           };
