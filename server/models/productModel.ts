@@ -19,6 +19,10 @@ export const Product = sequelize.define(
     images: {
       type: DataTypes.ARRAY(DataTypes.STRING),
     },
+    faqs: {
+      type: DataTypes.JSONB,
+      defaultValue: [],
+    },
     mrp: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,

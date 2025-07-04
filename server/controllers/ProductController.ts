@@ -5,6 +5,12 @@ import { Op } from "sequelize";
 import { Product } from "../models/productModel";
 import { createProductNotification } from "./NotificationController";
 
+const faqSchema = z.object({
+  id: z.string(),
+  question: z.string().min(1, "Question is required"),
+  answer: z.string().min(1, "Answer is required"),
+});
+
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
   description: z.string().min(1, "Description is required"),
@@ -30,6 +36,7 @@ const productSchema = z.object({
   ]),
   in_stock: z.boolean().default(true),
   stockQuantity: z.number().int().min(0).default(0),
+  faqs: z.array(faqSchema).optional().default([]),
 });
 
 // Fallback sample data for when database is unavailable
@@ -199,6 +206,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       after_exchange_price: afterExchangePrice,
       in_stock: data.in_stock,
       stock_quantity: data.stockQuantity,
+      faqs: data.faqs || [],
     });
 
     await createProductNotification(product.name, product.id);
@@ -216,7 +224,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
     const { id } = req.params;
     const data: any = productSchema.partial().parse(req.body);
 
-    const product = await Product.findByPk(id);
+    const product: any = await Product.findByPk(id);
     if (!product) return res.status(404).json({ error: "Product not found" });
 
     await product.update({
@@ -224,6 +232,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
       our_price: data.our_price,
       in_stock: data.in_stock,
       stock_quantity: data.stockQuantity,
+      faqs: data.faqs || product.faqs,
     });
 
     res.json({ message: "Product updated", product });

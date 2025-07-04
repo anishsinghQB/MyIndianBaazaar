@@ -26,7 +26,7 @@ export interface Product {
   in_stock: boolean;
   stockQuantity?: number;
   reviews: Review[];
-  faqs: FAQ[];
+  faqs: any;
 }
 
 export interface Review {

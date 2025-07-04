@@ -16,7 +16,7 @@ export default function UpdateProductModal({
   onSave,
   product,
 }: UpdateProductModalProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] : any = useState({
     name: "",
     description: "",
     images: ["", "", "", "", ""],
@@ -35,7 +35,7 @@ export default function UpdateProductModal({
     category: "clothes" as Product["category"],
     in_stock: true,
     stockQuantity: "",
-    faqs: [{ question: "", answer: "" }],
+    faqs: [{ id: "1", question: "", answer: "" }] as Array<{id: string, question: string, answer: string}>,
   });
 
   useEffect(() => {
@@ -97,12 +97,10 @@ export default function UpdateProductModal({
       height: formData.height,
       category: formData.category,
       in_stock: formData.in_stock,
-      stockQuantity: formData.stockQuantity
-        ? parseInt(formData.stockQuantity)
-        : undefined,
+      stockQuantity: formData.stockQuantity ? parseInt(formData.stockQuantity) : undefined,
       faqs: formData.faqs
-        .filter((faq) => faq.question.trim() !== "" && faq.answer.trim() !== "")
-        .map((faq, index) => ({
+        .filter((faq : any) => faq.question.trim() !== "" && faq.answer.trim() !== "")
+        .map((faq : any, index : any) => ({
           id: (index + 1).toString(),
           question: faq.question,
           answer: faq.answer,
@@ -179,7 +177,7 @@ export default function UpdateProductModal({
   const addFaqField = () => {
     setFormData((prev) => ({
       ...prev,
-      faqs: [...prev.faqs, { question: "", answer: "" }],
+      faqs: [...prev.faqs, { id: (prev.faqs.length + 1).toString(), question: "", answer: "" }],
     }));
   };
 
