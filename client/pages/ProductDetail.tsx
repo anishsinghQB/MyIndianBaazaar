@@ -345,6 +345,22 @@ export default function ProductDetail() {
                     <span className="text-gray-600">Height:</span>
                     <span className="ml-2 font-medium">{product.height}</span>
                   </div>
+                  <div>
+                    <span className="text-gray-600">Availability:</span>
+                    <span
+                      className={`ml-2 font-medium ${product.in_stock ? "text-green-600" : "text-red-600"}`}
+                    >
+                      {product.in_stock ? "In Stock" : "Out of Stock"}
+                    </span>
+                  </div>
+                  {product.stockQuantity !== undefined && (
+                    <div>
+                      <span className="text-gray-600">Stock Quantity:</span>
+                      <span className="ml-2 font-medium">
+                        {product.stockQuantity}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 
