@@ -28,7 +28,7 @@ export const getAllCustomers: RequestHandler = async (
           ],
         ],
       },
-      order: [["createdAt", "DESC"]],
+      order: [["created_at", "DESC"]],
     });
 
     res.json({ customers });
