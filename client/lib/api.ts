@@ -67,10 +67,11 @@ export const api = {
     }
   },
 
-
   async getProductsReviews(productId: string): Promise<any> {
-      const response : any = await axios.get(`${API_BASE}/products/${productId}/reviews`);
-      return response.data;
+    const response: any = await axios.get(
+      `${API_BASE}/products/${productId}/reviews`,
+    );
+    return response.data;
   },
 
   async getSearchSuggestions(
@@ -234,7 +235,7 @@ export const adminApi = {
     // This would call admin stats endpoint
     const response = await fetch(`${API_BASE}/admin/stats`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
     });
     if (!response.ok) {
@@ -245,7 +246,7 @@ export const adminApi = {
   getCustomers: async () => {
     const response = await fetch(`${API_BASE}/admin/customers`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
     });
     if (!response.ok) {
@@ -256,7 +257,7 @@ export const adminApi = {
   getOrders: async () => {
     const response = await fetch(`${API_BASE}/admin/orders`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
     });
     if (!response.ok) {
