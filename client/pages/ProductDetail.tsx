@@ -444,10 +444,6 @@ export default function ProductDetail() {
                 </div>
               </div>
 
-              
-            </div>
-          </div>
-
           {/* FAQs */}
           {product.faqs?.length > 0 && (
             <div className="bg-white p-6 rounded-lg border mb-8">
@@ -469,6 +465,10 @@ export default function ProductDetail() {
               </div>
             </div>
           )}
+              
+            </div>
+          </div>
+
 
           {/* Reviews Section */}
           <div className="mt-12">
