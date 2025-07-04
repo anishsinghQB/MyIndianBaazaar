@@ -201,7 +201,7 @@ export default function ProductDetail() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
             {/* Product Images */}
-            <div className="space-y-4">
+            <div className="space-y-8">
               <div className="aspect-square bg-white rounded-lg border">
                 <ImageZoom
                   src={product.images[selectedImage] || "/placeholder.svg"}
@@ -209,6 +209,7 @@ export default function ProductDetail() {
                   className="aspect-square rounded-lg"
                 />
               </div>
+
               <div className="grid grid-cols-5 gap-2">
                 {product.images.map((image, index) => (
                   <button
@@ -228,23 +229,36 @@ export default function ProductDetail() {
                   </button>
                 ))}
               </div>
-            <div className="mt-12">
-            <ReviewSection
-              key={reviewKey}
-              productId={product.id}
-              reviews={productReviews.reviews || []}
-              onReviewAdded={handleReviewAdded}
-            />
-          </div>
+
+               {product.faqs?.length > 0 && (
+                <div className="bg-white p-6 rounded-lg border mb-8">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">
+                    Frequently Asked Questions
+                  </h2>
+                  <div className="space-y-4">
+                    {product.faqs.map((faq) => (
+                      <div
+                        key={faq.id}
+                        className="border-b border-gray-200 pb-4 last:border-b-0"
+                      >
+                        <h3 className="font-medium text-gray-900 mb-2">
+                          {faq.question}
+                        </h3>
+                        <p className="text-gray-600">{faq.answer}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Product Info */}
             <div className="space-y-6">
               <div>
-                <p className="text-sm text-gray-600 mb-2">{product.company}</p>
                 <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
                   {product.name}
                 </h1>
+                <p className="text-sm text-gray-600 mb-2">{product.company}</p>
                 <div className="flex items-center gap-4 mb-4">
                   <div className="flex items-center">
                     <Star className="h-5 w-5 text-yellow-400 fill-current" />
@@ -270,7 +284,7 @@ export default function ProductDetail() {
                 </div>
               </div>
 
-               <div className="bg-white p-6 rounded-lg border">
+              <div className="bg-white p-6 rounded-lg border">
                 <h3 className="font-medium text-gray-900 mb-4">Description</h3>
                 <p className="text-gray-600 leading-relaxed">
                   {product.description}
@@ -279,7 +293,7 @@ export default function ProductDetail() {
 
               {/* Pricing */}
               <div className="bg-white p-6 rounded-lg border">
-                <div className="flex items-center gap-4 mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-4">
                   <span className="text-3xl font-bold text-gray-900">
                     ₹{(product.our_price || 0)?.toLocaleString()}
                   </span>
@@ -288,7 +302,7 @@ export default function ProductDetail() {
                       <span className="text-xl text-gray-500 line-through">
                         ₹{(product.mrp || 0)?.toLocaleString()}
                       </span>
-                      <span className="bg-green-500 text-white px-2 py-1 rounded text-sm font-medium">
+                      <span className="bg-green-500 text-white px-2 py-1 rounded text-sm font-medium w-fit">
                         {discountPercentage}% OFF
                       </span>
                     </>
@@ -427,7 +441,6 @@ export default function ProductDetail() {
                 </div>
               </div>
 
-
               {/* Services */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-white rounded-lg border">
@@ -444,31 +457,9 @@ export default function ProductDetail() {
                 </div>
               </div>
 
-          {/* FAQs */}
-          {product.faqs?.length > 0 && (
-            <div className="bg-white p-6 rounded-lg border mb-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
-                Frequently Asked Questions
-              </h2>
-              <div className="space-y-4">
-                {product.faqs.map((faq) => (
-                  <div
-                    key={faq.id}
-                    className="border-b border-gray-200 pb-4 last:border-b-0"
-                  >
-                    <h3 className="font-medium text-gray-900 mb-2">
-                      {faq.question}
-                    </h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-              
+
             </div>
           </div>
-
 
           {/* Reviews Section */}
           <div className="mt-12">

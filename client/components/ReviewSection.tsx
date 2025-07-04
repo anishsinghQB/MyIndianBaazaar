@@ -333,7 +333,7 @@ export default function ReviewSection({
                     </Avatar>
 
                     <div className="flex-1 space-y-2">
-                      <div className="flex items-center justify-between">
+                      <div className="block sm:flex items-center justify-between ">
                         <div className="flex items-center gap-2">
                           <span className="font-medium">{review.userName}</span>
                           {review.verified && (
