@@ -19,8 +19,8 @@ export const sequelize = new Sequelize(
   process.env.DB_USER || "postgres",
   process.env.DB_PASSWORD || "postgres",
   {
-    host: process.env.HOST_NAME,
-    port: Number(process.env.PORT_NUMBER) || 5432,
+    host: process.env.DB_HOST || "localhost",
+    port: Number(process.env.DB_PORT) || 5432,
     dialect: "postgres",
     pool: {
       max: 5,
@@ -49,4 +49,3 @@ export const connectToPgSqlDB = async () => {
     });
   });
 };
-

@@ -1,25 +1,22 @@
 import { Product } from "@shared/types";
+import {
+  ProductsResponse,
+  ProductResponse,
+  SearchSuggestionsResponse,
+  ReviewsResponse,
+  CreateReviewResponse,
+  OrdersResponse,
+  OrderResponse,
+  CreateOrderResponse,
+  PaymentVerificationResponse,
+  NotificationsResponse,
+  AdminStatsResponse,
+  AdminCustomersResponse,
+  AdminOrdersResponse,
+} from "@shared/api";
 import axios from "axios";
 
 const API_BASE = "/api";
-
-interface ProductsResponse {
-  products: Product[];
-}
-
-interface ProductResponse {
-  product: Product;
-}
-
-interface SearchSuggestionsResponse {
-  suggestions: Array<{
-    id: string;
-    name: string;
-    image: string;
-    category: string;
-    price: number;
-  }>;
-}
 
 export const api = {
   // Product APIs
@@ -67,10 +64,11 @@ export const api = {
     }
   },
 
-
   async getProductsReviews(productId: string): Promise<any> {
-      const response : any = await axios.get(`${API_BASE}/products/${productId}/reviews`);
-      return response.data;
+    const response: any = await axios.get(
+      `${API_BASE}/products/${productId}/reviews`,
+    );
+    return response.data;
   },
 
   async getSearchSuggestions(
@@ -234,7 +232,7 @@ export const adminApi = {
     // This would call admin stats endpoint
     const response = await fetch(`${API_BASE}/admin/stats`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
     });
     if (!response.ok) {
@@ -245,7 +243,7 @@ export const adminApi = {
   getCustomers: async () => {
     const response = await fetch(`${API_BASE}/admin/customers`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
     });
     if (!response.ok) {
@@ -256,12 +254,171 @@ export const adminApi = {
   getOrders: async () => {
     const response = await fetch(`${API_BASE}/admin/orders`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
     });
     if (!response.ok) {
       throw new Error("Failed to fetch orders");
     }
+    return response.json();
+  },
+};
+
+// Notification APIs
+export const notificationApi = {
+  async getNotifications() {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(`${API_BASE}/notifications`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch notifications");
+    }
+
+    return response.json();
+  },
+
+  async markAsRead(notificationId: string) {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(
+      `${API_BASE}/notifications/${notificationId}/read`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to mark notification as read");
+    }
+
+    return response.json();
+  },
+
+  async createNotification(notificationData: {
+    title: string;
+    message: string;
+    type: string;
+    userId?: string;
+  }) {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(`${API_BASE}/notifications`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(notificationData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to create notification");
+    }
+
+    return response.json();
+  },
+
+  async deleteNotification(notificationId: string) {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(
+      `${API_BASE}/notifications/${notificationId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to delete notification");
+    }
+
+    return response.json();
+  },
+};
+
+// Auth APIs
+export const authApi = {
+  async login(email: string, password: string) {
+    const response = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Login failed");
+    }
+
+    return response.json();
+  },
+
+  async register(userData: {
+    name: string;
+    email: string;
+    password: string;
+    mobileNumber?: string;
+    gender?: "male" | "female" | "other";
+  }) {
+    const response = await fetch(`${API_BASE}/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Registration failed");
+    }
+
+    return response.json();
+  },
+
+  async getProfile() {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(`${API_BASE}/auth/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch profile");
+    }
+
+    return response.json();
+  },
+
+  async googleAuth(googleData: {
+    googleId: string;
+    email: string;
+    name: string;
+  }) {
+    const response = await fetch(`${API_BASE}/auth/google`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(googleData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Google authentication failed");
+    }
+
     return response.json();
   },
 };
