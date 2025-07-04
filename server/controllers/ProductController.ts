@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { AuthRequest } from "../utils/auth";
 import { z } from "zod";
 import { Product } from "../models/productModel";
-import { createProductNotification } from "../routes/notifications";
+import { createProductNotification } from "./NotificationController";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
@@ -154,7 +154,9 @@ export const getAllProducts: RequestHandler = async (req, res) => {
     }
 
     if (inStock === "true") {
-      filteredProducts = filteredProducts.filter((product : any) => product.in_stock);
+      filteredProducts = filteredProducts.filter(
+        (product: any) => product.in_stock,
+      );
     }
 
     res.json({ products: filteredProducts });
@@ -183,7 +185,7 @@ export const getProductById: RequestHandler = async (req, res) => {
 
 export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
   try {
-    const data : any = productSchema.parse(req.body);
+    const data: any = productSchema.parse(req.body);
     const discount =
       data.discount ||
       Math.round(((data.mrp - data.ourPrice) / data.mrp) * 100);
@@ -211,7 +213,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
 export const updateProduct: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    const data : any = productSchema.partial().parse(req.body);
+    const data: any = productSchema.partial().parse(req.body);
 
     const product = await Product.findByPk(id);
     if (!product) return res.status(404).json({ error: "Product not found" });
@@ -268,7 +270,9 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
     );
 
     if (inStock === "true") {
-      filteredProducts = filteredProducts.filter((product : any) => product.in_stock);
+      filteredProducts = filteredProducts.filter(
+        (product: any) => product.in_stock,
+      );
     }
 
     res.json({ products: filteredProducts });
@@ -312,7 +316,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
     const term = q.trim().toLowerCase();
     const filteredProducts = sampleProducts
       .filter(
-        (product : any) =>
+        (product: any) =>
           product.name.toLowerCase().includes(term) && product.in_stock,
       )
       .slice(0, 10);
