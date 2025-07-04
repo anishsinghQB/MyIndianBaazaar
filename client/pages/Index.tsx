@@ -60,12 +60,12 @@ export default function Index() {
     switch (sortBy) {
       case "price-low":
         filtered = [...filtered].sort(
-          (a, b) => (a.ourPrice || 0) - (b.ourPrice || 0),
+          (a, b) => (a.our_price || 0) - (b.our_price || 0),
         );
         break;
       case "price-high":
         filtered = [...filtered].sort(
-          (a, b) => (b.ourPrice || 0) - (a.ourPrice || 0),
+          (a, b) => (b.our_price || 0) - (a.our_price || 0),
         );
         break;
       case "rating":

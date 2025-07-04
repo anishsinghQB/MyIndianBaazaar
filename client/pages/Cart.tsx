@@ -267,10 +267,10 @@ export default function Cart() {
                             <p className="text-lg font-bold text-gray-900">
                               ₹
                               {(
-                                (product.ourPrice || 0) * (item.quantity || 0)
+                                (product.our_price || 0) * (item.quantity || 0)
                               )?.toLocaleString() || "0"}
                             </p>
-                            {product.mrp > product.ourPrice && (
+                            {product.mrp > product.our_price && (
                               <p className="text-sm text-gray-500 line-through">
                                 ₹
                                 {(

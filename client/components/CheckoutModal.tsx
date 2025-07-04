@@ -86,7 +86,7 @@ export default function CheckoutModal({
           return {
             productId: item.productId,
             quantity: item.quantity,
-            price: product.ourPrice || 0,
+            price: product.our_price || 0,
             selectedSize: item.selectedSize,
             selectedColor: item.selectedColor,
           };
@@ -236,7 +236,7 @@ export default function CheckoutModal({
                       <p className="font-medium">
                         ₹
                         {(
-                          (product.ourPrice || 0) * (item.quantity || 0)
+                          (product.our_price || 0) * (item.quantity || 0)
                         )?.toLocaleString()}
                       </p>
                     </div>

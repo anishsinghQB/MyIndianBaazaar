@@ -34,7 +34,7 @@ export const api = {
       searchParams.append("search", params.search);
     }
     if (params?.in_stock) {
-      searchParams.append("inStock", "true");
+      searchParams.append("in_stock", "true");
     }
 
     const response = await fetch(`${API_BASE}/products?${searchParams}`);

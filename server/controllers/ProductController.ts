@@ -10,7 +10,7 @@ const productSchema = z.object({
   description: z.string().min(1, "Description is required"),
   images: z.array(z.string()).min(1, "At least one image is required"),
   mrp: z.number().positive("MRP must be positive"),
-  ourPrice: z.number().positive("Price must be positive"),
+  our_price: z.number().positive("Price must be positive"),
   discount: z.number().min(0).max(100).optional(),
   offers: z.array(z.string()).optional(),
   coupons: z.array(z.string()).optional(),
@@ -28,7 +28,7 @@ const productSchema = z.object({
     "groceries",
     "other",
   ]),
-  inStock: z.boolean().default(true),
+  in_stock: z.boolean().default(true),
   stockQuantity: z.number().int().min(0).default(0),
 });
 
@@ -41,7 +41,7 @@ const sampleProducts = [
       "High-quality wireless headphones with noise cancellation and superior sound quality.",
     images: ["/api/placeholder/400/300"],
     mrp: 299.99,
-    ourPrice: 249.99,
+    our_price: 249.99,
     discount: 17,
     rating: 4.5,
     afterExchangePrice: 199.99,
@@ -53,7 +53,7 @@ const sampleProducts = [
     weight: "350g",
     height: "20cm",
     category: "electronics",
-    inStock: true,
+    in_stock: true,
     stockQuantity: 50,
     reviews: [],
     faqs: [],
@@ -67,7 +67,7 @@ const sampleProducts = [
       "Advanced fitness tracking with heart rate monitor, GPS, and smartphone connectivity.",
     images: ["/api/placeholder/400/300"],
     mrp: 199.99,
-    ourPrice: 159.99,
+    our_price: 159.99,
     discount: 20,
     rating: 4.3,
     afterExchangePrice: 129.99,
@@ -79,7 +79,7 @@ const sampleProducts = [
     weight: "45g",
     height: "1.2cm",
     category: "electronics",
-    inStock: true,
+    in_stock: true,
     stockQuantity: 75,
     reviews: [],
     faqs: [],
@@ -93,7 +93,7 @@ const sampleProducts = [
       "Comfortable and sustainable organic cotton t-shirt in various colors.",
     images: ["/api/placeholder/400/300"],
     mrp: 29.99,
-    ourPrice: 24.99,
+    our_price: 24.99,
     discount: 17,
     rating: 4.7,
     afterExchangePrice: 19.99,
@@ -105,7 +105,7 @@ const sampleProducts = [
     weight: "200g",
     height: "70cm",
     category: "clothes",
-    inStock: true,
+    in_stock: true,
     stockQuantity: 100,
     reviews: [],
     faqs: [],
@@ -116,13 +116,13 @@ const sampleProducts = [
 
 export const getAllProducts: RequestHandler = async (req, res) => {
   // Extract query parameters outside try-catch to access in catch block
-  const { category, search, inStock } = req.query;
+  const { category, search, in_stock } = req.query;
 
   try {
     const whereClause: any = {};
 
     if (category) whereClause.category = category;
-    if (inStock === "true") whereClause.in_stock = true;
+    if (in_stock === "true") whereClause.in_stock = true;
     if (search) {
       whereClause.name = { [Op.iLike]: `%${search}%` };
     }
@@ -154,7 +154,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
       );
     }
 
-    if (inStock === "true") {
+    if (in_stock === "true") {
       filteredProducts = filteredProducts.filter(
         (product: any) => product.in_stock,
       );
@@ -189,12 +189,12 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
     const data: any = productSchema.parse(req.body);
     const discount =
       data.discount ||
-      Math.round(((data.mrp - data.ourPrice) / data.mrp) * 100);
-    const afterExchangePrice = parseFloat((data.ourPrice * 0.95).toFixed(2));
+      Math.round(((data.mrp - data.our_price) / data.mrp) * 100);
+    const afterExchangePrice = parseFloat((data.our_price * 0.95).toFixed(2));
 
     const product: any = await Product.create({
       ...data,
-      our_price: data.ourPrice,
+      our_price: data.our_price,
       discount,
       after_exchange_price: afterExchangePrice,
       in_stock: data.in_stock,
@@ -221,7 +221,7 @@ export const updateProduct: RequestHandler = async (req, res) => {
 
     await product.update({
       ...data,
-      our_price: data.ourPrice,
+      our_price: data.our_price,
       in_stock: data.in_stock,
       stock_quantity: data.stockQuantity,
     });
@@ -250,9 +250,9 @@ export const deleteProduct: RequestHandler = async (req, res) => {
 export const getProductsByCategory: RequestHandler = async (req, res) => {
   try {
     const { category } = req.params;
-    const { inStock } = req.query;
+    const { in_stock } = req.query;
     const whereClause: any = { category };
-    if (inStock === "true") whereClause.in_stock = true;
+    if (in_stock === "true") whereClause.in_stock = true;
 
     const products = await Product.findAll({
       where: whereClause,
@@ -265,12 +265,12 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
 
     // Filter sample products by category
     const { category } = req.params;
-    const { inStock } = req.query;
+    const { in_stock } = req.query;
     let filteredProducts = sampleProducts.filter(
       (product) => product.category === category,
     );
 
-    if (inStock === "true") {
+    if (in_stock === "true") {
       filteredProducts = filteredProducts.filter(
         (product: any) => product.in_stock,
       );
@@ -327,7 +327,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
       name: p.name,
       image: p.images?.[0] || "/placeholder.svg",
       category: p.category,
-      price: p.ourPrice,
+      price: p.our_price,
     }));
 
     res.json({ suggestions });

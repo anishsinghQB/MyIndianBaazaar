@@ -21,7 +21,7 @@ export default function UpdateProductModal({
     description: "",
     images: ["", "", "", "", ""],
     mrp: "",
-    ourPrice: "",
+    our_price: "",
     discount: "",
     rating: "4.0",
     afterExchangePrice: "",
@@ -33,7 +33,7 @@ export default function UpdateProductModal({
     weight: "",
     height: "",
     category: "clothes" as Product["category"],
-    inStock: true,
+    in_stock: true,
     stockQuantity: "",
     faqs: [{ question: "", answer: "" }],
   });
@@ -44,27 +44,27 @@ export default function UpdateProductModal({
         name: product.name || "",
         description: product.description || "",
         images:
-          product.images.length > 0
+          product?.images?.length > 0
             ? [...product.images, "", "", "", "", ""].slice(0, 5)
             : ["", "", "", "", ""],
         mrp: product.mrp?.toString() || "",
-        ourPrice: product.ourPrice?.toString() || "",
+        our_price: product.our_price?.toString() || "",
         discount: product.discount?.toString() || "",
         rating: product.rating?.toString() || "4.0",
         afterExchangePrice: product.afterExchangePrice?.toString() || "",
-        offers: product.offers.length > 0 ? product.offers : [""],
-        coupons: product.coupons.length > 0 ? product.coupons : [""],
+        offers: product?.offers?.length > 0 ? product.offers : [""],
+        coupons: product?.coupons?.length > 0 ? product.coupons : [""],
         company: product.company || "",
         color: product.color || "",
         size: product.size || "",
         weight: product.weight || "",
         height: product.height || "",
         category: product.category || "clothes",
-        inStock: product.in_stock ?? true,
+        in_stock : product.in_stock ?? true,
         stockQuantity: product.stockQuantity?.toString() || "",
         faqs:
-          product.faqs.length > 0
-            ? product.faqs.map((faq) => ({
+          product?.faqs?.length > 0
+            ? product?.faqs?.map((faq) => ({
                 question: faq.question,
                 answer: faq.answer,
               }))
@@ -82,7 +82,7 @@ export default function UpdateProductModal({
       description: formData.description,
       images: formData.images.filter((img) => img.trim() !== ""),
       mrp: parseFloat(formData.mrp) || 0,
-      ourPrice: parseFloat(formData.ourPrice) || 0,
+      our_price: parseFloat(formData.our_price) || 0,
       discount: parseFloat(formData.discount) || 0,
       rating: parseFloat(formData.rating) || 0,
       afterExchangePrice: formData.afterExchangePrice
@@ -96,7 +96,7 @@ export default function UpdateProductModal({
       weight: formData.weight,
       height: formData.height,
       category: formData.category,
-      inStock: formData.in_stock,
+      in_stock: formData.in_stock,
       stockQuantity: formData.stockQuantity
         ? parseInt(formData.stockQuantity)
         : undefined,
@@ -331,7 +331,7 @@ export default function UpdateProductModal({
                     onChange={(e) => updateImage(index, e.target.value)}
                     className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  {formData.images.length > 1 && (
+                  {formData?.images?.length > 1 && (
                     <Button
                       type="button"
                       variant="outline"
@@ -377,11 +377,11 @@ export default function UpdateProductModal({
                   required
                   min="0"
                   step="0.01"
-                  value={formData.ourPrice}
+                  value={formData.our_price}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      ourPrice: e.target.value,
+                      our_price: e.target.value,
                     }))
                   }
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -499,7 +499,7 @@ export default function UpdateProductModal({
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      inStock: e.target.checked,
+                      in_stock: e.target.checked,
                     }))
                   }
                   className="mr-2"

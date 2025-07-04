@@ -547,7 +547,7 @@ export default function Admin() {
                               {product.category}
                             </td>
                             <td className="py-4 px-4 font-medium text-gray-900">
-                              ₹{(product.ourPrice || 0)?.toLocaleString()}
+                              ₹{(product.our_price || 0)?.toLocaleString()}
                             </td>
                             <td className="py-4 px-4">
                               <span

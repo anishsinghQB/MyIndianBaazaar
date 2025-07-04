@@ -19,7 +19,7 @@ export default function AddProductModal({
     description: "",
     images: ["", "", "", "", ""],
     mrp: "",
-    ourPrice: "",
+    our_price: "",
     discount: "",
     rating: "4.0",
     afterExchangePrice: "",
@@ -31,7 +31,7 @@ export default function AddProductModal({
     weight: "",
     height: "",
     category: "clothes" as Product["category"],
-    inStock: true,
+    in_stock: true,
     faqs: [{ question: "", answer: "" }],
   });
 
@@ -43,7 +43,7 @@ export default function AddProductModal({
       description: formData.description,
       images: formData.images.filter((img) => img.trim() !== ""),
       mrp: parseFloat(formData.mrp) || 0,
-      ourPrice: parseFloat(formData.ourPrice) || 0,
+      our_price: parseFloat(formData.our_price) || 0,
       discount: parseFloat(formData.discount) || 0,
       afterExchangePrice: formData.afterExchangePrice
         ? parseFloat(formData.afterExchangePrice)
@@ -56,7 +56,7 @@ export default function AddProductModal({
       weight: formData.weight,
       height: formData.height,
       category: formData.category,
-      inStock: formData.in_stock,
+      in_stock: formData.in_stock,
       stockQuantity: 100, // Default stock quantity
       faqs: formData.faqs
         .filter((faq) => faq.question.trim() !== "" && faq.answer.trim() !== "")
@@ -76,7 +76,7 @@ export default function AddProductModal({
       description: "",
       images: ["", "", "", "", ""],
       mrp: "",
-      ourPrice: "",
+      our_price: "",
       discount: "",
       rating: "4.0",
       afterExchangePrice: "",
@@ -88,7 +88,7 @@ export default function AddProductModal({
       weight: "",
       height: "",
       category: "clothes",
-      inStock: true,
+      in_stock: true,
       faqs: [{ question: "", answer: "" }],
     });
   };
@@ -358,11 +358,11 @@ export default function AddProductModal({
                   required
                   min="0"
                   step="0.01"
-                  value={formData.ourPrice}
+                  value={formData.our_price}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      ourPrice: e.target.value,
+                      our_price: e.target.value,
                     }))
                   }
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -462,7 +462,7 @@ export default function AddProductModal({
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      inStock: e.target.checked,
+                      in_stock: e.target.checked,
                     }))
                   }
                   className="mr-2"

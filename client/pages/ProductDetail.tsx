@@ -117,7 +117,7 @@ export default function ProductDetail() {
   }
 
   const discountPercentage = Math.round(
-    (((product.mrp || 0) - (product.ourPrice || 0)) / (product.mrp || 1)) * 100,
+    (((product.mrp || 0) - (product.our_price || 0)) / (product.mrp || 1)) * 100,
   );
 
   const handleAddToCart = async () => {
@@ -168,7 +168,7 @@ export default function ProductDetail() {
             quantity: quantity,
           },
         ],
-        total: (product.ourPrice || 0) * quantity,
+        total: (product.our_price || 0) * quantity,
       }
     : { items: [], total: 0 };
 
@@ -265,9 +265,9 @@ export default function ProductDetail() {
               <div className="bg-white p-6 rounded-lg border">
                 <div className="flex items-center gap-4 mb-4">
                   <span className="text-3xl font-bold text-gray-900">
-                    ₹{(product.ourPrice || 0)?.toLocaleString()}
+                    ₹{(product.our_price || 0)?.toLocaleString()}
                   </span>
-                  {(product.mrp || 0) > (product.ourPrice || 0) && (
+                  {(product.mrp || 0) > (product.our_price || 0) && (
                     <>
                       <span className="text-xl text-gray-500 line-through">
                         ₹{(product.mrp || 0)?.toLocaleString()}

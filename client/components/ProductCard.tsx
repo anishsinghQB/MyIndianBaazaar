@@ -10,7 +10,7 @@ export default function ProductCard({ product, onCartUpdate }: any) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const discountPercentage = Math.round(
-    (((product.mrp || 0) - (product.ourPrice || 0)) / (product.mrp || 1)) * 100,
+    (((product.mrp || 0) - (product.our_price || 0)) / (product.mrp || 1)) * 100,
   );
 
   const handleAddToCart = async (e: React.MouseEvent) => {
@@ -80,9 +80,9 @@ export default function ProductCard({ product, onCartUpdate }: any) {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <span className="text-lg font-bold text-gray-900">
-              ₹{(product.ourPrice || 0)?.toLocaleString()}
+              ₹{(product.our_price || 0)?.toLocaleString()}
             </span>
-            {(product.mrp || 0) > (product.ourPrice || 0) && (
+            {(product.mrp || 0) > (product.our_price || 0) && (
               <span className="text-sm text-gray-500 line-through">
                 ₹{(product.mrp || 0)?.toLocaleString()}
               </span>

@@ -4,7 +4,7 @@ export interface Product {
   description: string;
   images: string[];
   mrp: number;
-  ourPrice: number;
+  our_price: number;
   discount: number;
   rating: number;
   afterExchangePrice?: number;
@@ -23,7 +23,7 @@ export interface Product {
     | "books"
     | "groceries"
     | "other";
-  inStock: boolean;
+  in_stock: boolean;
   stockQuantity?: number;
   reviews: Review[];
   faqs: FAQ[];

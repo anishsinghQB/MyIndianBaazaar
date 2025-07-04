@@ -90,14 +90,14 @@ export const calculateTotal = (cart: Cart, products: Product[]): number => {
     const product = products.find((p) => p.id === item.productId);
     if (
       !product ||
-      !product.ourPrice ||
-      isNaN(product.ourPrice) ||
+      !product.our_price ||
+      isNaN(product.our_price) ||
       !item.quantity ||
       isNaN(item.quantity)
     ) {
       return total;
     }
-    const itemTotal = product.ourPrice * item.quantity;
+    const itemTotal = product.our_price * item.quantity;
     return total + (isNaN(itemTotal) ? 0 : itemTotal);
   }, 0);
 };

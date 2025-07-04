@@ -93,29 +93,6 @@ export const getProductReviews: RequestHandler = async (req, res) => {
     res.json({ reviews: formatted });
   } catch (error) {
     console.error("Get product reviews error:", error);
-
-    // Fallback mock data when database is unavailable
-    const mockReviews = [
-      {
-        id: "1",
-        userId: "user1",
-        userName: "John Doe",
-        rating: 5,
-        comment: "Excellent product! Highly recommended.",
-        date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-        verified: true,
-      },
-      {
-        id: "2",
-        userId: "user2",
-        userName: "Jane Smith",
-        rating: 4,
-        comment: "Good quality, fast delivery. Happy with the purchase.",
-        date: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
-        verified: true,
-      },
-    ];
-
-    res.json({ reviews: mockReviews });
+    res.json({ error });
   }
 };

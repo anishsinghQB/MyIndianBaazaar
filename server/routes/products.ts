@@ -9,7 +9,7 @@ const productSchema = z.object({
   description: z.string().min(1, "Description is required"),
   images: z.array(z.string()).min(1, "At least one image is required"),
   mrp: z.number().positive("MRP must be positive"),
-  ourPrice: z.number().positive("Price must be positive"),
+  our_price: z.number().positive("Price must be positive"),
   discount: z.number().min(0).max(100).optional(),
   offers: z.array(z.string()).optional(),
   coupons: z.array(z.string()).optional(),
@@ -27,7 +27,7 @@ const productSchema = z.object({
     "groceries",
     "other",
   ]),
-  inStock: z.boolean().default(true),
+  in_stock: z.boolean().default(true),
   stockQuantity: z.number().int().min(0).default(0),
 });
 
@@ -40,7 +40,7 @@ const sampleProducts = [
       "High-quality wireless headphones with noise cancellation and premium sound quality. Perfect for music lovers and professionals.",
     images: ["/placeholder.svg", "/placeholder.svg"],
     mrp: 8999,
-    ourPrice: 6999,
+    our_price: 6999,
     discount: 22,
     rating: 4.5,
     afterExchangePrice: 5999,
@@ -52,7 +52,7 @@ const sampleProducts = [
     weight: "250g",
     height: "20cm",
     category: "electronics" as const,
-    inStock: true,
+    in_stock: true,
     stockQuantity: 50,
     reviews: [
       {
@@ -97,7 +97,7 @@ const sampleProducts = [
       "Comfortable and sustainable organic cotton t-shirt. Made from 100% organic cotton with a soft feel and perfect fit.",
     images: ["/placeholder.svg", "/placeholder.svg"],
     mrp: 1299,
-    ourPrice: 899,
+    our_price: 899,
     discount: 31,
     rating: 4.2,
     offers: ["Free shipping above ₹500", "Easy returns"],
@@ -108,7 +108,7 @@ const sampleProducts = [
     weight: "180g",
     height: "70cm",
     category: "clothes" as const,
-    inStock: true,
+    in_stock: true,
     stockQuantity: 100,
     reviews: [
       {
@@ -137,7 +137,7 @@ const sampleProducts = [
       "Brightening vitamin C serum that helps reduce dark spots and gives you glowing, healthy skin. Suitable for all skin types.",
     images: ["/placeholder.svg", "/placeholder.svg"],
     mrp: 2499,
-    ourPrice: 1899,
+    our_price: 1899,
     discount: 24,
     rating: 4.7,
     offers: ["Buy 2 get 1 free", "Free shipping"],
@@ -148,7 +148,7 @@ const sampleProducts = [
     weight: "50g",
     height: "10cm",
     category: "beauty" as const,
-    inStock: true,
+    in_stock: true,
     stockQuantity: 75,
     reviews: [],
     faqs: [
@@ -163,7 +163,7 @@ const sampleProducts = [
 ];
 
 export const getAllProducts: RequestHandler = async (req, res) => {
-  const { category, search, inStock } = req.query;
+  const { category, search, in_stock } = req.query;
 
   try {
     let query = "SELECT * FROM products WHERE 1=1";
@@ -179,7 +179,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
       query += ` AND (name ILIKE $${params.length} OR description ILIKE $${params.length})`;
     }
 
-    if (inStock === "true") {
+    if (in_stock === "true") {
       query += " AND in_stock = true";
     }
 
@@ -194,7 +194,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
         description: row.description,
         images: row.images || [],
         mrp: parseFloat(row.mrp) || 0,
-        ourPrice: parseFloat(row.our_price) || 0,
+        our_price: parseFloat(row.our_price) || 0,
         discount: row.discount || 0,
         rating: parseFloat(row.rating) || 0,
         afterExchangePrice: row.after_exchange_price
@@ -208,7 +208,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
         weight: row.weight,
         height: row.height,
         category: row.category,
-        inStock: row.in_stock,
+        in_stock: row.in_stock,
         stockQuantity: row.stock_quantity || 0,
         reviews: [], // TODO: Fetch reviews separately
         faqs: [], // TODO: Fetch FAQs separately
@@ -236,7 +236,7 @@ export const getAllProducts: RequestHandler = async (req, res) => {
       );
     }
 
-    if (inStock === "true") {
+    if (in_stock === "true") {
       filteredProducts = filteredProducts.filter((p) => p.in_stock);
     }
 
@@ -263,7 +263,7 @@ export const getProductById: RequestHandler = async (req, res) => {
       description: row.description,
       images: row.images || [],
       mrp: parseFloat(row.mrp) || 0,
-      ourPrice: parseFloat(row.our_price) || 0,
+      our_price: parseFloat(row.our_price) || 0,
       discount: row.discount || 0,
       rating: parseFloat(row.rating) || 0,
       afterExchangePrice: row.after_exchange_price
@@ -277,7 +277,7 @@ export const getProductById: RequestHandler = async (req, res) => {
       weight: row.weight,
       height: row.height,
       category: row.category,
-      inStock: row.in_stock,
+      in_stock: row.in_stock,
       stockQuantity: row.stock_quantity || 0,
       reviews: [], // TODO: Fetch reviews
       faqs: [], // TODO: Fetch FAQs
@@ -307,7 +307,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       description,
       images,
       mrp,
-      ourPrice,
+      our_price,
       discount,
       offers,
       coupons,
@@ -317,14 +317,14 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       weight,
       height,
       category,
-      inStock,
+      in_stock,
       stockQuantity,
     } = validatedData;
 
     const calculatedDiscount =
-      discount || Math.round(((mrp - ourPrice) / mrp) * 100);
+      discount || Math.round(((mrp - our_price) / mrp) * 100);
 
-    const afterExchangePrice = parseFloat((ourPrice * 0.95).toFixed(2)); // 5% exchange offer
+    const afterExchangePrice = parseFloat((our_price * 0.95).toFixed(2)); // 5% exchange offer
 
     const result = await pool.query(
       `INSERT INTO products (
@@ -338,7 +338,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
         description,
         images,
         mrp,
-        ourPrice,
+        our_price,
         calculatedDiscount,
         afterExchangePrice,
         offers || [],
@@ -349,7 +349,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
         weight,
         height,
         category,
-        inStock,
+        in_stock,
         stockQuantity,
       ],
     );
@@ -361,7 +361,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       description: row.description,
       images: row.images,
       mrp: parseFloat(row.mrp) || 0,
-      ourPrice: parseFloat(row.our_price) || 0,
+      our_price: parseFloat(row.our_price) || 0,
       discount: row.discount || 0,
       rating: parseFloat(row.rating) || 0,
       afterExchangePrice: parseFloat(row.after_exchange_price) || 0,
@@ -373,7 +373,7 @@ export const createProduct: RequestHandler = async (req: AuthRequest, res) => {
       weight: row.weight,
       height: row.height,
       category: row.category,
-      inStock: row.in_stock,
+      in_stock: row.in_stock,
       stockQuantity: row.stock_quantity || 0,
       reviews: [],
       faqs: [],
@@ -412,9 +412,9 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
     for (const [key, value] of Object.entries(validatedData)) {
       if (value !== undefined) {
         const dbField =
-          key === "ourPrice"
+          key === "our_price"
             ? "our_price"
-            : key === "inStock"
+            : key === "in_stock"
               ? "in_stock"
               : key === "stockQuantity"
                 ? "stock_quantity"
@@ -451,7 +451,7 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
       description: row.description,
       images: row.images,
       mrp: parseFloat(row.mrp) || 0,
-      ourPrice: parseFloat(row.our_price) || 0,
+      our_price: parseFloat(row.our_price) || 0,
       discount: row.discount || 0,
       rating: parseFloat(row.rating) || 0,
       afterExchangePrice: row.after_exchange_price
@@ -465,7 +465,7 @@ export const updateProduct: RequestHandler = async (req: AuthRequest, res) => {
       weight: row.weight,
       height: row.height,
       category: row.category,
-      inStock: row.in_stock,
+      in_stock: row.in_stock,
       stockQuantity: row.stock_quantity || 0,
       reviews: [],
       faqs: [],
@@ -515,12 +515,12 @@ export const deleteProduct: RequestHandler = async (req: AuthRequest, res) => {
 export const getProductsByCategory: RequestHandler = async (req, res) => {
   try {
     const { category } = req.params;
-    const { inStock } = req.query;
+    const { in_stock } = req.query;
 
     let query = "SELECT * FROM products WHERE category = $1";
     const params: any[] = [category];
 
-    if (inStock === "true") {
+    if (in_stock === "true") {
       query += " AND in_stock = true";
     }
 
@@ -535,7 +535,7 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
         description: row.description,
         images: row.images || [],
         mrp: parseFloat(row.mrp) || 0,
-        ourPrice: parseFloat(row.our_price) || 0,
+        our_price: parseFloat(row.our_price) || 0,
         discount: row.discount || 0,
         rating: parseFloat(row.rating) || 0,
         afterExchangePrice: row.after_exchange_price
@@ -549,7 +549,7 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
         weight: row.weight,
         height: row.height,
         category: row.category,
-        inStock: row.in_stock,
+        in_stock: row.in_stock,
         stockQuantity: row.stock_quantity || 0,
         reviews: [],
         faqs: [],
@@ -560,13 +560,13 @@ export const getProductsByCategory: RequestHandler = async (req, res) => {
 
     // Fallback to sample data when database is not available
     const { category } = req.params;
-    const { inStock } = req.query;
+    const { in_stock } = req.query;
 
     let filteredProducts = sampleProducts.filter(
       (p) => p.category === category,
     );
 
-    if (inStock === "true") {
+    if (in_stock === "true") {
       filteredProducts = filteredProducts.filter((p) => p.in_stock);
     }
 
@@ -638,7 +638,7 @@ export const getSearchSuggestions: RequestHandler = async (req, res) => {
             ? product.images[0]
             : "/placeholder.svg",
         category: product.category,
-        price: product.ourPrice,
+        price: product.our_price,
       }));
 
     res.json({ suggestions });
