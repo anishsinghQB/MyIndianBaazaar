@@ -343,3 +343,82 @@ export const notificationApi = {
     return response.json();
   },
 };
+
+// Auth APIs
+export const authApi = {
+  async login(email: string, password: string) {
+    const response = await fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Login failed");
+    }
+
+    return response.json();
+  },
+
+  async register(userData: {
+    name: string;
+    email: string;
+    password: string;
+    mobileNumber?: string;
+    gender?: "male" | "female" | "other";
+  }) {
+    const response = await fetch(`${API_BASE}/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Registration failed");
+    }
+
+    return response.json();
+  },
+
+  async getProfile() {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch(`${API_BASE}/auth/profile`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch profile");
+    }
+
+    return response.json();
+  },
+
+  async googleAuth(googleData: {
+    googleId: string;
+    email: string;
+    name: string;
+  }) {
+    const response = await fetch(`${API_BASE}/auth/google`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(googleData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Google authentication failed");
+    }
+
+    return response.json();
+  },
+};
