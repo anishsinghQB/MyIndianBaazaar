@@ -179,7 +179,7 @@ export const getOrders: RequestHandler = async (req: AuthRequest, res) => {
 
     const orders = result.rows.map((row) => ({
       id: row.id,
-      totalAmount: parseFloat(row.total_amount),
+      totalAmount: parseFloat(row.total_amount) || 0,
       status: row.status,
       paymentStatus: row.payment_status,
       paymentId: row.payment_id,
