@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Star, Heart } from "lucide-react";
-import { Product } from "@shared/types";
 import { Button } from "@/components/ui/button";
 import { addToCart } from "@/lib/cart";
 import { useState } from "react";

@@ -5,6 +5,7 @@ import { Review } from "../models/reviewModel";
 import { Order } from "../models/orderModel";
 import { OrderItem } from "../models/OrderdItem";
 import { User } from "../models/userModel";
+import { Product } from "../models/productModel";
 
 const reviewSchema = z.object({
   productId: z.string().uuid(),
@@ -16,7 +17,6 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
   try {
     const { productId, rating, comment } = reviewSchema.parse(req.body);
 
-    // 🧠 Check if user purchased the product
     const order = await Order.findOne({
       where: {
         user_id: req.user.id,
@@ -35,7 +35,6 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
         .json({ error: "You can only review products you purchased." });
     }
 
-    // ✅ Insert review
     await Review.create({
       product_id: productId,
       user_id: req.user.id,
@@ -43,6 +42,20 @@ export const createReview: RequestHandler = async (req: AuthRequest, res) => {
       comment,
       verified: true,
     });
+
+    const reviews = await Review.findAll({
+      where: { product_id: productId },
+    });
+
+    const totalRatings = reviews.reduce((sum, review: any) => sum + review.rating, 0) + rating;
+    const averageRating = totalRatings / (reviews.length + 1);
+
+    const product: any = await Product?.findByPk(productId);
+    if (product) {
+      await product.update({
+        rating: averageRating
+      });
+    }
 
     res.status(201).json({ message: "Review submitted successfully." });
   } catch (error) {
