@@ -168,7 +168,7 @@ export default function ProductDetail() {
             quantity: quantity,
           },
         ],
-        total: product.ourPrice * quantity,
+        total: (product.ourPrice || 0) * quantity,
       }
     : { items: [], total: 0 };
 
