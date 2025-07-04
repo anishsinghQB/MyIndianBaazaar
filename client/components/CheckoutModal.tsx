@@ -94,7 +94,7 @@ export default function CheckoutModal({
         .filter(Boolean) as CreateOrderRequest["items"];
 
       // Create order
-      const createOrderResponse : any = await axios.post("/api/orders", {
+      const createOrderResponse = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
