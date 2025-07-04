@@ -82,6 +82,14 @@ export default function Footer() {
                   Admin Panel
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/api-test"
+                  className="text-gray-400 hover:text-[#1690C7] text-sm transition-colors"
+                >
+                  API Test (Dev)
+                </Link>
+              </li>
             </ul>
           </div>
 
