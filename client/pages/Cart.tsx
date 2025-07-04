@@ -298,11 +298,14 @@ export default function Cart() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">
                       Subtotal (
-                      {cart.items.reduce((acc, item) => acc + item.quantity, 0)}{" "}
+                      {cart.items.reduce(
+                        (acc, item) => acc + (item.quantity || 0),
+                        0,
+                      )}{" "}
                       items)
                     </span>
                     <span className="font-medium">
-                      ₹{cart.total?.toLocaleString()}
+                      ₹{(cart.total || 0)?.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -312,7 +315,7 @@ export default function Cart() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Tax</span>
                     <span className="font-medium">
-                      ₹{Math.round(cart.total * 0.18)?.toLocaleString()}
+                      ₹{Math.round((cart.total || 0) * 0.18)?.toLocaleString()}
                     </span>
                   </div>
                   <div className="border-t pt-4">
@@ -321,7 +324,8 @@ export default function Cart() {
                         Total
                       </span>
                       <span className="text-lg font-bold text-gray-900">
-                        ₹{Math.round(cart.total * 1.18)?.toLocaleString()}
+                        ₹
+                        {Math.round((cart.total || 0) * 1.18)?.toLocaleString()}
                       </span>
                     </div>
                   </div>
